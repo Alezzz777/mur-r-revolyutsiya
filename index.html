@@ -133,6 +133,10 @@
       animation: floatHeart 0.9s ease-out forwards;
       z-index: 10;
     }
+    .pet-counter {
+      text-align: center; font-size: .88rem; margin-top: 8px;
+      min-height: 1.3em; opacity: .8; transition: opacity .2s;
+    }
     .greeting {
       text-align: center; font-size: .95rem; opacity: .7;
       margin: -6px 0 10px; font-style: italic;
@@ -171,6 +175,7 @@
       <button class="btn-ghost" id="newCatBtn">🎲 Новый котик</button>
     </div>
     <p class="cat-fact" id="catFact"></p>
+    <p class="pet-counter" id="petCounter"></p>
   </div>
 
   <section class="map-section">
@@ -418,9 +423,26 @@
       } catch(e) {}
     }
 
+    let petCount = 0;
+    const petMsgs = [
+      [1,  '😺 Котик почувствовал твою руку…'],
+      [2,  '😸 Котик доволен!'],
+      [5,  '😻 Котик в восторге! мур-мур-мур'],
+      [10, '🥰 Котик считает тебя своим человеком'],
+      [20, '👑 Ты — любимец всех котиков мира'],
+      [50, '🌟 Легенда Мур-р-революции!'],
+    ];
+    function updatePetCounter() {
+      petCount++;
+      const el = document.getElementById('petCounter');
+      const msg = [...petMsgs].reverse().find(([n]) => petCount >= n);
+      el.textContent = msg ? msg[1] : '';
+    }
+
     catWrap.addEventListener('click', (e) => {
       catWrap.classList.add('purring');
       playPurr();
+      updatePetCounter();
       setTimeout(() => catWrap.classList.remove('purring'), 1500);
       // всплывающие сердечки
       const emojis = ['💛','🐾','💛','🐱','💛'];
