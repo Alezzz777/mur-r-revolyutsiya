@@ -109,6 +109,15 @@
     .lang-switch { align-self: flex-end; margin-bottom: 8px; font-size: .88rem; }
     .lang-switch a { color: var(--accent-dark); text-decoration: none; font-weight: 600; opacity: .75; }
     .lang-switch a:hover { opacity: 1; }
+    @keyframes floatHeart {
+      0%   { transform: translateY(0) scale(1); opacity: 1; }
+      100% { transform: translateY(-90px) scale(1.4); opacity: 0; }
+    }
+    .float-heart {
+      position: absolute; pointer-events: none; font-size: 1.4rem;
+      animation: floatHeart 0.9s ease-out forwards;
+      z-index: 10;
+    }
     footer { margin-top:40px; opacity:.7; font-size:.9rem; text-align:center; }
     .toast {
       position:fixed; bottom:24px; left:50%;
@@ -301,10 +310,24 @@
       } catch(e) {}
     }
 
-    catWrap.addEventListener('click', () => {
+    catWrap.addEventListener('click', (e) => {
       catWrap.classList.add('purring');
       playPurr();
       setTimeout(() => catWrap.classList.remove('purring'), 1500);
+      // всплывающие сердечки
+      const emojis = ['💛','🐾','💛','🐱','💛'];
+      for (let i = 0; i < 3; i++) {
+        setTimeout(() => {
+          const h = document.createElement('span');
+          h.className = 'float-heart';
+          h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+          const rect = catWrap.getBoundingClientRect();
+          h.style.left = (20 + Math.random() * 60) + '%';
+          h.style.bottom = '20px';
+          catWrap.appendChild(h);
+          setTimeout(() => h.remove(), 950);
+        }, i * 150);
+      }
     });
 
     document.getElementById('newCatBtn').addEventListener('click', newCat);
