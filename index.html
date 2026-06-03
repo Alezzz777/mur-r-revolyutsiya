@@ -620,6 +620,30 @@
       }
     });
 
+    // --- котик скучает ---
+    (function() {
+      const purrBubble = catWrap.querySelector('.purr');
+      const idleTexts = ['мяу? 👀', 'эй, ты тут? 🐾', 'мур… 💛', 'погладишь? 🐱', 'мяу-мяу~ 😺'];
+      let idleTimer;
+      function resetIdle() {
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(() => {
+          if (catWrap.classList.contains('purring')) return;
+          const txt = idleTexts[Math.floor(Math.random() * idleTexts.length)];
+          purrBubble.textContent = txt;
+          catWrap.classList.add('purring');
+          setTimeout(() => {
+            catWrap.classList.remove('purring');
+            purrBubble.textContent = 'мур-р-р 💛';
+          }, 2000);
+          resetIdle();
+        }, 20000);
+      }
+      document.addEventListener('click', resetIdle);
+      document.addEventListener('keydown', resetIdle);
+      resetIdle();
+    })();
+
     // --- пасхалка: код Конами ---
     (function() {
       const code = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];

@@ -501,6 +501,30 @@
       setTimeout(() => catWrap.classList.remove('purring'), 10000);
     });
 
+    // --- cat gets bored ---
+    (function() {
+      const purrBubble = catWrap.querySelector('.purr');
+      const idleTexts = ['meow? 👀', 'hey, you there? 🐾', 'purr… 💛', 'pet me? 🐱', 'meow-meow~ 😺'];
+      let idleTimer;
+      function resetIdle() {
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(() => {
+          if (catWrap.classList.contains('purring')) return;
+          const txt = idleTexts[Math.floor(Math.random() * idleTexts.length)];
+          purrBubble.textContent = txt;
+          catWrap.classList.add('purring');
+          setTimeout(() => {
+            catWrap.classList.remove('purring');
+            purrBubble.textContent = 'purr-r-r 💛';
+          }, 2000);
+          resetIdle();
+        }, 20000);
+      }
+      document.addEventListener('click', resetIdle);
+      document.addEventListener('keydown', resetIdle);
+      resetIdle();
+    })();
+
     // --- Konami code easter egg ---
     (function() {
       const code = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
