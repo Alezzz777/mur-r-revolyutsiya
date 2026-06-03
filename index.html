@@ -264,19 +264,32 @@
     document.getElementById('newCatBtn').addEventListener('click', newCat);
 
     document.getElementById('shareBtn').addEventListener('click', async () => {
-      const shareData = {
-        title: 'Мур-р-революция 🐾',
-        text: 'Лови котика 🐱 Погладь его, прочти манифест и передай дальше — это Мур-р-революция, мы делаем мир мягче.',
-        url: window.location.href
-      };
+      const text = 'Лови котика 🐱 Погладь его, прочти манифест и передай дальше — это Мур-р-революция, мы делаем мир мягче.';
+      const url = window.location.href;
       try {
+        // Пробуем поделиться именно этой картинкой (Web Share API level 2)
+        if (navigator.share && navigator.canShare) {
+          showToast('Загружаю котика… 🐾');
+          const blob = await fetch(catImg.src).then(r => r.blob());
+          const file = new File([blob], 'cat.jpg', { type: blob.type || 'image/jpeg' });
+          if (navigator.canShare({ files: [file] })) {
+            await navigator.share({ files: [file], title: 'Мур-р-революция 🐾', text });
+            return;
+          }
+        }
+        // Fallback: share URL
         if (navigator.share) {
-          await navigator.share(shareData);
+          await navigator.share({ title: 'Мур-р-революция 🐾', text, url });
         } else {
-          await navigator.clipboard.writeText(shareData.text + ' ' + shareData.url);
+          await navigator.clipboard.writeText(text + ' ' + url);
           showToast('Ссылка скопирована — передай котика! 💌');
         }
-      } catch(e) {}
+      } catch(e) {
+        if (e.name !== 'AbortError') {
+          await navigator.clipboard.writeText(text + ' ' + url).catch(() => {});
+          showToast('Ссылка скопирована — передай котика! 💌');
+        }
+      }
     });
   </script>
 </body>
