@@ -3,7 +3,7 @@
 # Деплой: на render.com -> New -> Blueprint -> подключить репозиторий с этим файлом.
 services:
   - type: web
-    name: mur
+    name: murrr
     runtime: static
     buildCommand: ""        # сборка не нужна — чистая статика
     staticPublishPath: .    # отдаём корень репозитория (index.html)
