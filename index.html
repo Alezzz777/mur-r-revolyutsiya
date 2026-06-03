@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Мур-р-революция 🐾</title>
+  <meta name="description" content="Революция без баррикад — только с мурчанием. Погладь котика, передай дальше, сделай мир мягче." />
+
+  <!-- Чтобы при пересылке ссылки сразу была красивая карточка с котиком -->
+  <meta property="og:title" content="Мур-р-революция 🐾" />
+  <meta property="og:description" content="Мы не воюем — мы мурчим. Открой, прочти манифест и передай котика дальше." />
+  <meta property="og:image" content="https://cataas.com/cat?width=1200&height=630" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <style>
+    :root {
+      --bg1: #ffe9f0;
+      --bg2: #fff6e6;
+      --ink: #3a2b32;
+      --accent: #ff7eb3;
+      --accent-dark: #e85b97;
+      --card: #fffdfb;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      color: var(--ink);
+      background: linear-gradient(135deg, var(--bg1), var(--bg2));
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px 48px;
+    }
+    h1 {
+      font-size: clamp(2rem, 6vw, 3.2rem);
+      margin: 8px 0 4px;
+      text-align: center;
+      letter-spacing: -0.5px;
+    }
+    .tagline {
+      text-align: center;
+      font-size: 1.1rem;
+      opacity: 0.85;
+      margin: 0 0 24px;
+    }
+    .card {
+      background: var(--card);
+      border-radius: 24px;
+      box-shadow: 0 12px 40px rgba(232, 91, 151, 0.18);
+      padding: 20px;
+      max-width: 540px;
+      width: 100%;
+    }
+    .cat-wrap {
+      position: relative;
+      border-radius: 18px;
+      overflow: hidden;
+      background: #f3e8ee;
+      aspect-ratio: 1 / 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .cat-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.25s ease;
+    }
+    .cat-wrap:active img { transform: scale(0.98); }
+    .purr {
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255,255,255,0.92);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .cat-wrap.purring .purr { opacity: 1; }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+      justify-content: center;
+    }
+    button {
+      font: inherit;
+      font-weight: 600;
+      border: none;
+      border-radius: 999px;
+      padding: 12px 20px;
+      cursor: pointer;
+      transition: transform 0.12s ease, box-shadow 0.2s ease;
+    }
+    button:active { transform: translateY(1px) scale(0.98); }
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+      box-shadow: 0 6px 18px rgba(255, 126, 179, 0.45);
+    }
+    .btn-primary:hover { background: var(--accent-dark); }
+    .btn-ghost {
+      background: #fff;
+      color: var(--accent-dark);
+      border: 2px solid var(--accent);
+    }
+
+    .manifest {
+      max-width: 540px;
+      width: 100%;
+      margin-top: 32px;
+      line-height: 1.65;
+    }
+    .manifest h2 { text-align: center; }
+    .manifest ol { padding-left: 1.2em; }
+    .manifest li { margin: 10px 0; }
+    .heart { color: var(--accent-dark); }
+    footer {
+      margin-top: 40px;
+      opacity: 0.7;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--ink);
+      color: white;
+      padding: 12px 22px;
+      border-radius: 999px;
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  </style>
+</head>
+<body>
+  <h1>🐾 Мур-р-революция</h1>
+  <p class="tagline">Мы не воюем — мы мурчим.</p>
+
+  <div class="card">
+    <div class="cat-wrap" id="catWrap" title="Погладь котика 🐾">
+      <img id="catImg" alt="Котик Мур-р-революции" src="https://cataas.com/cat?width=600&height=600" />
+      <span class="purr">мур-р-р 💛</span>
+    </div>
+    <div class="buttons">
+      <button class="btn-primary" id="shareBtn">💌 Переслать котика</button>
+      <button class="btn-ghost" id="newCatBtn">🎲 Новый котик</button>
+    </div>
+  </div>
+
+  <section class="manifest">
+    <h2>Манифест Мур-р-революции</h2>
+    <p>Это революция без баррикад и без врагов. Её единственное оружие — тепло.</p>
+    <ol>
+      <li><span class="heart">Доброта заразна.</span> Один тёплый поступок будит следующий. Мы передаём котика — и передаём настроение.</li>
+      <li><span class="heart">Никто не рождается злым.</span> Чаще всего за злостью — усталость и страх. Котик не спорит, он просто мурчит — и человеку становится мягче.</li>
+      <li><span class="heart">Маленькое важнее громкого.</span> Покормить уличного кота, поддержать того, кому тяжело, не ответить злом на зло — из этого и складывается мир.</li>
+      <li><span class="heart">Каждый может присоединиться.</span> Не нужно быть героем. Достаточно погладить котика и передать его дальше.</li>
+      <li><span class="heart">Мир — это когда все гладят своих котиков.</span> И мы идём к нему по одному мурчанию за раз.</li>
+    </ol>
+    <p style="text-align:center"><strong>Погладил? Передай дальше. 🐱➡️🐱➡️🐱</strong></p>
+  </section>
+
+  <footer>Сделано с 💛 в рамках Мур-р-революции</footer>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const catImg = document.getElementById('catImg');
+    const catWrap = document.getElementById('catWrap');
+    const toast = document.getElementById('toast');
+
+    function newCat() {
+      // уникальный параметр — чтобы браузер не отдал закэшированного котика
+      const bust = Date.now() + '-' + Math.floor(Math.random() * 1e6);
+      catImg.src = 'https://cataas.com/cat?width=600&height=600&t=' + bust;
+    }
+
+    function showToast(msg) {
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2200);
+    }
+
+    // Погладить котика -> мурчание
+    catWrap.addEventListener('click', () => {
+      catWrap.classList.add('purring');
+      setTimeout(() => catWrap.classList.remove('purring'), 1500);
+    });
+
+    document.getElementById('newCatBtn').addEventListener('click', newCat);
+
+    document.getElementById('shareBtn').addEventListener('click', async () => {
+      const shareData = {
+        title: 'Мур-р-революция 🐾',
+        text: 'Лови котика 🐱 Погладь его, прочти манифест и передай дальше — это Мур-р-революция, мы делаем мир мягче.',
+        url: window.location.href
+      };
+      try {
+        if (navigator.share) {
+          await navigator.share(shareData);
+        } else {
+          await navigator.clipboard.writeText(shareData.text + ' ' + shareData.url);
+          showToast('Ссылка скопирована — передай котика! 💌');
+        }
+      } catch (e) {
+        // пользователь закрыл диалог — ничего страшного
+      }
+    });
+  </script>
+</body>
+</html>

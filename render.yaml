@@ -1,0 +1,18 @@
+# Блупринт Мур-р-революции для Render.com
+# Статичный сайт — без сборки, просто отдаёт файлы из этой папки.
+# Деплой: на render.com -> New -> Blueprint -> подключить репозиторий с этим файлом.
+services:
+  - type: web
+    name: mur-r-revolyutsiya
+    runtime: static
+    buildCommand: ""        # сборка не нужна — чистая статика
+    staticPublishPath: .    # отдаём корень репозитория (index.html)
+    pullRequestPreviewsEnabled: true
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: "public, max-age=0, must-revalidate"
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
