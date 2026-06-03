@@ -489,6 +489,21 @@
       el.textContent = msg ? msg[1] : '';
     }
 
+    // --- secret cat whisper on double click ---
+    const whispers = [
+      '🐱 the cat whispers: everything will be okay',
+      '💛 the cat says: you are special',
+      '😺 the cat knows: kindness always comes back',
+      '🐾 the cat is sure: you can handle this',
+      '🌙 the cat whispers: today is a good day',
+      '💛 the cat says: you are not alone',
+      '😸 the cat knows: the world is kinder with you in it',
+      '🐾 the cat whispers: hug someone today',
+    ];
+    catWrap.addEventListener('dblclick', () => {
+      showToast(whispers[Math.floor(Math.random() * whispers.length)]);
+    });
+
     catWrap.addEventListener('click', (e) => {
       catWrap.classList.add('purring');
       playPurr();

@@ -580,6 +580,21 @@
       el.textContent = msg ? msg[1] : '';
     }
 
+    // --- тайный шёпот котика по двойному клику ---
+    const whispers = [
+      '🐱 котик шепчет: всё будет хорошо',
+      '💛 котик говорит: ты особенный человек',
+      '😺 котик знает: доброта возвращается',
+      '🐾 котик уверен: ты справишься',
+      '🌙 котик шепчет: сегодня хороший день',
+      '💛 котик говорит: ты не один',
+      '😸 котик знает: мир добрее, когда ты в нём',
+      '🐾 котик шепчет: обними кого-нибудь сегодня',
+    ];
+    catWrap.addEventListener('dblclick', () => {
+      showToast(whispers[Math.floor(Math.random() * whispers.length)]);
+    });
+
     catWrap.addEventListener('click', (e) => {
       catWrap.classList.add('purring');
       playPurr();
