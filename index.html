@@ -178,6 +178,14 @@
       text-align:center; font-size:.95rem; font-weight:600;
       color: var(--accent-dark); margin: 0 0 16px; min-height: 1.4em;
     }
+    .season-badge {
+      display: inline-block; margin: 0 0 14px;
+      padding: 5px 14px; border-radius: 999px;
+      font-size: .85rem; font-weight: 600;
+      background: linear-gradient(90deg, #fff0f6, #fff8ee);
+      box-shadow: 0 2px 8px rgba(232,91,151,.13);
+      opacity: .9;
+    }
     footer { margin-top:40px; opacity:.7; font-size:.9rem; text-align:center; }
     .toast {
       position:fixed; bottom:24px; left:50%;
@@ -198,6 +206,7 @@
   <p class="greeting" id="greeting"></p>
   <p class="counter">Революцию поддержали уже <span id="cnt">…</span> котиков по всему миру 🌍</p>
   <p class="streak" id="streak"></p>
+  <p class="season-badge" id="seasonBadge"></p>
 
   <div class="card">
     <p class="cat-of-day" id="catOfDay"></p>
@@ -619,6 +628,19 @@
         }
       }
     });
+
+    // --- сезонный бейдж ---
+    (function() {
+      const m = new Date().getMonth(); // 0=Jan
+      const seasons = [
+        { months: [2,3,4],  text: '🌸 Весна — котики цветут вместе с природой!' },
+        { months: [5,6,7],  text: '☀️ Лето — котики греются на солнышке!' },
+        { months: [8,9,10], text: '🍂 Осень — котики любят шуршать листьями!' },
+        { months: [11,0,1], text: '❄️ Зима — котики мурчат и греют!' },
+      ];
+      const s = seasons.find(s => s.months.includes(m));
+      if (s) document.getElementById('seasonBadge').textContent = s.text;
+    })();
 
     // --- котик скучает ---
     (function() {
