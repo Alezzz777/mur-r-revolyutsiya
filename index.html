@@ -420,7 +420,7 @@
     function playPurr() {
       try {
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const dur = 1.8;
+        const dur = 5.0;
         const sr = ctx.sampleRate;
 
         // Коричневый шум — самый близкий к мурчанию тембр
@@ -491,7 +491,7 @@
       catWrap.classList.add('purring');
       playPurr();
       updatePetCounter();
-      setTimeout(() => catWrap.classList.remove('purring'), 1500);
+      setTimeout(() => catWrap.classList.remove('purring'), 5000);
       // всплывающие сердечки
       const emojis = ['💛','🐾','💛','🐱','💛'];
       for (let i = 0; i < 3; i++) {

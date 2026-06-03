@@ -211,7 +211,7 @@
     function playPurr() {
       try {
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const dur = 1.8;
+        const dur = 5.0;
         const sr = ctx.sampleRate;
         const buf = ctx.createBuffer(1, sr * dur, sr);
         const d = buf.getChannelData(0);
@@ -282,7 +282,7 @@
     catWrap.addEventListener('click', () => {
       catWrap.classList.add('purring');
       playPurr();
-      setTimeout(() => catWrap.classList.remove('purring'), 1500);
+      setTimeout(() => catWrap.classList.remove('purring'), 5000);
     });
 
     document.getElementById('newCatBtn').addEventListener('click', newCat);
