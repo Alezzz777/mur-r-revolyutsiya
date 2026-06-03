@@ -307,8 +307,16 @@
       '💤 Кошка тратит треть времени бодрствования на уход за шёрсткой.',
       '🌙 Кошки видят в темноте в 6 раз лучше людей.',
     ];
-    document.getElementById('catFact').textContent =
-      CAT_FACTS[Math.floor(Math.random() * CAT_FACTS.length)];
+    const catFactEl = document.getElementById('catFact');
+    function newFact() {
+      catFactEl.style.opacity = '0';
+      setTimeout(() => {
+        catFactEl.textContent = CAT_FACTS[Math.floor(Math.random() * CAT_FACTS.length)];
+        catFactEl.style.opacity = '1';
+      }, 250);
+    }
+    catFactEl.style.transition = 'opacity .25s';
+    newFact();
 
     const catImg = document.getElementById('catImg');
     const catWrap = document.getElementById('catWrap');
@@ -318,6 +326,7 @@
       const bust = Date.now() + '-' + Math.floor(Math.random() * 1e6);
       catImg.crossOrigin = 'anonymous';
       catImg.src = 'https://cataas.com/cat?width=600&height=600&t=' + bust;
+      newFact();
     }
 
     function catToBlob() {
