@@ -544,6 +544,33 @@
         }
       }
     });
+
+    // --- пасхалка: код Конами ---
+    (function() {
+      const code = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+      let pos = 0;
+      document.addEventListener('keydown', (e) => {
+        if (e.key === code[pos]) { pos++; } else { pos = e.key === code[0] ? 1 : 0; }
+        if (pos < code.length) return;
+        pos = 0;
+        // Взрыв котиков!
+        const overlay = document.createElement('div');
+        overlay.style.cssText = 'position:fixed;inset:0;z-index:9998;pointer-events:none;overflow:hidden;';
+        document.body.appendChild(overlay);
+        const emojis = ['🐱','🐈','😺','😸','😻','🐾','💛'];
+        for (let i = 0; i < 60; i++) {
+          const span = document.createElement('span');
+          span.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+          span.style.cssText = `position:absolute;font-size:${1.5+Math.random()*2}rem;
+            left:${Math.random()*100}%;top:${Math.random()*100}%;
+            animation:floatHeart ${0.8+Math.random()*1.2}s ease-out forwards;
+            animation-delay:${Math.random()*0.6}s;`;
+          overlay.appendChild(span);
+        }
+        showToast('🐱 МУР-Р-РЕВОЛЮЦИЯ АКТИВИРОВАНА! 🐱');
+        setTimeout(() => overlay.remove(), 2500);
+      });
+    })();
   </script>
 </body>
 </html>
