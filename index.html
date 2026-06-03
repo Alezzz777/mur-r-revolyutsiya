@@ -100,6 +100,12 @@
     .donate-btn:active { transform:scale(.97); }
     .donate-btn.kofi { background:#ff5e5b; color:white; }
     .donate-btn.boosty { background:#f15c22; color:white; }
+    .cat-fact {
+      margin-top: 14px; padding: 10px 16px;
+      background: linear-gradient(135deg, #fff0f6, #fff8ee);
+      border-radius: 12px; font-size: .92rem;
+      text-align: center; line-height: 1.55; opacity: .9;
+    }
     .lang-switch { align-self: flex-end; margin-bottom: 8px; font-size: .88rem; }
     .lang-switch a { color: var(--accent-dark); text-decoration: none; font-weight: 600; opacity: .75; }
     .lang-switch a:hover { opacity: 1; }
@@ -129,6 +135,7 @@
       <button class="btn-primary" id="shareBtn">💌 Переслать котика</button>
       <button class="btn-ghost" id="newCatBtn">🎲 Новый котик</button>
     </div>
+    <p class="cat-fact" id="catFact"></p>
   </div>
 
   <section class="map-section">
@@ -217,6 +224,23 @@
     loadVisits().then(() => recordVisit());
 
     // --- котик ---
+    const CAT_FACTS = [
+      '🐱 Кошки мурчат с частотой 25–150 Гц — именно эта вибрация ускоряет заживление костей.',
+      '😴 Кошки спят 12–16 часов в сутки. Они просто очень серьёзно относятся к отдыху.',
+      '👃 Нос каждой кошки уникален, как отпечаток пальца у человека.',
+      '🧠 Мозг кошки похож на человеческий на 90% — особенно в зонах эмоций.',
+      '🐾 Кошки ходят на цыпочках. Буквально — они пальцеходящие животные.',
+      '💛 Когда кошка медленно моргает на тебя — это кошачий поцелуй.',
+      '🌍 На Земле около 600 миллионов домашних кошек.',
+      '🎵 Кошки не мяукают друг с другом. Мяуканье — специально для людей.',
+      '⚡ Кошка может прыгнуть в 5 раз выше своего роста.',
+      '🤝 Первые кошки были одомашнены около 10 000 лет назад на Ближнем Востоке.',
+      '💤 Кошка тратит треть времени бодрствования на уход за шёрсткой.',
+      '🌙 Кошки видят в темноте в 6 раз лучше людей.',
+    ];
+    document.getElementById('catFact').textContent =
+      CAT_FACTS[Math.floor(Math.random() * CAT_FACTS.length)];
+
     const catImg = document.getElementById('catImg');
     const catWrap = document.getElementById('catWrap');
     const toast = document.getElementById('toast');
