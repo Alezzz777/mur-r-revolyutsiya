@@ -118,6 +118,10 @@
       animation: floatHeart 0.9s ease-out forwards;
       z-index: 10;
     }
+    .streak {
+      text-align:center; font-size:.95rem; font-weight:600;
+      color: var(--accent-dark); margin: 0 0 16px; min-height: 1.4em;
+    }
     footer { margin-top:40px; opacity:.7; font-size:.9rem; text-align:center; }
     .toast {
       position:fixed; bottom:24px; left:50%;
@@ -134,6 +138,7 @@
   <h1>🐾 Мур-р-революция</h1>
   <p class="tagline">Мы не воюем — мы мурчим.</p>
   <p class="counter">Революцию поддержали уже <span id="cnt">…</span> котиков по всему миру 🌍</p>
+  <p class="streak" id="streak"></p>
 
   <div class="card">
     <div class="cat-wrap" id="catWrap" title="Погладь котика 🐾">
@@ -233,6 +238,25 @@
     }
 
     loadVisits().then(() => recordVisit());
+
+    // --- серия дней ---
+    (function() {
+      const today = new Date().toISOString().slice(0, 10);
+      const yesterday = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
+      const last = localStorage.getItem('purr_streak_last');
+      let streak = parseInt(localStorage.getItem('purr_streak') || '0');
+      if (last === today) { /* уже считали сегодня */ }
+      else if (last === yesterday) { streak += 1; }
+      else { streak = 1; }
+      localStorage.setItem('purr_streak', streak);
+      localStorage.setItem('purr_streak_last', today);
+      const el = document.getElementById('streak');
+      if (streak >= 2) {
+        el.textContent = `🔥 ${streak} ${streak < 5 ? 'дня' : 'дней'} подряд гладишь котиков!`;
+      } else {
+        el.textContent = '✨ Добро пожаловать в революцию!';
+      }
+    })();
 
     // --- котик ---
     const CAT_FACTS = [
