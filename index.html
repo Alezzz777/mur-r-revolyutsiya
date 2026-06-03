@@ -78,6 +78,19 @@
     .manifest ol { padding-left:1.2em; }
     .manifest li { margin:10px 0; }
     .heart { color:var(--accent-dark); }
+    .donate-section { max-width:540px; width:100%; margin-top:32px; }
+    .donate-btns { display:flex; flex-wrap:wrap; gap:12px; justify-content:center; }
+    .donate-btn {
+      display:inline-flex; align-items:center;
+      padding:13px 24px; border-radius:999px;
+      font:inherit; font-weight:700; font-size:.97rem;
+      text-decoration:none; transition:transform .12s, box-shadow .2s;
+      box-shadow:0 6px 18px rgba(0,0,0,.12);
+    }
+    .donate-btn:hover { transform:translateY(-2px); box-shadow:0 8px 22px rgba(0,0,0,.18); }
+    .donate-btn:active { transform:scale(.97); }
+    .donate-btn.kofi { background:#ff5e5b; color:white; }
+    .donate-btn.boosty { background:#f15c22; color:white; }
     footer { margin-top:40px; opacity:.7; font-size:.9rem; text-align:center; }
     .toast {
       position:fixed; bottom:24px; left:50%;
@@ -121,6 +134,19 @@
       <li><span class="heart">Мир — это когда все гладят своих котиков.</span> И мы идём к нему по одному мурчанию за раз.</li>
     </ol>
     <p style="text-align:center"><strong>Погладил? Передай дальше. 🐱➡️🐱➡️🐱</strong></p>
+  </section>
+
+  <section class="donate-section">
+    <h2 style="text-align:center;margin-bottom:6px;">💛 Помочь котикам</h2>
+    <p style="text-align:center;opacity:.75;margin:0 0 18px;font-size:.97rem;">Каждый рубль идёт на корм бездомным котикам и помощь приютам</p>
+    <div class="donate-btns">
+      <a class="donate-btn kofi" href="https://ko-fi.com/murrrevolyutsiya" target="_blank" rel="noopener">
+        <img src="https://storage.ko-fi.com/cdn/cup-border.png" alt="Ko-fi" style="height:20px;vertical-align:middle;margin-right:7px;">Поддержать на Ko-fi
+      </a>
+      <a class="donate-btn boosty" href="https://boosty.to/murr-revolyutsiya" target="_blank" rel="noopener">
+        🚀 Поддержать на Boosty
+      </a>
+    </div>
   </section>
 
   <footer>Сделано с 💛 в рамках Мур-р-революции · <a href="/about.html" style="color:#e85b97;text-decoration:none;font-weight:600;">История проекта 🐾</a></footer>
