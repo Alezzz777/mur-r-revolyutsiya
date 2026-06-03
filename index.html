@@ -202,6 +202,12 @@
       opacity:0; transition:all .3s; z-index:9999;
     }
     .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+    @keyframes catStretch {
+      0%   { transform: scale(0.92) rotate(-1deg); opacity: 0; }
+      60%  { transform: scale(1.04) rotate(0.5deg); opacity: 1; }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+    .cat-wrap.stretching img { animation: catStretch 0.55s cubic-bezier(.22,1,.36,1) forwards; }
     @keyframes pawFade {
       0%   { opacity: .7; transform: scale(1) rotate(var(--r)); }
       100% { opacity: 0;  transform: scale(0.5) rotate(var(--r)) translateY(-14px); }
@@ -475,7 +481,11 @@
         const bust = Date.now() + '-' + Math.floor(Math.random() * 1e6);
         catImg.crossOrigin = 'anonymous';
         catImg.src = 'https://cataas.com/cat?width=600&height=600&t=' + bust;
-        catImg.onload = () => { catImg.style.opacity = '1'; };
+        catImg.onload = () => {
+          catImg.style.opacity = '1';
+          catWrap.classList.add('stretching');
+          setTimeout(() => catWrap.classList.remove('stretching'), 600);
+        };
       }, 350);
       newFact();
     }
