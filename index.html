@@ -311,32 +311,15 @@
       const text = 'Лови котика 🐱 Погладь его, прочти манифест и передай дальше — это Мур-р-революция, мы делаем мир мягче.';
       const url = window.location.href;
       try {
-        // Пробуем поделиться именно этой картинкой через canvas (обходит CORS)
-        if (navigator.share && navigator.canShare) {
-          showToast('Загружаю котика… 🐾');
-          let blob = await catToBlob();
-          // Если canvas не сработал — пробуем fetch
-          if (!blob) {
-            blob = await fetch(catImg.src).then(r => r.blob()).catch(() => null);
-          }
-          if (blob) {
-            const file = new File([blob], 'cat.jpg', { type: 'image/jpeg' });
-            if (navigator.canShare({ files: [file] })) {
-              await navigator.share({ files: [file], title: 'Мур-р-революция 🐾', text: text + '\n' + url });
-              return;
-            }
-          }
-        }
-        // Fallback: share URL
         if (navigator.share) {
           await navigator.share({ title: 'Мур-р-революция 🐾', text, url });
         } else {
-          await navigator.clipboard.writeText(text + ' ' + url);
+          await navigator.clipboard.writeText(url);
           showToast('Ссылка скопирована — передай котика! 💌');
         }
       } catch(e) {
         if (e.name !== 'AbortError') {
-          await navigator.clipboard.writeText(text + ' ' + url).catch(() => {});
+          await navigator.clipboard.writeText(url).catch(() => {});
           showToast('Ссылка скопирована — передай котика! 💌');
         }
       }

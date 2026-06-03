@@ -244,29 +244,15 @@
       const text = 'Here\'s a cat for you 🐱 Pet it, read the manifesto, and pass it on — this is Purr-r-revolution, we\'re making the world softer.';
       const url = window.location.href;
       try {
-        if (navigator.share && navigator.canShare) {
-          showToast('Loading the cat… 🐾');
-          let blob = await catToBlob();
-          if (!blob) {
-            blob = await fetch(catImg.src).then(r => r.blob()).catch(() => null);
-          }
-          if (blob) {
-            const file = new File([blob], 'cat.jpg', { type: 'image/jpeg' });
-            if (navigator.canShare({ files: [file] })) {
-              await navigator.share({ files: [file], title: 'Purr-r-revolution 🐾', text: text + '\n' + url });
-              return;
-            }
-          }
-        }
         if (navigator.share) {
           await navigator.share({ title: 'Purr-r-revolution 🐾', text, url });
         } else {
-          await navigator.clipboard.writeText(text + ' ' + url);
+          await navigator.clipboard.writeText(url);
           showToast('Link copied — pass the cat on! 💌');
         }
       } catch(e) {
         if (e.name !== 'AbortError') {
-          await navigator.clipboard.writeText(text + ' ' + url).catch(() => {});
+          await navigator.clipboard.writeText(url).catch(() => {});
           showToast('Link copied — pass the cat on! 💌');
         }
       }
