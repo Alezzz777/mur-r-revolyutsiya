@@ -20,6 +20,12 @@
       --ink: #3a2b32; --accent: #ff7eb3;
       --accent-dark: #e85b97; --card: #fffdfb;
     }
+    body.night-mode {
+      --bg1: #1a1020; --bg2: #21182e;
+      --ink: #f0e6f6; --accent: #d47ab8;
+      --accent-dark: #c45fa0; --card: #2a1f35;
+    }
+    body.night-mode #map { filter: brightness(0.75) saturate(0.8); }
     * { box-sizing: border-box; }
     body {
       margin: 0;
@@ -247,6 +253,12 @@
     }
 
     loadVisits().then(() => recordVisit());
+
+    // --- night mode ---
+    (function() {
+      const h = new Date().getHours();
+      if (h >= 22 || h < 6) document.body.classList.add('night-mode');
+    })();
 
     // --- paw trail on load ---
     (function() {
