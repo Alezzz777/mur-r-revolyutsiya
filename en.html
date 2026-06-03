@@ -1,25 +1,16 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Мур-р-революция 🐾</title>
-  <meta name="description" content="Революция без баррикад — только с мурчанием. Погладь котика, передай дальше, сделай мир мягче." />
-  <meta property="og:title" content="Мур-р-революция 🐾" />
-  <meta property="og:description" content="Мы не воюем — мы мурчим. Открой, прочти манифест и передай котика дальше." />
+  <title>Purr-r-revolution 🐾</title>
+  <meta name="description" content="A revolution without barricades — only purring. Pet a cat, pass it on, make the world softer." />
+  <meta property="og:title" content="Purr-r-revolution 🐾" />
+  <meta property="og:description" content="We don't fight — we purr. Open it, read the manifesto, pass the cat along." />
   <meta property="og:image" content="https://cataas.com/cat?width=1200&height=630" />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <script>
-    (function(){
-      var lang = (navigator.language || navigator.userLanguage || '').toLowerCase();
-      if (lang.startsWith('en') && !sessionStorage.getItem('lang-chosen')) {
-        sessionStorage.setItem('lang-chosen', '1');
-        location.replace('/en.html');
-      }
-    })();
-  </script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
@@ -41,8 +32,10 @@
     }
     h1 { font-size: clamp(2rem,6vw,3.2rem); margin: 8px 0 4px; text-align: center; }
     .tagline { text-align: center; font-size: 1.1rem; opacity: .85; margin: 0 0 8px; }
+    .lang-switch { align-self: flex-end; margin-bottom: 8px; font-size: .88rem; }
+    .lang-switch a { color: var(--accent-dark); text-decoration: none; font-weight: 600; opacity: .75; }
+    .lang-switch a:hover { opacity: 1; }
 
-    /* счётчик */
     .counter {
       text-align: center; margin-bottom: 20px;
       font-size: 1rem; color: var(--accent-dark); font-weight: 600;
@@ -77,7 +70,6 @@
     .btn-primary:hover { background:var(--accent-dark); }
     .btn-ghost { background:#fff; color:var(--accent-dark); border:2px solid var(--accent); }
 
-    /* карта */
     .map-section { max-width:540px; width:100%; margin-top:32px; }
     .map-section h2 { text-align:center; margin-bottom:12px; }
     #map { height:320px; border-radius:18px; overflow:hidden; box-shadow:0 8px 24px rgba(232,91,151,.15); }
@@ -87,6 +79,7 @@
     .manifest ol { padding-left:1.2em; }
     .manifest li { margin:10px 0; }
     .heart { color:var(--accent-dark); }
+
     .donate-section { max-width:540px; width:100%; margin-top:32px; }
     .donate-btns { display:flex; flex-wrap:wrap; gap:12px; justify-content:center; }
     .donate-btn {
@@ -100,9 +93,7 @@
     .donate-btn:active { transform:scale(.97); }
     .donate-btn.kofi { background:#ff5e5b; color:white; }
     .donate-btn.boosty { background:#f15c22; color:white; }
-    .lang-switch { align-self: flex-end; margin-bottom: 8px; font-size: .88rem; }
-    .lang-switch a { color: var(--accent-dark); text-decoration: none; font-weight: 600; opacity: .75; }
-    .lang-switch a:hover { opacity: 1; }
+
     footer { margin-top:40px; opacity:.7; font-size:.9rem; text-align:center; }
     .toast {
       position:fixed; bottom:24px; left:50%;
@@ -115,54 +106,55 @@
   </style>
 </head>
 <body>
-  <div class="lang-switch"><a href="/en.html">🇬🇧 EN</a></div>
-  <h1>🐾 Мур-р-революция</h1>
-  <p class="tagline">Мы не воюем — мы мурчим.</p>
-  <p class="counter">Революцию поддержали уже <span id="cnt">…</span> котиков по всему миру 🌍</p>
+  <div class="lang-switch"><a href="/">🇷🇺 RU</a></div>
+
+  <h1>🐾 Purr-r-revolution</h1>
+  <p class="tagline">We don't fight — we purr.</p>
+  <p class="counter">Already <span id="cnt">…</span> cats supported the revolution worldwide 🌍</p>
 
   <div class="card">
-    <div class="cat-wrap" id="catWrap" title="Погладь котика 🐾">
-      <img id="catImg" alt="Котик Мур-р-революции" src="https://cataas.com/cat?width=600&height=600" />
-      <span class="purr">мур-р-р 💛</span>
+    <div class="cat-wrap" id="catWrap" title="Pet the cat 🐾">
+      <img id="catImg" alt="Purr-r-revolution cat" src="https://cataas.com/cat?width=600&height=600" />
+      <span class="purr">purr-r-r 💛</span>
     </div>
     <div class="buttons">
-      <button class="btn-primary" id="shareBtn">💌 Переслать котика</button>
-      <button class="btn-ghost" id="newCatBtn">🎲 Новый котик</button>
+      <button class="btn-primary" id="shareBtn">💌 Share the cat</button>
+      <button class="btn-ghost" id="newCatBtn">🎲 New cat</button>
     </div>
   </div>
 
   <section class="map-section">
-    <h2>🗺️ Откуда уже гладили котиков</h2>
+    <h2>🗺️ Where cats have been petted</h2>
     <div id="map"></div>
   </section>
 
   <section class="manifest">
-    <h2>Манифест Мур-р-революции</h2>
-    <p>Это революция без баррикад и без врагов. Её единственное оружие — тепло.</p>
+    <h2>Purr-r-revolution Manifesto</h2>
+    <p>This is a revolution without barricades and without enemies. Its only weapon is warmth.</p>
     <ol>
-      <li><span class="heart">Доброта заразна.</span> Один тёплый поступок будит следующий. Мы передаём котика — и передаём настроение.</li>
-      <li><span class="heart">Никто не рождается злым.</span> Чаще всего за злостью — усталость и страх. Котик не спорит, он просто мурчит — и человеку становится мягче.</li>
-      <li><span class="heart">Маленькое важнее громкого.</span> Покормить уличного кота, поддержать того, кому тяжело, не ответить злом на зло — из этого и складывается мир.</li>
-      <li><span class="heart">Каждый может присоединиться.</span> Не нужно быть героем. Достаточно погладить котика и передать его дальше.</li>
-      <li><span class="heart">Мир — это когда все гладят своих котиков.</span> И мы идём к нему по одному мурчанию за раз.</li>
+      <li><span class="heart">Kindness is contagious.</span> One warm act sparks the next. We pass the cat along — and pass the feeling with it.</li>
+      <li><span class="heart">Nobody is born cruel.</span> Most often, cruelty hides exhaustion and fear. A cat doesn't argue — it just purrs — and the person becomes softer.</li>
+      <li><span class="heart">Small things matter more than loud ones.</span> Feeding a stray cat, supporting someone who's struggling, not returning cruelty with cruelty — the world is built from these moments.</li>
+      <li><span class="heart">Anyone can join.</span> You don't need to be a hero. Just pet the cat and pass it on.</li>
+      <li><span class="heart">Peace is when everyone pets their cats.</span> And we're getting there one purr at a time.</li>
     </ol>
-    <p style="text-align:center"><strong>Погладил? Передай дальше. 🐱➡️🐱➡️🐱</strong></p>
+    <p style="text-align:center"><strong>Petted it? Pass it on. 🐱➡️🐱➡️🐱</strong></p>
   </section>
 
   <section class="donate-section">
-    <h2 style="text-align:center;margin-bottom:6px;">💛 Помочь котикам</h2>
-    <p style="text-align:center;opacity:.75;margin:0 0 18px;font-size:.97rem;">Каждый рубль идёт на корм бездомным котикам и помощь приютам</p>
+    <h2 style="text-align:center;margin-bottom:6px;">💛 Help the cats</h2>
+    <p style="text-align:center;opacity:.75;margin:0 0 18px;font-size:.97rem;">Every donation goes to food for stray cats and shelter support</p>
     <div class="donate-btns">
       <a class="donate-btn kofi" href="https://ko-fi.com/murrrevolyutsiya" target="_blank" rel="noopener">
-        <img src="https://storage.ko-fi.com/cdn/cup-border.png" alt="Ko-fi" style="height:20px;vertical-align:middle;margin-right:7px;">Поддержать на Ko-fi
+        <img src="https://storage.ko-fi.com/cdn/cup-border.png" alt="Ko-fi" style="height:20px;vertical-align:middle;margin-right:7px;">Support on Ko-fi
       </a>
       <a class="donate-btn boosty" href="https://boosty.to/murrrevolyutsiya" target="_blank" rel="noopener">
-        🚀 Поддержать на Boosty
+        🚀 Support on Boosty
       </a>
     </div>
   </section>
 
-  <footer>Сделано с 💛 в рамках Мур-р-революции · <a href="/about.html" style="color:#e85b97;text-decoration:none;font-weight:600;">История проекта 🐾</a></footer>
+  <footer>Made with 💛 as part of Purr-r-revolution · <a href="/en-about.html" style="color:#e85b97;text-decoration:none;font-weight:600;">Our story 🐾</a></footer>
   <div class="toast" id="toast"></div>
 
   <script>
@@ -170,11 +162,9 @@
     const SUPABASE_KEY = 'sb_publishable_QDZ8kFBXubI9Ni8_j2mVoQ_LrDTh59J';
     const HEADERS = { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' };
 
-    // --- карта ---
     const map = L.map('map', { zoomControl: true, scrollWheelZoom: false }).setView([20, 10], 2);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap',
-      maxZoom: 10
+      attribution: '© OpenStreetMap', maxZoom: 10
     }).addTo(map);
 
     const catIcon = L.divIcon({ html: '🐾', className: '', iconSize: [24, 24], iconAnchor: [12, 12] });
@@ -204,7 +194,6 @@
           headers: { ...HEADERS, 'Prefer': 'return=minimal' },
           body: JSON.stringify({ lat: geo.latitude, lng: geo.longitude, country: geo.country_name, city: geo.city })
         });
-        // Обновим счётчик и добавим точку на карту
         const cnt = document.getElementById('cnt');
         const prev = parseInt(cnt.textContent) || 0;
         cnt.textContent = prev + 1;
@@ -216,7 +205,6 @@
 
     loadVisits().then(() => recordVisit());
 
-    // --- котик ---
     const catImg = document.getElementById('catImg');
     const catWrap = document.getElementById('catWrap');
     const toast = document.getElementById('toast');
@@ -241,8 +229,8 @@
 
     document.getElementById('shareBtn').addEventListener('click', async () => {
       const shareData = {
-        title: 'Мур-р-революция 🐾',
-        text: 'Лови котика 🐱 Погладь его, прочти манифест и передай дальше — это Мур-р-революция, мы делаем мир мягче.',
+        title: 'Purr-r-revolution 🐾',
+        text: 'Here\'s a cat for you 🐱 Pet it, read the manifesto, and pass it on — this is Purr-r-revolution, we\'re making the world softer.',
         url: window.location.href
       };
       try {
@@ -250,7 +238,7 @@
           await navigator.share(shareData);
         } else {
           await navigator.clipboard.writeText(shareData.text + ' ' + shareData.url);
-          showToast('Ссылка скопирована — передай котика! 💌');
+          showToast('Link copied — pass the cat on! 💌');
         }
       } catch(e) {}
     });
