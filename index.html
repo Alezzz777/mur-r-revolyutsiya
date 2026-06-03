@@ -420,7 +420,7 @@
     function playPurr() {
       try {
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const dur = 5.0;
+        const dur = 10.0;
         const sr = ctx.sampleRate;
 
         // Коричневый шум — самый близкий к мурчанию тембр
@@ -458,8 +458,8 @@
         const breathAmp = ctx.createGain();
         breathLfo.frequency.value = 0.32;
         breathLfo.type = 'sine';
-        breathAmp.gain.value = 0.22;
-        breathGain.gain.value = 0.55;
+        breathAmp.gain.value = 0.35;
+        breathGain.gain.value = 0.85;
         breathLfo.connect(breathAmp);
         breathAmp.connect(breathGain.gain);
 
@@ -505,7 +505,7 @@
       catWrap.classList.add('purring');
       playPurr();
       updatePetCounter();
-      setTimeout(() => catWrap.classList.remove('purring'), 5000);
+      setTimeout(() => catWrap.classList.remove('purring'), 10000);
       // всплывающие сердечки
       const emojis = ['💛','🐾','💛','🐱','💛'];
       for (let i = 0; i < 3; i++) {
