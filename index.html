@@ -367,30 +367,54 @@
     function playPurr() {
       try {
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const duration = 1.4;
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
+        const dur = 1.8;
+        const sr = ctx.sampleRate;
+
+        // Коричневый шум — самый близкий к мурчанию тембр
+        const buf = ctx.createBuffer(1, sr * dur, sr);
+        const d = buf.getChannelData(0);
+        let last = 0;
+        for (let i = 0; i < d.length; i++) {
+          const w = Math.random() * 2 - 1;
+          d[i] = (last + 0.02 * w) / 1.02;
+          last = d[i];
+          d[i] *= 4;
+        }
+        const noise = ctx.createBufferSource();
+        noise.buffer = buf;
+
+        // Низкочастотный фильтр — убираем всё выше 180 Гц
+        const lp = ctx.createBiquadFilter();
+        lp.type = 'lowpass';
+        lp.frequency.value = 180;
+        lp.Q.value = 0.8;
+
+        // Тремоло ~25 Гц — создаёт вибрацию мурчания
+        const tremoloGain = ctx.createGain();
         const lfo = ctx.createOscillator();
-        const lfoGain = ctx.createGain();
+        const lfoAmp = ctx.createGain();
+        lfo.frequency.value = 26;
+        lfoAmp.gain.value = 0.35;
+        lfo.connect(lfoAmp);
+        lfoAmp.connect(tremoloGain.gain);
+        tremoloGain.gain.value = 0.35;
 
-        lfo.frequency.value = 25;
-        lfoGain.gain.value = 18;
-        lfo.connect(lfoGain);
-        lfoGain.connect(osc.frequency);
+        // Огибающая (плавное начало и конец)
+        const master = ctx.createGain();
+        master.gain.setValueAtTime(0, ctx.currentTime);
+        master.gain.linearRampToValueAtTime(0.55, ctx.currentTime + 0.18);
+        master.gain.linearRampToValueAtTime(0.55, ctx.currentTime + dur - 0.25);
+        master.gain.linearRampToValueAtTime(0, ctx.currentTime + dur);
 
-        osc.type = 'sawtooth';
-        osc.frequency.value = 90;
-        gain.gain.setValueAtTime(0, ctx.currentTime);
-        gain.gain.linearRampToValueAtTime(0.18, ctx.currentTime + 0.1);
-        gain.gain.linearRampToValueAtTime(0.18, ctx.currentTime + duration - 0.2);
-        gain.gain.linearRampToValueAtTime(0, ctx.currentTime + duration);
+        noise.connect(lp);
+        lp.connect(tremoloGain);
+        tremoloGain.connect(master);
+        master.connect(ctx.destination);
 
-        osc.connect(gain);
-        gain.connect(ctx.destination);
         lfo.start();
-        osc.start();
-        osc.stop(ctx.currentTime + duration);
-        lfo.stop(ctx.currentTime + duration);
+        noise.start();
+        noise.stop(ctx.currentTime + dur);
+        lfo.stop(ctx.currentTime + dur);
       } catch(e) {}
     }
 
