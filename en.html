@@ -32,9 +32,38 @@
     }
     h1 { font-size: clamp(2rem,6vw,3.2rem); margin: 8px 0 4px; text-align: center; }
     .tagline { text-align: center; font-size: 1.1rem; opacity: .85; margin: 0 0 8px; }
-    .lang-switch { align-self: flex-end; margin-bottom: 8px; font-size: .88rem; }
+    .lang-switch { align-self: flex-end; margin-bottom: 8px; font-size: .88rem; z-index:1; position:relative; }
     .lang-switch a { color: var(--accent-dark); text-decoration: none; font-weight: 600; opacity: .75; }
     .lang-switch a:hover { opacity: 1; }
+    .greeting { text-align:center; font-size:.95rem; opacity:.7; margin:-6px 0 10px; font-style:italic; }
+    .streak { text-align:center; font-size:.95rem; font-weight:600; color:var(--accent-dark); margin:0 0 16px; min-height:1.4em; }
+    @keyframes pawStep {
+      0%   { opacity:0; transform:scale(.5) rotate(-15deg); }
+      30%  { opacity:1; transform:scale(1) rotate(-15deg); }
+      70%  { opacity:1; transform:scale(1) rotate(-15deg); }
+      100% { opacity:0; transform:scale(1) rotate(-15deg); }
+    }
+    .paw-trail { position:fixed; top:0; left:0; width:100%; height:60px; pointer-events:none; z-index:999; overflow:hidden; }
+    .paw-step { position:absolute; font-size:1.3rem; animation:pawStep .7s ease-in-out forwards; top:10px; }
+    @keyframes bgFloat {
+      0%   { transform:translateY(0) scale(1); opacity:0; }
+      10%  { opacity:.07; }
+      90%  { opacity:.07; }
+      100% { transform:translateY(-100vh) scale(1.2); opacity:0; }
+    }
+    .bg-particle { position:fixed; pointer-events:none; z-index:0; font-size:1.4rem; animation:bgFloat linear infinite; bottom:-40px; }
+    @keyframes floatHeart {
+      0%   { transform:translateY(0) scale(1); opacity:1; }
+      100% { transform:translateY(-90px) scale(1.4); opacity:0; }
+    }
+    .float-heart { position:absolute; pointer-events:none; font-size:1.4rem; animation:floatHeart .9s ease-out forwards; z-index:10; }
+    .cat-of-day { text-align:center; font-size:.88rem; font-weight:600; color:var(--accent-dark); opacity:.8; margin:0 0 10px; }
+    .cat-fact { margin-top:14px; padding:10px 16px; background:linear-gradient(135deg,#fff0f6,#fff8ee); border-radius:12px; font-size:.92rem; text-align:center; line-height:1.55; opacity:.9; transition:opacity .25s; }
+    .pet-counter { text-align:center; font-size:.88rem; margin-top:8px; min-height:1.3em; opacity:.8; }
+    .daily-msg-section { max-width:540px; width:100%; margin-top:24px; }
+    .daily-msg { background:linear-gradient(135deg,#fff0f6,#fff8ee); border-radius:18px; padding:18px 22px; text-align:center; font-size:1rem; line-height:1.6; box-shadow:0 4px 16px rgba(232,91,151,.10); }
+    .daily-msg .msg-label { font-size:.8rem; font-weight:700; color:var(--accent-dark); letter-spacing:.04em; text-transform:uppercase; margin-bottom:6px; }
+    .daily-msg .msg-text { font-style:italic; }
 
     .counter {
       text-align: center; margin-bottom: 20px;
@@ -106,13 +135,18 @@
   </style>
 </head>
 <body>
+  <div class="paw-trail" id="pawTrail"></div>
+  <div id="bgParticles"></div>
   <div class="lang-switch"><a href="/">🇷🇺 RU</a></div>
 
   <h1>🐾 Purr-r-revolution</h1>
   <p class="tagline">We don't fight — we purr.</p>
+  <p class="greeting" id="greeting"></p>
   <p class="counter">Already <span id="cnt">…</span> cats supported the revolution worldwide 🌍</p>
+  <p class="streak" id="streak"></p>
 
   <div class="card">
+    <p class="cat-of-day" id="catOfDay"></p>
     <div class="cat-wrap" id="catWrap" title="Pet the cat 🐾">
       <img id="catImg" alt="Purr-r-revolution cat" src="https://cataas.com/cat?width=600&height=600" crossorigin="anonymous" />
       <span class="purr">purr-r-r 💛</span>
@@ -121,11 +155,17 @@
       <button class="btn-primary" id="shareBtn">💌 Share the cat</button>
       <button class="btn-ghost" id="newCatBtn">🎲 New cat</button>
     </div>
+    <p class="cat-fact" id="catFact"></p>
+    <p class="pet-counter" id="petCounter"></p>
   </div>
 
   <section class="map-section">
     <h2>🗺️ Where cats have been petted</h2>
     <div id="map"></div>
+  </section>
+
+  <section class="daily-msg-section">
+    <div class="daily-msg" id="dailyMsg"></div>
   </section>
 
   <section class="manifest">
@@ -208,6 +248,95 @@
 
     loadVisits().then(() => recordVisit());
 
+    // --- paw trail on load ---
+    (function() {
+      const trail = document.getElementById('pawTrail');
+      const steps = 7;
+      for (let i = 0; i < steps; i++) {
+        setTimeout(() => {
+          const p = document.createElement('span');
+          p.className = 'paw-step';
+          p.textContent = '🐾';
+          p.style.left = (8 + (i / (steps - 1)) * 84) + '%';
+          p.style.top = (8 + (i % 2) * 18) + 'px';
+          trail.appendChild(p);
+          setTimeout(() => p.remove(), 750);
+        }, i * 120);
+      }
+    })();
+
+    // --- background particles ---
+    (function() {
+      const container = document.getElementById('bgParticles');
+      const symbols = ['🐾','💛','🐾','💛','🐱'];
+      for (let i = 0; i < 12; i++) {
+        const p = document.createElement('span');
+        p.className = 'bg-particle';
+        p.textContent = symbols[i % symbols.length];
+        p.style.left = (Math.random() * 96) + '%';
+        const dur = 12 + Math.random() * 16;
+        p.style.animationDuration = dur + 's';
+        p.style.animationDelay = -(Math.random() * dur) + 's';
+        container.appendChild(p);
+      }
+    })();
+
+    // --- streak ---
+    (function() {
+      const today = new Date().toISOString().slice(0, 10);
+      const yesterday = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
+      const last = localStorage.getItem('purr_streak_last');
+      let streak = parseInt(localStorage.getItem('purr_streak') || '0');
+      if (last === today) {}
+      else if (last === yesterday) { streak += 1; }
+      else { streak = 1; }
+      localStorage.setItem('purr_streak', streak);
+      localStorage.setItem('purr_streak_last', today);
+      const el = document.getElementById('streak');
+      el.textContent = streak >= 2 ? `🔥 ${streak} days petting cats in a row!` : '✨ Welcome to the revolution!';
+    })();
+
+    // --- greeting by time ---
+    (function() {
+      const h = new Date().getHours();
+      const greetings = h < 6  ? ['🌟 Late night revolutionary — the cat is with you.', '🌙 Can\'t sleep? The cat purrs for you.']
+                      : h < 12 ? ['☀️ Good morning! Your cat is ready.', '🌅 Good morning, revolutionary!']
+                      : h < 17 ? ['🌤️ Good afternoon! Perfect time to pet a cat.', '☀️ Have a warm day — with a cat in it!']
+                      : h < 22 ? ['🌇 Good evening! The cat purrs for you.', '🌆 Evenings are better with cats.']
+                      :          ['🌙 Late evening — the best time for cats.', '✨ A quiet night and a purring cat.'];
+      document.getElementById('greeting').textContent = greetings[Math.floor(Math.random() * greetings.length)];
+    })();
+
+    // --- cat of the day + daily message ---
+    (function() {
+      const names = ['Biscuit','Marshmallow','Whiskers','Fluffy','Peanut','Mochi','Cheddar',
+        'Noodle','Pretzel','Waffle','Pudding','Toffee','Socks','Shadow',
+        'Ginger','Pumpkin','Pepper','Snowball','Mittens','Chester'];
+      const messages = [
+        'Hug someone for no reason at all 💛',
+        'Write to someone you\'ve been thinking about 🐾',
+        'Do one small kind thing — and the day is already a success 😺',
+        'Smile at a stranger. That\'s also a revolution 🌍',
+        'Feed a stray cat — or a bird. The world gets softer 🐱',
+        'Say thank you to someone who\'s long overdue 💛',
+        'Today is a good day to forgive someone 🌸',
+        'Make tea, wrap up in a blanket, and just be 🍵',
+        'Call a friend or family member — right now 💛',
+        'Go outside and find something beautiful. It\'s there 🌿',
+        'Take a pause. Let\'s breathe together, like a cat 🐾',
+        'Help someone with something small — that\'s the revolution 😸',
+        'Today you can do nothing. Cats approve 😴',
+        'Tell someone something good about them 💛',
+        'The world is better because you\'re in it 🌍',
+      ];
+      const d = new Date();
+      const seed = d.getFullYear() * 10000 + (d.getMonth()+1) * 100 + d.getDate();
+      document.getElementById('catOfDay').textContent = `✨ Cat of the day: ${names[seed % names.length]}`;
+      const msg = messages[(seed + 7) % messages.length];
+      document.getElementById('dailyMsg').innerHTML =
+        `<div class="msg-label">💌 Today's cat message</div><div class="msg-text">"${msg}"</div>`;
+    })();
+
     function playPurr() {
       try {
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -264,14 +393,47 @@
       } catch(e) {}
     }
 
+    const CAT_FACTS = [
+      '🐱 Cats purr at 25–150 Hz — that vibration actually helps heal bones.',
+      '😴 Cats sleep 12–16 hours a day. They take rest very seriously.',
+      '👃 Every cat\'s nose print is unique, like a human fingerprint.',
+      '🧠 A cat\'s brain is 90% similar to a human\'s — especially in emotion regions.',
+      '🐾 Cats walk on their toes. Literally — they are digitigrade animals.',
+      '💛 When a cat slow-blinks at you, that\'s a cat kiss.',
+      '🌍 There are about 600 million domestic cats on Earth.',
+      '🎵 Cats don\'t meow at each other. Meowing is just for humans.',
+      '⚡ A cat can jump 5 times its own height.',
+      '🤝 The first cats were domesticated around 10,000 years ago in the Middle East.',
+      '💤 Cats spend a third of their waking hours grooming.',
+      '🌙 Cats can see in the dark 6 times better than humans.',
+    ];
+
+    const catFactEl = document.getElementById('catFact');
+    function newFact() {
+      catFactEl.style.opacity = '0';
+      setTimeout(() => {
+        catFactEl.textContent = CAT_FACTS[Math.floor(Math.random() * CAT_FACTS.length)];
+        catFactEl.style.opacity = '1';
+      }, 250);
+    }
+    catFactEl.style.transition = 'opacity .25s';
+    newFact();
+
     const catImg = document.getElementById('catImg');
     const catWrap = document.getElementById('catWrap');
     const toast = document.getElementById('toast');
 
+    catImg.style.transition = 'opacity .35s ease';
+
     function newCat() {
-      const bust = Date.now() + '-' + Math.floor(Math.random() * 1e6);
-      catImg.crossOrigin = 'anonymous';
-      catImg.src = 'https://cataas.com/cat?width=600&height=600&t=' + bust;
+      catImg.style.opacity = '0';
+      setTimeout(() => {
+        const bust = Date.now() + '-' + Math.floor(Math.random() * 1e6);
+        catImg.crossOrigin = 'anonymous';
+        catImg.src = 'https://cataas.com/cat?width=600&height=600&t=' + bust;
+        catImg.onload = () => { catImg.style.opacity = '1'; };
+      }, 350);
+      newFact();
     }
 
     function catToBlob() {
@@ -292,11 +454,66 @@
       setTimeout(() => toast.classList.remove('show'), 2200);
     }
 
-    catWrap.addEventListener('click', () => {
+    let petCount = 0;
+    const petMsgs = [
+      [1,  '😺 The cat felt your hand…'],
+      [2,  '😸 The cat is happy!'],
+      [5,  '😻 The cat is delighted! purr-purr-purr'],
+      [10, '🥰 The cat considers you their human'],
+      [20, '👑 You are beloved by all cats of the world'],
+      [50, '🌟 Legend of the Purr-r-revolution!'],
+    ];
+    function updatePetCounter() {
+      petCount++;
+      const el = document.getElementById('petCounter');
+      const msg = [...petMsgs].reverse().find(([n]) => petCount >= n);
+      el.textContent = msg ? msg[1] : '';
+    }
+
+    catWrap.addEventListener('click', (e) => {
       catWrap.classList.add('purring');
       playPurr();
+      updatePetCounter();
+      const emojis = ['💛','🐾','💛','🐱','💛'];
+      for (let i = 0; i < 3; i++) {
+        setTimeout(() => {
+          const h = document.createElement('span');
+          h.className = 'float-heart';
+          h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+          h.style.left = (20 + Math.random() * 60) + '%';
+          h.style.bottom = '20px';
+          catWrap.appendChild(h);
+          setTimeout(() => h.remove(), 950);
+        }, i * 150);
+      }
       setTimeout(() => catWrap.classList.remove('purring'), 10000);
     });
+
+    // --- Konami code easter egg ---
+    (function() {
+      const code = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+      let pos = 0;
+      document.addEventListener('keydown', (e) => {
+        if (e.key === code[pos]) { pos++; } else { pos = e.key === code[0] ? 1 : 0; }
+        if (pos < code.length) return;
+        pos = 0;
+        const overlay = document.createElement('div');
+        overlay.style.cssText = 'position:fixed;inset:0;z-index:9998;pointer-events:none;overflow:hidden;';
+        document.body.appendChild(overlay);
+        const emojis = ['🐱','🐈','😺','😸','😻','🐾','💛'];
+        for (let i = 0; i < 60; i++) {
+          const span = document.createElement('span');
+          span.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+          span.style.cssText = `position:absolute;font-size:${1.5+Math.random()*2}rem;
+            left:${Math.random()*100}%;top:${Math.random()*100}%;
+            animation:floatHeart ${0.8+Math.random()*1.2}s ease-out forwards;
+            animation-delay:${Math.random()*0.6}s;`;
+          overlay.appendChild(span);
+        }
+        showToast('🐱 PURR-R-REVOLUTION ACTIVATED! 🐱');
+        setTimeout(() => overlay.remove(), 2500);
+      });
+    })();
 
     document.getElementById('newCatBtn').addEventListener('click', newCat);
 
