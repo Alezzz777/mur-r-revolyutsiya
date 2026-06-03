@@ -253,7 +253,7 @@
           if (blob) {
             const file = new File([blob], 'cat.jpg', { type: 'image/jpeg' });
             if (navigator.canShare({ files: [file] })) {
-              await navigator.share({ files: [file], title: 'Purr-r-revolution 🐾', text });
+              await navigator.share({ files: [file], title: 'Purr-r-revolution 🐾', text: text + '\n' + url });
               return;
             }
           }

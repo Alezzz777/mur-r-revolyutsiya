@@ -291,7 +291,7 @@
           if (blob) {
             const file = new File([blob], 'cat.jpg', { type: 'image/jpeg' });
             if (navigator.canShare({ files: [file] })) {
-              await navigator.share({ files: [file], title: 'Мур-р-революция 🐾', text });
+              await navigator.share({ files: [file], title: 'Мур-р-революция 🐾', text: text + '\n' + url });
               return;
             }
           }
