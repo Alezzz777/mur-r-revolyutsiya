@@ -128,7 +128,7 @@
 
   <div class="card">
     <div class="cat-wrap" id="catWrap" title="Погладь котика 🐾">
-      <img id="catImg" alt="Котик Мур-р-революции" src="https://cataas.com/cat?width=600&height=600" />
+      <img id="catImg" alt="Котик Мур-р-революции" src="https://cataas.com/cat?width=600&height=600" crossorigin="anonymous" />
       <span class="purr">мур-р-р 💛</span>
     </div>
     <div class="buttons">
@@ -247,7 +247,20 @@
 
     function newCat() {
       const bust = Date.now() + '-' + Math.floor(Math.random() * 1e6);
+      catImg.crossOrigin = 'anonymous';
       catImg.src = 'https://cataas.com/cat?width=600&height=600&t=' + bust;
+    }
+
+    function catToBlob() {
+      return new Promise((resolve) => {
+        try {
+          const canvas = document.createElement('canvas');
+          canvas.width = catImg.naturalWidth || 600;
+          canvas.height = catImg.naturalHeight || 600;
+          canvas.getContext('2d').drawImage(catImg, 0, 0);
+          canvas.toBlob(resolve, 'image/jpeg', 0.92);
+        } catch(e) { resolve(null); }
+      });
     }
 
     function showToast(msg) {
@@ -267,14 +280,20 @@
       const text = 'Лови котика 🐱 Погладь его, прочти манифест и передай дальше — это Мур-р-революция, мы делаем мир мягче.';
       const url = window.location.href;
       try {
-        // Пробуем поделиться именно этой картинкой (Web Share API level 2)
+        // Пробуем поделиться именно этой картинкой через canvas (обходит CORS)
         if (navigator.share && navigator.canShare) {
           showToast('Загружаю котика… 🐾');
-          const blob = await fetch(catImg.src).then(r => r.blob());
-          const file = new File([blob], 'cat.jpg', { type: blob.type || 'image/jpeg' });
-          if (navigator.canShare({ files: [file] })) {
-            await navigator.share({ files: [file], title: 'Мур-р-революция 🐾', text });
-            return;
+          let blob = await catToBlob();
+          // Если canvas не сработал — пробуем fetch
+          if (!blob) {
+            blob = await fetch(catImg.src).then(r => r.blob()).catch(() => null);
+          }
+          if (blob) {
+            const file = new File([blob], 'cat.jpg', { type: 'image/jpeg' });
+            if (navigator.canShare({ files: [file] })) {
+              await navigator.share({ files: [file], title: 'Мур-р-революция 🐾', text });
+              return;
+            }
           }
         }
         // Fallback: share URL
