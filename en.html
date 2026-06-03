@@ -236,18 +236,29 @@
         lfo.connect(lfoAmp);
         lfoAmp.connect(tremoloGain.gain);
         tremoloGain.gain.value = 0.35;
+        const breathGain = ctx.createGain();
+        const breathLfo = ctx.createOscillator();
+        const breathAmp = ctx.createGain();
+        breathLfo.frequency.value = 0.32;
+        breathLfo.type = 'sine';
+        breathAmp.gain.value = 0.22;
+        breathGain.gain.value = 0.55;
+        breathLfo.connect(breathAmp);
+        breathAmp.connect(breathGain.gain);
         const master = ctx.createGain();
         master.gain.setValueAtTime(0, ctx.currentTime);
-        master.gain.linearRampToValueAtTime(0.55, ctx.currentTime + 0.18);
-        master.gain.linearRampToValueAtTime(0.55, ctx.currentTime + dur - 0.25);
+        master.gain.linearRampToValueAtTime(1.0, ctx.currentTime + 0.25);
+        master.gain.linearRampToValueAtTime(1.0, ctx.currentTime + dur - 0.35);
         master.gain.linearRampToValueAtTime(0, ctx.currentTime + dur);
         noise.connect(lp);
         lp.connect(tremoloGain);
-        tremoloGain.connect(master);
+        tremoloGain.connect(breathGain);
+        breathGain.connect(master);
         master.connect(ctx.destination);
-        lfo.start(); noise.start();
+        lfo.start(); breathLfo.start(); noise.start();
         noise.stop(ctx.currentTime + dur);
         lfo.stop(ctx.currentTime + dur);
+        breathLfo.stop(ctx.currentTime + dur);
       } catch(e) {}
     }
 
