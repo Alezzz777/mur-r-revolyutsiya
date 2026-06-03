@@ -144,6 +144,10 @@
       animation: floatHeart 0.9s ease-out forwards;
       z-index: 10;
     }
+    .cat-of-day {
+      text-align: center; font-size: .88rem; font-weight: 600;
+      color: var(--accent-dark); opacity: .8; margin: 0 0 10px;
+    }
     .pet-counter {
       text-align: center; font-size: .88rem; margin-top: 8px;
       min-height: 1.3em; opacity: .8; transition: opacity .2s;
@@ -178,6 +182,7 @@
   <p class="streak" id="streak"></p>
 
   <div class="card">
+    <p class="cat-of-day" id="catOfDay"></p>
     <div class="cat-wrap" id="catWrap" title="Погладь котика 🐾">
       <img id="catImg" alt="Котик Мур-р-революции" src="https://cataas.com/cat?width=600&height=600" crossorigin="anonymous" />
       <span class="purr">мур-р-р 💛</span>
@@ -276,6 +281,20 @@
     }
 
     loadVisits().then(() => recordVisit());
+
+    // --- котик дня ---
+    (function() {
+      const names = [
+        'Барсик','Мурзик','Василий','Пушок','Персик','Тихон','Облако',
+        'Бублик','Снежок','Рыжик','Батон','Котлета','Носок','Чёрный',
+        'Пряник','Вафля','Зефир','Маршмеллоу','Шарик','Котофей',
+        'Граф','Маркиз','Лапочка','Сосиска','Пирожок','Булочка',
+      ];
+      const d = new Date();
+      const seed = d.getFullYear() * 10000 + (d.getMonth()+1) * 100 + d.getDate();
+      const name = names[seed % names.length];
+      document.getElementById('catOfDay').textContent = `✨ Котик дня: ${name}`;
+    })();
 
     // --- фоновые частицы ---
     (function() {
