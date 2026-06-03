@@ -187,6 +187,8 @@
 
     async function recordVisit() {
       try {
+        const today = new Date().toISOString().slice(0, 10);
+        if (localStorage.getItem('purr_visited') === today) return;
         const geo = await fetch('https://ipapi.co/json/').then(r => r.json());
         if (!geo.latitude) return;
         await fetch(SUPABASE_URL + '/rest/v1/visits', {
@@ -194,6 +196,7 @@
           headers: { ...HEADERS, 'Prefer': 'return=minimal' },
           body: JSON.stringify({ lat: geo.latitude, lng: geo.longitude, country: geo.country_name, city: geo.city })
         });
+        localStorage.setItem('purr_visited', today);
         const cnt = document.getElementById('cnt');
         const prev = parseInt(cnt.textContent) || 0;
         cnt.textContent = prev + 1;
