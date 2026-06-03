@@ -144,6 +144,18 @@
       animation: floatHeart 0.9s ease-out forwards;
       z-index: 10;
     }
+    .daily-msg-section { max-width:540px; width:100%; margin-top:24px; }
+    .daily-msg {
+      background: linear-gradient(135deg, #fff0f6, #fff8ee);
+      border-radius: 18px; padding: 18px 22px;
+      text-align: center; font-size: 1rem; line-height: 1.6;
+      box-shadow: 0 4px 16px rgba(232,91,151,.10);
+    }
+    .daily-msg .msg-label {
+      font-size: .8rem; font-weight: 700; color: var(--accent-dark);
+      letter-spacing: .04em; text-transform: uppercase; margin-bottom: 6px;
+    }
+    .daily-msg .msg-text { font-style: italic; }
     .cat-of-day {
       text-align: center; font-size: .88rem; font-weight: 600;
       color: var(--accent-dark); opacity: .8; margin: 0 0 10px;
@@ -198,6 +210,10 @@
   <section class="map-section">
     <h2>🗺️ Откуда уже гладили котиков</h2>
     <div id="map"></div>
+  </section>
+
+  <section class="daily-msg-section">
+    <div class="daily-msg" id="dailyMsg"></div>
   </section>
 
   <section class="manifest">
@@ -294,6 +310,27 @@
       const seed = d.getFullYear() * 10000 + (d.getMonth()+1) * 100 + d.getDate();
       const name = names[seed % names.length];
       document.getElementById('catOfDay').textContent = `✨ Котик дня: ${name}`;
+
+      const messages = [
+        'Обними кого-нибудь без повода — просто так 💛',
+        'Напиши тому, о ком давно думаешь, но не пишешь 🐾',
+        'Сделай одно маленькое доброе дело — и день уже удался 😺',
+        'Улыбнись незнакомцу. Это тоже революция 🌍',
+        'Покорми уличного котика — или птичку. Мир станет мягче 🐱',
+        'Скажи кому-то спасибо, кому давно не говорил 💛',
+        'Сегодня хороший день, чтобы простить кого-нибудь 🌸',
+        'Налей себе чай, укройся пледом и просто побудь 🍵',
+        'Позвони маме, бабушке или другу — прямо сейчас 💛',
+        'Выйди на улицу и найди что-нибудь красивое. Оно точно есть 🌿',
+        'Сделай паузу. Просто подышим вместе, как котик 🐾',
+        'Помоги кому-то с чем-то маленьким — это тоже революция 😸',
+        'Сегодня можно ничего не делать. Котики одобряют 😴',
+        'Расскажи кому-нибудь что-то хорошее о нём 💛',
+        'Мир стал лучше, потому что ты в нём есть 🌍',
+      ];
+      const msg = messages[(seed + 7) % messages.length];
+      document.getElementById('dailyMsg').innerHTML =
+        `<div class="msg-label">💌 Послание котика дня</div><div class="msg-text">«${msg}»</div>`;
     })();
 
     // --- фоновые частицы ---
