@@ -269,8 +269,39 @@
       setTimeout(() => toast.classList.remove('show'), 2200);
     }
 
+    function playPurr() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const duration = 1.4;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        const lfo = ctx.createOscillator();
+        const lfoGain = ctx.createGain();
+
+        lfo.frequency.value = 25;
+        lfoGain.gain.value = 18;
+        lfo.connect(lfoGain);
+        lfoGain.connect(osc.frequency);
+
+        osc.type = 'sawtooth';
+        osc.frequency.value = 90;
+        gain.gain.setValueAtTime(0, ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.18, ctx.currentTime + 0.1);
+        gain.gain.linearRampToValueAtTime(0.18, ctx.currentTime + duration - 0.2);
+        gain.gain.linearRampToValueAtTime(0, ctx.currentTime + duration);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        lfo.start();
+        osc.start();
+        osc.stop(ctx.currentTime + duration);
+        lfo.stop(ctx.currentTime + duration);
+      } catch(e) {}
+    }
+
     catWrap.addEventListener('click', () => {
       catWrap.classList.add('purring');
+      playPurr();
       setTimeout(() => catWrap.classList.remove('purring'), 1500);
     });
 
