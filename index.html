@@ -392,10 +392,16 @@
     const catWrap = document.getElementById('catWrap');
     const toast = document.getElementById('toast');
 
+    catImg.style.transition = 'opacity .35s ease';
+
     function newCat() {
-      const bust = Date.now() + '-' + Math.floor(Math.random() * 1e6);
-      catImg.crossOrigin = 'anonymous';
-      catImg.src = 'https://cataas.com/cat?width=600&height=600&t=' + bust;
+      catImg.style.opacity = '0';
+      setTimeout(() => {
+        const bust = Date.now() + '-' + Math.floor(Math.random() * 1e6);
+        catImg.crossOrigin = 'anonymous';
+        catImg.src = 'https://cataas.com/cat?width=600&height=600&t=' + bust;
+        catImg.onload = () => { catImg.style.opacity = '1'; };
+      }, 350);
       newFact();
     }
 
