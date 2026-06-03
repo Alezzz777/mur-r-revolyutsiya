@@ -452,14 +452,20 @@
         lfoAmp.connect(tremoloGain.gain);
         tremoloGain.gain.value = 0.35;
 
-        // Медленное "дыхание" ~0.3 Гц — то тише, то громче
+        // Дыхание — случайные параметры каждый раз
+        const rnd = (a, b) => a + Math.random() * (b - a);
         const breathGain = ctx.createGain();
         const breathLfo = ctx.createOscillator();
         const breathAmp = ctx.createGain();
-        breathLfo.frequency.value = 0.32;
+        breathLfo.frequency.value = rnd(0.55, 0.85); // быстрее прежнего
         breathLfo.type = 'sine';
-        breathAmp.gain.value = 0.35;
-        breathGain.gain.value = 0.85;
+        breathAmp.gain.value = rnd(0.28, 0.40);
+        breathGain.gain.value = rnd(0.78, 0.95);
+        // случайный тембр — фильтр каждый раз чуть другой
+        lp.frequency.value = rnd(150, 210);
+        // случайная вибрация
+        lfo.frequency.value = rnd(23, 29);
+        lfoAmp.gain.value = rnd(0.28, 0.42);
         breathLfo.connect(breathAmp);
         breathAmp.connect(breathGain.gain);
 
