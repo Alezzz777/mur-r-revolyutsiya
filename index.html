@@ -5,22 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Мур-р-революция 🐾</title>
   <meta name="description" content="Революция без баррикад — только с мурчанием. Погладь котика, передай дальше, сделай мир мягче." />
-
-  <!-- Чтобы при пересылке ссылки сразу была красивая карточка с котиком -->
   <meta property="og:title" content="Мур-р-революция 🐾" />
   <meta property="og:description" content="Мы не воюем — мы мурчим. Открой, прочти манифест и передай котика дальше." />
   <meta property="og:image" content="https://cataas.com/cat?width=1200&height=630" />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
 
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
   <style>
     :root {
-      --bg1: #ffe9f0;
-      --bg2: #fff6e6;
-      --ink: #3a2b32;
-      --accent: #ff7eb3;
-      --accent-dark: #e85b97;
-      --card: #fffdfb;
+      --bg1: #ffe9f0; --bg2: #fff6e6;
+      --ink: #3a2b32; --accent: #ff7eb3;
+      --accent-dark: #e85b97; --card: #fffdfb;
     }
     * { box-sizing: border-box; }
     body {
@@ -29,129 +27,72 @@
       color: var(--ink);
       background: linear-gradient(135deg, var(--bg1), var(--bg2));
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      display: flex; flex-direction: column; align-items: center;
       padding: 24px 16px 48px;
     }
-    h1 {
-      font-size: clamp(2rem, 6vw, 3.2rem);
-      margin: 8px 0 4px;
-      text-align: center;
-      letter-spacing: -0.5px;
+    h1 { font-size: clamp(2rem,6vw,3.2rem); margin: 8px 0 4px; text-align: center; }
+    .tagline { text-align: center; font-size: 1.1rem; opacity: .85; margin: 0 0 8px; }
+
+    /* счётчик */
+    .counter {
+      text-align: center; margin-bottom: 20px;
+      font-size: 1rem; color: var(--accent-dark); font-weight: 600;
     }
-    .tagline {
-      text-align: center;
-      font-size: 1.1rem;
-      opacity: 0.85;
-      margin: 0 0 24px;
-    }
+    .counter span { font-size: 1.6rem; }
+
     .card {
-      background: var(--card);
-      border-radius: 24px;
-      box-shadow: 0 12px 40px rgba(232, 91, 151, 0.18);
-      padding: 20px;
-      max-width: 540px;
-      width: 100%;
+      background: var(--card); border-radius: 24px;
+      box-shadow: 0 12px 40px rgba(232,91,151,.18);
+      padding: 20px; max-width: 540px; width: 100%;
     }
     .cat-wrap {
-      position: relative;
-      border-radius: 18px;
-      overflow: hidden;
-      background: #f3e8ee;
-      aspect-ratio: 1 / 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
+      position: relative; border-radius: 18px; overflow: hidden;
+      background: #f3e8ee; aspect-ratio: 1/1;
+      display: flex; align-items: center; justify-content: center; cursor: pointer;
     }
-    .cat-wrap img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: transform 0.25s ease;
-    }
-    .cat-wrap:active img { transform: scale(0.98); }
+    .cat-wrap img { width:100%; height:100%; object-fit:cover; display:block; transition: transform .25s; }
+    .cat-wrap:active img { transform: scale(.98); }
     .purr {
-      position: absolute;
-      bottom: 12px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(255,255,255,0.92);
-      padding: 6px 14px;
-      border-radius: 999px;
-      font-size: 0.95rem;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.3s ease;
+      position:absolute; bottom:12px; left:50%; transform:translateX(-50%);
+      background:rgba(255,255,255,.92); padding:6px 14px; border-radius:999px;
+      font-size:.95rem; pointer-events:none; opacity:0; transition:opacity .3s;
     }
-    .cat-wrap.purring .purr { opacity: 1; }
-
-    .buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 16px;
-      justify-content: center;
-    }
+    .cat-wrap.purring .purr { opacity:1; }
+    .buttons { display:flex; flex-wrap:wrap; gap:10px; margin-top:16px; justify-content:center; }
     button {
-      font: inherit;
-      font-weight: 600;
-      border: none;
-      border-radius: 999px;
-      padding: 12px 20px;
-      cursor: pointer;
-      transition: transform 0.12s ease, box-shadow 0.2s ease;
+      font:inherit; font-weight:600; border:none; border-radius:999px;
+      padding:12px 20px; cursor:pointer; transition:transform .12s,box-shadow .2s;
     }
-    button:active { transform: translateY(1px) scale(0.98); }
-    .btn-primary {
-      background: var(--accent);
-      color: white;
-      box-shadow: 0 6px 18px rgba(255, 126, 179, 0.45);
-    }
-    .btn-primary:hover { background: var(--accent-dark); }
-    .btn-ghost {
-      background: #fff;
-      color: var(--accent-dark);
-      border: 2px solid var(--accent);
-    }
+    button:active { transform:translateY(1px) scale(.98); }
+    .btn-primary { background:var(--accent); color:white; box-shadow:0 6px 18px rgba(255,126,179,.45); }
+    .btn-primary:hover { background:var(--accent-dark); }
+    .btn-ghost { background:#fff; color:var(--accent-dark); border:2px solid var(--accent); }
 
-    .manifest {
-      max-width: 540px;
-      width: 100%;
-      margin-top: 32px;
-      line-height: 1.65;
-    }
-    .manifest h2 { text-align: center; }
-    .manifest ol { padding-left: 1.2em; }
-    .manifest li { margin: 10px 0; }
-    .heart { color: var(--accent-dark); }
-    footer {
-      margin-top: 40px;
-      opacity: 0.7;
-      font-size: 0.9rem;
-      text-align: center;
-    }
+    /* карта */
+    .map-section { max-width:540px; width:100%; margin-top:32px; }
+    .map-section h2 { text-align:center; margin-bottom:12px; }
+    #map { height:320px; border-radius:18px; overflow:hidden; box-shadow:0 8px 24px rgba(232,91,151,.15); }
+
+    .manifest { max-width:540px; width:100%; margin-top:32px; line-height:1.65; }
+    .manifest h2 { text-align:center; }
+    .manifest ol { padding-left:1.2em; }
+    .manifest li { margin:10px 0; }
+    .heart { color:var(--accent-dark); }
+    footer { margin-top:40px; opacity:.7; font-size:.9rem; text-align:center; }
     .toast {
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%) translateY(80px);
-      background: var(--ink);
-      color: white;
-      padding: 12px 22px;
-      border-radius: 999px;
-      opacity: 0;
-      transition: all 0.3s ease;
-      z-index: 10;
+      position:fixed; bottom:24px; left:50%;
+      transform:translateX(-50%) translateY(80px);
+      background:var(--ink); color:white;
+      padding:12px 22px; border-radius:999px;
+      opacity:0; transition:all .3s; z-index:9999;
     }
-    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
   </style>
 </head>
 <body>
   <h1>🐾 Мур-р-революция</h1>
   <p class="tagline">Мы не воюем — мы мурчим.</p>
+  <p class="counter">Революцию поддержали уже <span id="cnt">…</span> котиков по всему миру 🌍</p>
 
   <div class="card">
     <div class="cat-wrap" id="catWrap" title="Погладь котика 🐾">
@@ -163,6 +104,11 @@
       <button class="btn-ghost" id="newCatBtn">🎲 Новый котик</button>
     </div>
   </div>
+
+  <section class="map-section">
+    <h2>🗺️ Откуда уже гладили котиков</h2>
+    <div id="map"></div>
+  </section>
 
   <section class="manifest">
     <h2>Манифест Мур-р-революции</h2>
@@ -181,12 +127,62 @@
   <div class="toast" id="toast"></div>
 
   <script>
+    const SUPABASE_URL = 'https://ramtjjkracjedynfdruq.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_QDZ8kFBXubI9Ni8_j2mVoQ_LrDTh59J';
+    const HEADERS = { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' };
+
+    // --- карта ---
+    const map = L.map('map', { zoomControl: true, scrollWheelZoom: false }).setView([20, 10], 2);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap',
+      maxZoom: 10
+    }).addTo(map);
+
+    const catIcon = L.divIcon({ html: '🐾', className: '', iconSize: [24, 24], iconAnchor: [12, 12] });
+
+    async function loadVisits() {
+      try {
+        const r = await fetch(SUPABASE_URL + '/rest/v1/visits?select=lat,lng,country,city&order=created_at.desc&limit=500', { headers: HEADERS });
+        const rows = await r.json();
+        if (!Array.isArray(rows)) return;
+        document.getElementById('cnt').textContent = rows.length;
+        rows.forEach(v => {
+          if (v.lat && v.lng) {
+            L.marker([v.lat, v.lng], { icon: catIcon })
+              .bindPopup(`🐾 ${v.city || ''} ${v.country || ''}`)
+              .addTo(map);
+          }
+        });
+      } catch(e) { console.log('visits load error', e); }
+    }
+
+    async function recordVisit() {
+      try {
+        const geo = await fetch('https://ipapi.co/json/').then(r => r.json());
+        if (!geo.latitude) return;
+        await fetch(SUPABASE_URL + '/rest/v1/visits', {
+          method: 'POST',
+          headers: { ...HEADERS, 'Prefer': 'return=minimal' },
+          body: JSON.stringify({ lat: geo.latitude, lng: geo.longitude, country: geo.country_name, city: geo.city })
+        });
+        // Обновим счётчик и добавим точку на карту
+        const cnt = document.getElementById('cnt');
+        const prev = parseInt(cnt.textContent) || 0;
+        cnt.textContent = prev + 1;
+        L.marker([geo.latitude, geo.longitude], { icon: catIcon })
+          .bindPopup(`🐾 ${geo.city || ''} ${geo.country_name || ''}`)
+          .addTo(map);
+      } catch(e) { console.log('record visit error', e); }
+    }
+
+    loadVisits().then(() => recordVisit());
+
+    // --- котик ---
     const catImg = document.getElementById('catImg');
     const catWrap = document.getElementById('catWrap');
     const toast = document.getElementById('toast');
 
     function newCat() {
-      // уникальный параметр — чтобы браузер не отдал закэшированного котика
       const bust = Date.now() + '-' + Math.floor(Math.random() * 1e6);
       catImg.src = 'https://cataas.com/cat?width=600&height=600&t=' + bust;
     }
@@ -197,7 +193,6 @@
       setTimeout(() => toast.classList.remove('show'), 2200);
     }
 
-    // Погладить котика -> мурчание
     catWrap.addEventListener('click', () => {
       catWrap.classList.add('purring');
       setTimeout(() => catWrap.classList.remove('purring'), 1500);
@@ -218,9 +213,7 @@
           await navigator.clipboard.writeText(shareData.text + ' ' + shareData.url);
           showToast('Ссылка скопирована — передай котика! 💌');
         }
-      } catch (e) {
-        // пользователь закрыл диалог — ничего страшного
-      }
+      } catch(e) {}
     });
   </script>
 </body>
