@@ -11,6 +11,13 @@
       --ink: #3a2b32; --accent: #ff7eb3;
       --accent-dark: #e85b97; --card: #fffdfb;
     }
+    body.night-mode {
+      --bg1: #1a1020; --bg2: #21182e;
+      --ink: #f0e6f6; --accent: #d47ab8;
+      --accent-dark: #c45fa0; --card: #2a1f35;
+    }
+    body.night-mode .dialogue { background: linear-gradient(135deg, #2e1a2e, #261a20); }
+    body.night-mode .highlight { background: linear-gradient(90deg, #2a1a2e, #21182a); color: #f0e6f6; }
     * { box-sizing: border-box; }
     body {
       margin: 0;
@@ -149,6 +156,7 @@
 
   </div>
 
+  <script>(function(){const h=new Date().getHours();if(h>=20||h<6)document.body.classList.add('night-mode');})();</script>
   <footer>Purr-r-revolution · born in one evening · lives in everyone who passed the cat on 🐱</footer>
 </body>
 </html>

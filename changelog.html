@@ -20,6 +20,11 @@
       --ink: #3a2b32; --accent: #ff7eb3;
       --accent-dark: #e85b97; --card: #fffdfb;
     }
+    body.night-mode {
+      --bg1: #1a1020; --bg2: #21182e;
+      --ink: #f0e6f6; --accent: #d47ab8;
+      --accent-dark: #c45fa0; --card: #2a1f35;
+    }
     * { box-sizing: border-box; }
     body {
       margin: 0;
@@ -247,6 +252,7 @@
 
   </div>
 
+  <script>(function(){const h=new Date().getHours();if(h>=20||h<6)document.body.classList.add('night-mode');})();</script>
   <footer>Мур-р-революция · каждый день чуточку лучше · <a href="/about.html" style="color:#e85b97;text-decoration:none;font-weight:600;">История проекта 🐾</a></footer>
 </body>
 </html>
