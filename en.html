@@ -612,6 +612,30 @@
       setTimeout(() => catWrap.classList.remove('purring'), 10000);
     });
 
+    // --- cat missed you while tab was hidden ---
+    (function() {
+      let hiddenAt = null;
+      const msgs = [
+        'the cat was waiting for you! 🐾',
+        'finally! the cat missed you 💛',
+        'the cat didn\'t sleep — it was waiting 😺',
+        'you\'re back! the cat is happy 🐱',
+        'the cat had its paw ready 🐾',
+      ];
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          hiddenAt = Date.now();
+        } else if (hiddenAt && Date.now() - hiddenAt > 8000) {
+          hiddenAt = null;
+          catWrap.classList.add('stretching');
+          setTimeout(() => catWrap.classList.remove('stretching'), 600);
+          setTimeout(() => showToast(msgs[Math.floor(Math.random() * msgs.length)]), 300);
+        } else {
+          hiddenAt = null;
+        }
+      });
+    })();
+
     // --- scroll to top button ---
     (function() {
       const btn = document.getElementById('scrollTop');
