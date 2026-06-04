@@ -177,6 +177,16 @@
       text-align: center; font-size: .88rem; margin-top: 8px;
       min-height: 1.3em; opacity: .8; transition: opacity .2s;
     }
+    .pet-progress-wrap {
+      margin: 6px 4px 0; height: 5px; border-radius: 999px;
+      background: rgba(232,91,151,.15); overflow: hidden;
+    }
+    .pet-progress-bar {
+      height: 100%; border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+      transition: width 0.4s cubic-bezier(.22,1,.36,1);
+      width: 0%;
+    }
     .greeting {
       text-align: center; font-size: .95rem; opacity: .7;
       margin: -6px 0 10px; font-style: italic;
@@ -243,6 +253,9 @@
     </div>
     <p class="cat-fact" id="catFact"></p>
     <p class="pet-counter" id="petCounter"></p>
+    <div class="pet-progress-wrap" id="petProgressWrap" style="display:none">
+      <div class="pet-progress-bar" id="petProgressBar"></div>
+    </div>
   </div>
 
   <section class="map-section">
@@ -596,6 +609,18 @@
       const el = document.getElementById('petCounter');
       const msg = [...petMsgs].reverse().find(([n]) => petCount >= n);
       el.textContent = msg ? msg[1] : '';
+      // прогресс-бар до следующей вехи
+      const steps = [1, 2, 5, 10, 20, 50];
+      const next = steps.find(s => s > petCount);
+      const prev = steps.filter(s => s <= petCount).pop() || 0;
+      const wrap = document.getElementById('petProgressWrap');
+      const bar  = document.getElementById('petProgressBar');
+      if (next) {
+        wrap.style.display = 'block';
+        bar.style.width = ((petCount - prev) / (next - prev) * 100) + '%';
+      } else {
+        wrap.style.display = 'none';
+      }
     }
 
     // --- котик моргает ---
