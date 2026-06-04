@@ -102,6 +102,12 @@
     button:active { transform:translateY(1px) scale(.98); }
     .btn-primary { background:var(--accent); color:white; box-shadow:0 6px 18px rgba(255,126,179,.45); }
     .btn-primary:hover { background:var(--accent-dark); }
+    @keyframes btnPulse {
+      0%,100% { box-shadow: 0 6px 18px rgba(255,126,179,.45); transform: scale(1); }
+      50%     { box-shadow: 0 8px 26px rgba(255,126,179,.7);  transform: scale(1.03); }
+    }
+    #shareBtn { animation: btnPulse 2.8s ease-in-out infinite; }
+    #shareBtn:hover, #shareBtn:active { animation: none; }
     .btn-ghost { background:#fff; color:var(--accent-dark); border:2px solid var(--accent); }
 
     /* карта */
