@@ -366,11 +366,11 @@
     // --- greeting by time ---
     (function() {
       const h = new Date().getHours();
-      const greetings = h < 6  ? ['🌟 Late night revolutionary — the cat is with you.', '🌙 Can\'t sleep? The cat purrs for you.']
+      const greetings = h < 6  ? ['🌙 Late night revolutionary — the cat is with you.', '✨ Can\'t sleep? The cat purrs for you.']
                       : h < 12 ? ['☀️ Good morning! Your cat is ready.', '🌅 Good morning, revolutionary!']
                       : h < 17 ? ['🌤️ Good afternoon! Perfect time to pet a cat.', '☀️ Have a warm day — with a cat in it!']
-                      : h < 22 ? ['🌇 Good evening! The cat purrs for you.', '🌆 Evenings are better with cats.']
-                      :          ['🌙 Late evening — the best time for cats.', '✨ A quiet night and a purring cat.'];
+                      : h < 20 ? ['🌇 Good evening! The cat purrs for you.', '🌆 Evenings are better with cats.']
+                      :          ['🌙 A quiet night — the best time for cats.', '✨ Night is softer with a purring cat.'];
       document.getElementById('greeting').textContent = greetings[Math.floor(Math.random() * greetings.length)];
     })();
 
