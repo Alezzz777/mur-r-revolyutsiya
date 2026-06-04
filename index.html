@@ -212,6 +212,14 @@
       opacity:0; transition:all .3s; z-index:9999;
     }
     .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+    @keyframes catSneeze {
+      0%,100% { transform: rotate(0deg) translateY(0); }
+      20%  { transform: rotate(-3deg) translateY(-4px); }
+      40%  { transform: rotate(3deg)  translateY(-8px); }
+      60%  { transform: rotate(-2deg) translateY(-3px); }
+      80%  { transform: rotate(1deg)  translateY(-1px); }
+    }
+    .cat-wrap.sneezing img { animation: catSneeze 0.45s ease-in-out; }
     @keyframes catStretch {
       0%   { transform: scale(0.92) rotate(-1deg); opacity: 0; }
       60%  { transform: scale(1.04) rotate(0.5deg); opacity: 1; }
@@ -652,6 +660,18 @@
     });
 
     catWrap.addEventListener('click', (e) => {
+      // редкий чих — 3% шанс
+      if (Math.random() < 0.03) {
+        const purrBubble = catWrap.querySelector('.purr');
+        catWrap.classList.add('sneezing', 'purring');
+        purrBubble.textContent = 'апчхи! 🤧';
+        setTimeout(() => {
+          catWrap.classList.remove('sneezing', 'purring');
+          purrBubble.textContent = 'мур-р-р 💛';
+          showToast('будь здоров, котик! 🐱');
+        }, 1800);
+        return;
+      }
       catWrap.classList.add('purring');
       playPurr();
       updatePetCounter();
