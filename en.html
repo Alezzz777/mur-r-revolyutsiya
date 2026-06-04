@@ -633,6 +633,21 @@
 
     document.getElementById('newCatBtn').addEventListener('click', newCat);
 
+    // --- shared cat counter ---
+    function onShared() {
+      const n = (parseInt(localStorage.getItem('purr_shared') || '0')) + 1;
+      localStorage.setItem('purr_shared', n);
+      const milestones = {
+        1:  '💌 you passed the first cat! The revolution has begun!',
+        3:  '💌 3 cats in the world — you\'re a true revolutionary!',
+        5:  '🐾 5 cats! The world is noticeably kinder thanks to you!',
+        10: '😻 10 cats! You\'re a legend of Purr-r-revolution!',
+        20: '🌍 20 cats! You\'re changing the world one purr at a time!',
+        50: '👑 50 cats! You are the great Cat-Passer!',
+      };
+      if (milestones[n]) setTimeout(() => showToast(milestones[n]), 1200);
+    }
+
     document.getElementById('shareBtn').addEventListener('click', async () => {
       const text = 'Here\'s a cat for you 🐱 Pet it, read the manifesto, and pass it on — this is Purr-r-revolution, we\'re making the world softer.';
       const url = window.location.href;
@@ -647,20 +662,23 @@
             const file = new File([blob], 'cat.jpg', { type: 'image/jpeg' });
             if (navigator.canShare({ files: [file] })) {
               await navigator.share({ files: [file], title: 'Purr-r-revolution 🐾', text: text + '\n' + url });
-              return;
+              onShared(); return;
             }
           }
         }
         if (navigator.share) {
           await navigator.share({ title: 'Purr-r-revolution 🐾', text, url });
+          onShared();
         } else {
           await navigator.clipboard.writeText(text + ' ' + url);
           showToast('Link copied — pass the cat on! 💌');
+          onShared();
         }
       } catch(e) {
         if (e.name !== 'AbortError') {
           await navigator.clipboard.writeText(text + ' ' + url).catch(() => {});
           showToast('Link copied — pass the cat on! 💌');
+          onShared();
         }
       }
     });

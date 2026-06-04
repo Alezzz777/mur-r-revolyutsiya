@@ -649,6 +649,21 @@
 
     document.getElementById('newCatBtn').addEventListener('click', newCat);
 
+    // --- счётчик переданных котиков ---
+    function onShared() {
+      const n = (parseInt(localStorage.getItem('purr_shared') || '0')) + 1;
+      localStorage.setItem('purr_shared', n);
+      const milestones = {
+        1:  '💌 ты передал первого котика! Революция началась!',
+        3:  '💌 уже 3 котика в мире — ты настоящий революционер!',
+        5:  '🐾 5 котиков! Мир заметно добрее благодаря тебе!',
+        10: '😻 10 котиков! Ты легенда Мур-р-революции!',
+        20: '🌍 20 котиков! Ты меняешь мир по одному мурчанию!',
+        50: '👑 50 котиков! Ты великий Котопередатель!',
+      };
+      if (milestones[n]) setTimeout(() => showToast(milestones[n]), 1200);
+    }
+
     document.getElementById('shareBtn').addEventListener('click', async () => {
       const text = 'Лови котика 🐱 Погладь его, прочти манифест и передай дальше — это Мур-р-революция, мы делаем мир мягче.';
       const url = window.location.href;
@@ -665,21 +680,24 @@
             const file = new File([blob], 'cat.jpg', { type: 'image/jpeg' });
             if (navigator.canShare({ files: [file] })) {
               await navigator.share({ files: [file], title: 'Мур-р-революция 🐾', text: text + '\n' + url });
-              return;
+              onShared(); return;
             }
           }
         }
         // Fallback: share URL
         if (navigator.share) {
           await navigator.share({ title: 'Мур-р-революция 🐾', text, url });
+          onShared();
         } else {
           await navigator.clipboard.writeText(text + ' ' + url);
           showToast('Ссылка скопирована — передай котика! 💌');
+          onShared();
         }
       } catch(e) {
         if (e.name !== 'AbortError') {
           await navigator.clipboard.writeText(text + ' ' + url).catch(() => {});
           showToast('Ссылка скопирована — передай котика! 💌');
+          onShared();
         }
       }
     });
