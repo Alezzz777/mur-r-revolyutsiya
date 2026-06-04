@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>What the cats are planning 🐾 Purr-r-revolution</title>
+  <meta name="description" content="Ideas, wishes and bug reports from the Purr-r-revolution ultra-cat team." />
+  <style>
+    :root { --bg1:#ffe9f0;--bg2:#fff6e6;--ink:#3a2b32;--accent:#ff7eb3;--accent-dark:#e85b97;--card:#fffdfb; }
+    body.night-mode { --bg1:#1a1020;--bg2:#21182e;--ink:#f0e6f6;--accent:#d47ab8;--accent-dark:#c45fa0;--card:#2a1f35; }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:"Segoe UI",system-ui,-apple-system,sans-serif;color:var(--ink);background:linear-gradient(135deg,var(--bg1),var(--bg2));min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:24px 16px 64px}
+    .lang-switch{align-self:flex-end;margin-bottom:8px;font-size:.88rem}
+    .lang-switch a{color:var(--accent-dark);text-decoration:none;font-weight:600;opacity:.75}
+    .lang-switch a:hover{opacity:1}
+    .back{align-self:flex-start;margin-bottom:16px;text-decoration:none;color:var(--accent-dark);font-weight:600;font-size:.95rem;opacity:.85;transition:opacity .2s}
+    .back:hover{opacity:1}
+    h1{font-size:clamp(1.8rem,5vw,2.6rem);text-align:center;margin:0 0 6px}
+    .sub{text-align:center;font-size:1rem;opacity:.7;margin:0 0 36px}
+    .team{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:36px;max-width:640px;width:100%}
+    .member{background:var(--card);border-radius:999px;padding:8px 18px;font-size:.88rem;font-weight:600;box-shadow:0 3px 12px rgba(232,91,151,.13);display:flex;align-items:center;gap:6px}
+    .member .dot{width:8px;height:8px;border-radius:50%}
+    .dot-dev{background:#4caf82}.dot-design{background:#ff9f43}.dot-poet{background:#a29bfe}.dot-create{background:#fd79a8}.dot-test{background:#74b9ff}
+    .content{max-width:640px;width:100%;display:flex;flex-direction:column;gap:16px}
+    .section{background:var(--card);border-radius:22px;box-shadow:0 6px 24px rgba(232,91,151,.12);overflow:hidden}
+    .section-header{padding:16px 22px 14px;border-bottom:1px solid rgba(232,91,151,.1);display:flex;align-items:center;gap:10px}
+    .section-icon{font-size:1.4rem}.section-title{font-weight:700;font-size:1rem;margin:0}
+    .section-body{padding:14px 22px 18px}
+    .todo-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(232,91,151,.07);font-size:.93rem;line-height:1.5}
+    .todo-item:last-child{border-bottom:none}
+    .todo-check{width:18px;height:18px;border-radius:4px;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:.75rem}
+    .todo-check.open{border:2px solid var(--accent);background:transparent}
+    .todo-check.done{background:#4caf82;color:white;border:none}
+    .todo-text.done-text{opacity:.5;text-decoration:line-through}
+    .todo-date{font-size:.75rem;opacity:.5;margin-left:auto;flex-shrink:0;padding-left:8px}
+    .empty{opacity:.5;font-style:italic;font-size:.9rem;padding:6px 0}
+    .loading{text-align:center;opacity:.6;font-style:italic;padding:32px 0}
+    .updated-at{text-align:center;font-size:.78rem;opacity:.45;margin-top:8px}
+    footer{margin-top:40px;opacity:.6;font-size:.88rem;text-align:center}
+  </style>
+</head>
+<body>
+  <div class="lang-switch"><a href="/todo.html">🇷🇺 RU</a></div>
+  <a class="back" href="/en.html">← Back to the cat</a>
+
+  <h1>📋 What the cats are planning</h1>
+  <p class="sub">Ideas, wishes and bugs from the Purr-r-revolution ultra-cat team</p>
+
+  <div class="team">
+    <div class="member"><span class="dot dot-dev"></span>🛠️ developer — 5:00</div>
+    <div class="member"><span class="dot dot-design"></span>🎨 designer — 10:00</div>
+    <div class="member"><span class="dot dot-poet"></span>✍️ poet — 15:00</div>
+    <div class="member"><span class="dot dot-create"></span>💡 creative — 20:00</div>
+    <div class="member"><span class="dot dot-test"></span>🔍 tester — 23:50</div>
+  </div>
+
+  <div class="content" id="content">
+    <div class="loading">🐾 Loading cat tasks…</div>
+  </div>
+  <p class="updated-at" id="updatedAt"></p>
+
+  <footer>Purr-r-revolution · cats work while you sleep 🌙 · <a href="/en-changelog.html" style="color:#e85b97;text-decoration:none;font-weight:600;">What's already done 🛠️</a></footer>
+
+  <script>
+    (function() { const h=new Date().getHours(); if(h>=20||h<6) document.body.classList.add('night-mode'); })();
+
+    const SECTIONS = [
+      { key: 'поэта',        icon: '✍️', title: "Cat-poet's ideas",      color: '#a29bfe' },
+      { key: 'креативщика',  icon: '💡', title: "Cat-creative's ideas",  color: '#fd79a8' },
+      { key: 'тестировщика', icon: '🔍', title: 'Bugs from cat-tester',  color: '#74b9ff' },
+      { key: 'Сделано',      icon: '✅', title: 'Already done',          color: '#4caf82' },
+    ];
+
+    function parseTodo(md) {
+      const sections = {}; let current = null;
+      for (const raw of md.split('\n')) {
+        const line = raw.trim();
+        const hm = line.match(/^##\s+(.+)/);
+        if (hm) { current = hm[1].replace(/[🐱🎨✍️💡🔍✅🐛]\s*/g,'').trim(); sections[current]=[]; continue; }
+        if (current && line.match(/^- \[[ x]\]/)) {
+          const done = line.startsWith('- [x]');
+          const rest = line.replace(/^- \[[ x]\]\s*/,'');
+          const dateM = rest.match(/^\[([^\]]+)\]\s*/);
+          const date = dateM ? dateM[1] : '';
+          const text = dateM ? rest.slice(dateM[0].length) : rest;
+          sections[current].push({done,date,text});
+        }
+      }
+      return sections;
+    }
+
+    function renderSection(title, items, cfg) {
+      const open = items.filter(i=>!i.done), done = items.filter(i=>i.done);
+      const show = cfg.key==='Сделано' ? done.slice(0,5) : open;
+      const div = document.createElement('div'); div.className='section';
+      const badge = open.length>0 && cfg.key!=='Сделано'
+        ? `<span style="margin-left:auto;background:${cfg.color}22;color:${cfg.color};font-size:.75rem;font-weight:700;padding:2px 10px;border-radius:999px;">${open.length}</span>` : '';
+      div.innerHTML = `<div class="section-header"><span class="section-icon">${cfg.icon}</span><p class="section-title">${cfg.title}</p>${badge}</div><div class="section-body"></div>`;
+      const body = div.querySelector('.section-body');
+      if (!show.length) {
+        body.innerHTML = `<p class="empty">${cfg.key==='Сделано'?'Nothing yet — the cats just started!':'The cat hasn\'t written anything yet 🐾'}</p>`;
+      } else {
+        show.forEach(item => {
+          const row = document.createElement('div'); row.className='todo-item';
+          row.innerHTML=`<span class="todo-check ${item.done?'done':'open'}">${item.done?'✓':''}</span><span class="todo-text ${item.done?'done-text':''}">${item.text}</span>${item.date?`<span class="todo-date">${item.date}</span>`:''}`;
+          body.appendChild(row);
+        });
+        if (cfg.key==='Сделано'&&done.length>5) body.insertAdjacentHTML('beforeend',`<p class="empty">…and ${done.length-5} more completed</p>`);
+      }
+      return div;
+    }
+
+    async function load() {
+      try {
+        const url='https://raw.githubusercontent.com/Alezzz777/mur-r-revolyutsiya/main/TODO.md?_='+Date.now();
+        const md = await fetch(url).then(r=>r.text());
+        const data = parseTodo(md);
+        const container = document.getElementById('content'); container.innerHTML='';
+        SECTIONS.forEach(cfg => {
+          const key = Object.keys(data).find(k=>k.includes(cfg.key));
+          container.appendChild(renderSection(cfg.title, key?data[key]:[], cfg));
+        });
+        document.getElementById('updatedAt').textContent='Live from GitHub · updated: '+new Date().toLocaleTimeString('en');
+      } catch(e) {
+        document.getElementById('content').innerHTML='<div style="text-align:center;color:var(--accent-dark);padding:24px;font-size:.9rem">😿 Could not load tasks.<br>The cat-tester is already on it.</div>';
+      }
+    }
+    load();
+  </script>
+</body>
+</html>
