@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Good Deed of the Day 🐾 Purr-r-revolution</title>
+  <meta name="description" content="One small kind act a day makes the world softer. From the cat, with love." />
+  <meta property="og:title" content="Good Deed of the Day 🐾" />
+  <meta property="og:description" content="The cat suggests one small kind act. Will you do it?" />
+  <style>
+    :root {
+      --bg1: #ffe9f0; --bg2: #fff6e6;
+      --ink: #3a2b32; --accent: #ff7eb3;
+      --accent-dark: #e85b97; --card: #fffdfb;
+    }
+    body.night-mode {
+      --bg1: #1a1020; --bg2: #21182e;
+      --ink: #f0e6f6; --accent: #d47ab8;
+      --accent-dark: #c45fa0; --card: #2a1f35;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      color: var(--ink);
+      background: linear-gradient(135deg, var(--bg1), var(--bg2));
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 24px 16px 64px;
+    }
+    .lang-switch { align-self: flex-end; margin-bottom: 8px; font-size: .88rem; }
+    .lang-switch a { color: var(--accent-dark); text-decoration: none; font-weight: 600; opacity: .75; }
+    .lang-switch a:hover { opacity: 1; }
+    .back { align-self: flex-start; margin-bottom: 16px; text-decoration: none; color: var(--accent-dark); font-weight: 600; font-size: 0.95rem; opacity: 0.85; transition: opacity .2s; }
+    .back:hover { opacity: 1; }
+    h1 { font-size: clamp(1.8rem, 5vw, 2.8rem); text-align: center; margin: 0 0 6px; }
+    .sub { text-align: center; font-size: 1rem; opacity: .7; margin: 0 0 32px; }
+    .card { background: var(--card); border-radius: 28px; box-shadow: 0 12px 40px rgba(232,91,151,.18); padding: 32px 28px; max-width: 520px; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 20px; }
+    .cat-img { width: 140px; height: 140px; border-radius: 50%; object-fit: cover; box-shadow: 0 6px 20px rgba(232,91,151,.2); }
+    .cat-img.happy { animation: catJoy .5s ease-in-out; }
+    @keyframes catJoy { 0%,100%{transform:scale(1) rotate(0deg)} 30%{transform:scale(1.08) rotate(-4deg)} 60%{transform:scale(1.08) rotate(4deg)} }
+    .date-label { font-size: .8rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--accent-dark); opacity: .7; }
+    .deed-card { background: linear-gradient(135deg, #fff0f6, #fff8ee); border-radius: 20px; padding: 22px 24px; text-align: center; width: 100%; }
+    body.night-mode .deed-card { background: linear-gradient(135deg, #2e1a2e, #261a20); }
+    .deed-icon { font-size: 2.8rem; margin-bottom: 10px; display: block; }
+    .deed-text { font-size: 1.15rem; font-weight: 600; line-height: 1.55; margin: 0 0 8px; }
+    .deed-hint { font-size: .9rem; opacity: .7; line-height: 1.5; margin: 0; }
+    .done-btn { font: inherit; font-weight: 700; font-size: 1.05rem; background: var(--accent); color: white; border: none; border-radius: 999px; padding: 14px 32px; cursor: pointer; box-shadow: 0 6px 18px rgba(255,126,179,.45); transition: background .2s, transform .12s; }
+    .done-btn:hover { background: var(--accent-dark); }
+    .done-btn:active { transform: scale(.97); }
+    .done-btn.did-it { background: #4caf82; box-shadow: 0 6px 18px rgba(76,175,130,.35); }
+    .done-counter { font-size: .88rem; opacity: .65; text-align: center; }
+    .done-counter span { font-weight: 700; color: var(--accent-dark); }
+    .streak-note { font-size: .88rem; text-align: center; min-height: 1.3em; color: var(--accent-dark); font-weight: 600; }
+    @keyframes floatHeart { 0%{transform:translateY(0) scale(1);opacity:1} 100%{transform:translateY(-80px) scale(1.3);opacity:0} }
+    .float-heart { position: fixed; pointer-events: none; font-size: 1.6rem; animation: floatHeart 1s ease-out forwards; z-index: 9999; }
+    .nav-links { max-width: 520px; width: 100%; margin-top: 32px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+    .nav-link { display: inline-block; padding: 10px 20px; border-radius: 999px; background: var(--card); color: var(--accent-dark); text-decoration: none; font-weight: 600; font-size: .9rem; box-shadow: 0 4px 14px rgba(232,91,151,.12); transition: transform .12s, box-shadow .2s; }
+    .nav-link:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(232,91,151,.2); }
+    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--ink); color: white; padding: 12px 22px; border-radius: 999px; opacity: 0; transition: all .3s; z-index: 9999; white-space: nowrap; }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    footer { margin-top: 40px; opacity: .6; font-size: .88rem; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="lang-switch"><a href="/kindness.html">🇷🇺 RU</a></div>
+  <a class="back" href="/en.html">← Back to the cat</a>
+
+  <h1>💛 Good Deed of the Day</h1>
+  <p class="sub">One small action — and the world is already a little softer</p>
+
+  <div class="card">
+    <img class="cat-img" id="catImg" src="https://cataas.com/cat?width=300&height=300" alt="Cat" />
+    <p class="date-label" id="dateLabel"></p>
+    <div class="deed-card">
+      <span class="deed-icon" id="deedIcon"></span>
+      <p class="deed-text" id="deedText"></p>
+      <p class="deed-hint" id="deedHint"></p>
+    </div>
+    <button class="done-btn" id="doneBtn">✓ I did it!</button>
+    <p class="done-counter">People who did this today: <span id="doneCount">…</span></p>
+    <p class="streak-note" id="streakNote"></p>
+  </div>
+
+  <div class="nav-links">
+    <a class="nav-link" href="/en.html">🐾 Pet the cat</a>
+    <a class="nav-link" href="/en-about.html">📖 Our story</a>
+    <a class="nav-link" href="/en-changelog.html">🛠️ What's new</a>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <footer>Purr-r-revolution · kindness is contagious · one deed at a time 💛</footer>
+
+  <script>
+    (function() {
+      const h = new Date().getHours();
+      if (h >= 20 || h < 6) document.body.classList.add('night-mode');
+    })();
+
+    const DEEDS = [
+      { icon: '😊', text: 'Smile at a stranger', hint: 'Just smile at the first person you see. It costs nothing — and can change someone\'s day.' },
+      { icon: '📞', text: 'Call someone you haven\'t called in a while', hint: 'A parent, friend, or grandparent. Just ask how they\'re doing — no reason needed.' },
+      { icon: '🍵', text: 'Treat someone to tea or coffee', hint: 'A colleague, neighbor, or someone nearby. A small gesture — a big warmth.' },
+      { icon: '💌', text: 'Send someone a kind message', hint: 'One sincere "you\'re great" or "I\'m glad you exist" — that\'s already a revolution.' },
+      { icon: '🐱', text: 'Feed a stray cat or bird', hint: 'Bring a little food on your walk. They\'re always grateful.' },
+      { icon: '🌿', text: 'Pick up litter outside', hint: 'One bag, one bottle. The world is instantly a little cleaner.' },
+      { icon: '🤝', text: 'Help someone with heavy bags', hint: 'Hold the door, help carry, offer your seat.' },
+      { icon: '🙏', text: 'Say thank you to someone long overdue', hint: 'A cashier, driver, friend. A sincere thank you is always surprising and warm.' },
+      { icon: '🎁', text: 'Give someone a small surprise', hint: 'A note on the fridge, a flower, a favorite candy. For no reason — just because.' },
+      { icon: '👂', text: 'Truly listen to someone', hint: 'Without looking at your phone. Just being present and listening — that\'s a rare gift.' },
+      { icon: '🌟', text: 'Tell someone something good about them', hint: 'Not flattery — something sincere you\'ve noticed but never said.' },
+      { icon: '🏠', text: 'Help a neighbor with something', hint: 'Bring in a package, help with a door, just say hello like a human.' },
+      { icon: '📚', text: 'Share something useful with a friend', hint: 'A book, article, video, recipe — something that inspired you.' },
+      { icon: '🌸', text: 'Give someone a flower or plant', hint: 'A lilac branch, wildflower, small cactus. Living beauty is always a joy.' },
+      { icon: '💛', text: 'Forgive someone', hint: 'You don\'t have to say it out loud. Just let it go inside — it gets lighter for both of you.' },
+      { icon: '🎶', text: 'Share your favorite music', hint: 'Send a friend a song that lifts you up. Music is the best gift for no occasion.' },
+      { icon: '🤗', text: 'Hug someone', hint: 'Long and real. Scientists say you need at least 8 hugs a day.' },
+      { icon: '🌍', text: 'Do something for nature', hint: 'Plant a seed, water a tree, skip single-use plastic today.' },
+      { icon: '✍️', text: 'Write a letter to your future self', hint: 'What do you want to remember in a year? This is kindness — to yourself.' },
+      { icon: '🐾', text: 'Pass the cat on to someone', hint: 'Share this site with someone who needs a little warmth right now.' },
+    ];
+
+    const d = new Date();
+    const seed = d.getFullYear() * 10000 + (d.getMonth()+1) * 100 + d.getDate();
+    const deed = DEEDS[seed % DEEDS.length];
+    document.getElementById('deedIcon').textContent = deed.icon;
+    document.getElementById('deedText').textContent = deed.text;
+    document.getElementById('deedHint').textContent = deed.hint;
+
+    const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    document.getElementById('dateLabel').textContent = `${months[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+
+    const today = d.toISOString().slice(0, 10);
+    const countKey = 'kindness_count_' + today;
+    let doneCount = parseInt(localStorage.getItem(countKey) || '0');
+    const baseCount = 7 + (seed % 23);
+    document.getElementById('doneCount').textContent = baseCount + doneCount;
+
+    const doneKey = 'kindness_done_' + today;
+    const doneBtn = document.getElementById('doneBtn');
+    if (localStorage.getItem(doneKey)) {
+      doneBtn.textContent = '✓ Already done today!';
+      doneBtn.classList.add('did-it');
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    function burst() {
+      const emojis = ['💛','🐾','💛','🌸','💛','😻','💛'];
+      for (let i = 0; i < 12; i++) {
+        setTimeout(() => {
+          const h = document.createElement('span');
+          h.className = 'float-heart';
+          h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+          h.style.left = (10 + Math.random() * 80) + '%';
+          h.style.top  = (20 + Math.random() * 60) + '%';
+          document.body.appendChild(h);
+          setTimeout(() => h.remove(), 1050);
+        }, i * 80);
+      }
+    }
+
+    doneBtn.addEventListener('click', () => {
+      if (localStorage.getItem(doneKey)) {
+        showToast('The cat already knows — you\'re wonderful! 💛');
+        return;
+      }
+      localStorage.setItem(doneKey, '1');
+      doneCount++;
+      localStorage.setItem(countKey, doneCount);
+      document.getElementById('doneCount').textContent = baseCount + doneCount;
+      doneBtn.textContent = '✓ Already done today!';
+      doneBtn.classList.add('did-it');
+
+      const yesterday = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
+      const last = localStorage.getItem('kindness_streak_last');
+      let streak = parseInt(localStorage.getItem('kindness_streak') || '0');
+      if (last === yesterday) { streak++; } else { streak = 1; }
+      localStorage.setItem('kindness_streak', streak);
+      localStorage.setItem('kindness_streak_last', today);
+
+      const streakEl = document.getElementById('streakNote');
+      if (streak >= 2) {
+        streakEl.textContent = `🔥 ${streak} days of kindness in a row!`;
+      } else {
+        streakEl.textContent = '✨ First step — already a revolution!';
+      }
+
+      document.getElementById('catImg').classList.add('happy');
+      setTimeout(() => document.getElementById('catImg').classList.remove('happy'), 600);
+      burst();
+      setTimeout(() => showToast('The cat is proud of you! 🐱💛'), 400);
+    });
+
+    (function() {
+      const streak = parseInt(localStorage.getItem('kindness_streak') || '0');
+      const last = localStorage.getItem('kindness_streak_last');
+      if (streak >= 2 && last === today) {
+        document.getElementById('streakNote').textContent =
+          `🔥 ${streak} days of kindness in a row!`;
+      }
+    })();
+  </script>
+</body>
+</html>

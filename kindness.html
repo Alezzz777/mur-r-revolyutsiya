@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Доброе дело дня 🐾 Мур-р-революция</title>
+  <meta name="description" content="Одно маленькое доброе дело в день — и мир становится мягче. От котика с любовью." />
+  <meta property="og:title" content="Доброе дело дня 🐾" />
+  <meta property="og:description" content="Котик предлагает одно маленькое доброе дело. Сделаешь?" />
+  <script>
+    (function(){
+      var lang = (navigator.language || navigator.userLanguage || '').toLowerCase();
+      if (lang.startsWith('en') && !sessionStorage.getItem('lang-chosen')) {
+        sessionStorage.setItem('lang-chosen', '1');
+        location.replace('/en-kindness.html');
+      }
+    })();
+  </script>
+  <style>
+    :root {
+      --bg1: #ffe9f0; --bg2: #fff6e6;
+      --ink: #3a2b32; --accent: #ff7eb3;
+      --accent-dark: #e85b97; --card: #fffdfb;
+    }
+    body.night-mode {
+      --bg1: #1a1020; --bg2: #21182e;
+      --ink: #f0e6f6; --accent: #d47ab8;
+      --accent-dark: #c45fa0; --card: #2a1f35;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      color: var(--ink);
+      background: linear-gradient(135deg, var(--bg1), var(--bg2));
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 24px 16px 64px;
+    }
+    .lang-switch { align-self: flex-end; margin-bottom: 8px; font-size: .88rem; }
+    .lang-switch a { color: var(--accent-dark); text-decoration: none; font-weight: 600; opacity: .75; }
+    .lang-switch a:hover { opacity: 1; }
+    .back { align-self: flex-start; margin-bottom: 16px; text-decoration: none; color: var(--accent-dark); font-weight: 600; font-size: 0.95rem; opacity: 0.85; transition: opacity .2s; }
+    .back:hover { opacity: 1; }
+
+    h1 { font-size: clamp(1.8rem, 5vw, 2.8rem); text-align: center; margin: 0 0 6px; }
+    .sub { text-align: center; font-size: 1rem; opacity: .7; margin: 0 0 32px; }
+
+    .card {
+      background: var(--card); border-radius: 28px;
+      box-shadow: 0 12px 40px rgba(232,91,151,.18);
+      padding: 32px 28px; max-width: 520px; width: 100%;
+      display: flex; flex-direction: column; align-items: center; gap: 20px;
+    }
+
+    .cat-img {
+      width: 140px; height: 140px; border-radius: 50%;
+      object-fit: cover; box-shadow: 0 6px 20px rgba(232,91,151,.2);
+      transition: transform .3s;
+    }
+    .cat-img.happy { animation: catJoy .5s ease-in-out; }
+    @keyframes catJoy {
+      0%,100% { transform: scale(1) rotate(0deg); }
+      30%  { transform: scale(1.08) rotate(-4deg); }
+      60%  { transform: scale(1.08) rotate(4deg); }
+    }
+
+    .date-label {
+      font-size: .8rem; font-weight: 700; letter-spacing: .06em;
+      text-transform: uppercase; color: var(--accent-dark); opacity: .7;
+    }
+
+    .deed-card {
+      background: linear-gradient(135deg, #fff0f6, #fff8ee);
+      border-radius: 20px; padding: 22px 24px;
+      text-align: center; width: 100%;
+    }
+    body.night-mode .deed-card { background: linear-gradient(135deg, #2e1a2e, #261a20); }
+    .deed-icon { font-size: 2.8rem; margin-bottom: 10px; display: block; }
+    .deed-text {
+      font-size: 1.15rem; font-weight: 600; line-height: 1.55;
+      margin: 0 0 8px;
+    }
+    .deed-hint { font-size: .9rem; opacity: .7; line-height: 1.5; margin: 0; }
+
+    .done-btn {
+      font: inherit; font-weight: 700; font-size: 1.05rem;
+      background: var(--accent); color: white;
+      border: none; border-radius: 999px;
+      padding: 14px 32px; cursor: pointer;
+      box-shadow: 0 6px 18px rgba(255,126,179,.45);
+      transition: background .2s, transform .12s;
+      position: relative; overflow: hidden;
+    }
+    .done-btn:hover { background: var(--accent-dark); }
+    .done-btn:active { transform: scale(.97); }
+    .done-btn.did-it {
+      background: #4caf82; box-shadow: 0 6px 18px rgba(76,175,130,.35);
+    }
+
+    .done-counter {
+      font-size: .88rem; opacity: .65; text-align: center;
+    }
+    .done-counter span { font-weight: 700; color: var(--accent-dark); }
+
+    .streak-note {
+      font-size: .88rem; text-align: center; min-height: 1.3em;
+      color: var(--accent-dark); font-weight: 600;
+    }
+
+    @keyframes floatHeart {
+      0%   { transform: translateY(0) scale(1); opacity: 1; }
+      100% { transform: translateY(-80px) scale(1.3); opacity: 0; }
+    }
+    .float-heart {
+      position: fixed; pointer-events: none; font-size: 1.6rem;
+      animation: floatHeart 1s ease-out forwards; z-index: 9999;
+    }
+
+    .nav-links {
+      max-width: 520px; width: 100%; margin-top: 32px;
+      display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+    }
+    .nav-link {
+      display: inline-block; padding: 10px 20px; border-radius: 999px;
+      background: var(--card); color: var(--accent-dark);
+      text-decoration: none; font-weight: 600; font-size: .9rem;
+      box-shadow: 0 4px 14px rgba(232,91,151,.12);
+      transition: transform .12s, box-shadow .2s;
+    }
+    .nav-link:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(232,91,151,.2); }
+
+    .toast {
+      position: fixed; bottom: 24px; left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--ink); color: white;
+      padding: 12px 22px; border-radius: 999px;
+      opacity: 0; transition: all .3s; z-index: 9999; white-space: nowrap;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    footer { margin-top: 40px; opacity: .6; font-size: .88rem; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="lang-switch"><a href="/en-kindness.html">🇬🇧 EN</a></div>
+  <a class="back" href="/">← Назад к котику</a>
+
+  <h1>💛 Доброе дело дня</h1>
+  <p class="sub">Одно маленькое действие — и мир уже немного мягче</p>
+
+  <div class="card">
+    <img class="cat-img" id="catImg" src="https://cataas.com/cat?width=300&height=300" alt="Котик" />
+    <p class="date-label" id="dateLabel"></p>
+
+    <div class="deed-card">
+      <span class="deed-icon" id="deedIcon"></span>
+      <p class="deed-text" id="deedText"></p>
+      <p class="deed-hint" id="deedHint"></p>
+    </div>
+
+    <button class="done-btn" id="doneBtn">✓ Я сделал это!</button>
+    <p class="done-counter">Сегодня это доброе дело сделали: <span id="doneCount">…</span> человек</p>
+    <p class="streak-note" id="streakNote"></p>
+  </div>
+
+  <div class="nav-links">
+    <a class="nav-link" href="/">🐾 Погладить котика</a>
+    <a class="nav-link" href="/about.html">📖 История проекта</a>
+    <a class="nav-link" href="/changelog.html">🛠️ Что нового</a>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <footer>Мур-р-революция · доброта заразна · одно дело за раз 💛</footer>
+
+  <script>
+    // ночной режим
+    (function() {
+      const h = new Date().getHours();
+      if (h >= 20 || h < 6) document.body.classList.add('night-mode');
+    })();
+
+    const DEEDS = [
+      { icon: '😊', text: 'Улыбнись незнакомцу', hint: 'Просто улыбнись первому встречному. Это ничего не стоит — и может изменить чей-то день.' },
+      { icon: '📞', text: 'Позвони кому-то, кому давно не звонил', hint: 'Маме, другу, бабушке. Просто спроси как дела — без повода.' },
+      { icon: '🍵', text: 'Угости кого-нибудь чаем или кофе', hint: 'Коллегу, соседа, случайного человека рядом. Маленький жест — большое тепло.' },
+      { icon: '💌', text: 'Напиши кому-то доброе сообщение', hint: 'Одно искреннее "ты классный" или "я рад что ты есть" — это уже революция.' },
+      { icon: '🐱', text: 'Покорми уличного котика или птичку', hint: 'Захвати немного еды на прогулку. Они всегда рады.' },
+      { icon: '🌿', text: 'Подними мусор на улице', hint: 'Один пакетик, одна бутылка. Мир сразу чуть чище.' },
+      { icon: '🤝', text: 'Помоги кому-то с тяжёлыми сумками', hint: 'Придержи дверь, помоги донести, предложи место.' },
+      { icon: '🙏', text: 'Скажи спасибо тому, кому давно не говорил', hint: 'Кассиру, водителю, другу. Искреннее спасибо всегда неожиданно и приятно.' },
+      { icon: '🎁', text: 'Сделай кому-то маленький сюрприз', hint: 'Записка на холодильнике, цветок, любимая конфета. Без причины — просто так.' },
+      { icon: '👂', text: 'Выслушай кого-то по-настоящему', hint: 'Не отвлекаясь на телефон. Просто быть рядом и слушать — это редкий подарок.' },
+      { icon: '🌟', text: 'Скажи кому-то что-то хорошее о нём', hint: 'Не лесть, а искреннее — то что ты давно замечал, но не говорил.' },
+      { icon: '🏠', text: 'Помоги соседу с чем-нибудь', hint: 'Принести посылку, помочь с дверью, просто поздороваться по-человечески.' },
+      { icon: '📚', text: 'Поделись чем-то полезным с другом', hint: 'Книга, статья, видео, рецепт — что-то что тебя вдохновило.' },
+      { icon: '🌸', text: 'Подари цветок или растение', hint: 'Веточка сирени, полевой цветок, маленький кактус. Живая красота — всегда радость.' },
+      { icon: '💛', text: 'Прости кого-нибудь', hint: 'Необязательно говорить вслух. Просто отпусти внутри — станет легче обоим.' },
+      { icon: '🎶', text: 'Поделись любимой музыкой', hint: 'Отправь другу песню которая тебя поднимает. Музыка — лучший подарок без повода.' },
+      { icon: '🤗', text: 'Обними кого-нибудь', hint: 'Долго и по-настоящему. Учёные говорят: нужно минимум 8 объятий в день.' },
+      { icon: '🌍', text: 'Сделай что-то для природы', hint: 'Посади семечко, полей дерево, откажись от одноразового пластика сегодня.' },
+      { icon: '✍️', text: 'Напиши письмо самому себе из будущего', hint: 'Что ты хочешь помнить через год? Это тоже доброе дело — для себя.' },
+      { icon: '🐾', text: 'Передай котика кому-нибудь', hint: 'Поделись этим сайтом с кем-то кому нужно немного тепла прямо сейчас.' },
+    ];
+
+    const d = new Date();
+    const seed = d.getFullYear() * 10000 + (d.getMonth()+1) * 100 + d.getDate();
+    const deed = DEEDS[seed % DEEDS.length];
+
+    document.getElementById('deedIcon').textContent = deed.icon;
+    document.getElementById('deedText').textContent = deed.text;
+    document.getElementById('deedHint').textContent = deed.hint;
+
+    const months = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+    document.getElementById('dateLabel').textContent = `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+
+    // счётчик сделавших (localStorage, сбрасывается каждый день)
+    const today = d.toISOString().slice(0, 10);
+    const countKey = 'kindness_count_' + today;
+    let doneCount = parseInt(localStorage.getItem(countKey) || '0');
+    // имитируем базовый счётчик — добавляем seed-число чтобы не выглядело пустым
+    const baseCount = 7 + (seed % 23);
+    document.getElementById('doneCount').textContent = baseCount + doneCount;
+
+    // кнопка "я сделал"
+    const doneKey = 'kindness_done_' + today;
+    const doneBtn = document.getElementById('doneBtn');
+    if (localStorage.getItem(doneKey)) {
+      doneBtn.textContent = '✓ Уже сделано сегодня!';
+      doneBtn.classList.add('did-it');
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    function burst() {
+      const emojis = ['💛','🐾','💛','🌸','💛','😻','💛'];
+      for (let i = 0; i < 12; i++) {
+        setTimeout(() => {
+          const h = document.createElement('span');
+          h.className = 'float-heart';
+          h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+          h.style.left = (10 + Math.random() * 80) + '%';
+          h.style.top  = (20 + Math.random() * 60) + '%';
+          document.body.appendChild(h);
+          setTimeout(() => h.remove(), 1050);
+        }, i * 80);
+      }
+    }
+
+    doneBtn.addEventListener('click', () => {
+      if (localStorage.getItem(doneKey)) {
+        showToast('Котик уже знает — ты молодец! 💛');
+        return;
+      }
+      localStorage.setItem(doneKey, '1');
+      doneCount++;
+      localStorage.setItem(countKey, doneCount);
+      document.getElementById('doneCount').textContent = baseCount + doneCount;
+      doneBtn.textContent = '✓ Уже сделано сегодня!';
+      doneBtn.classList.add('did-it');
+
+      // серия дней добрых дел
+      const yesterday = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
+      const lastKey = 'kindness_streak_last';
+      const streakKey = 'kindness_streak';
+      const last = localStorage.getItem(lastKey);
+      let streak = parseInt(localStorage.getItem(streakKey) || '0');
+      if (last === yesterday) { streak++; } else { streak = 1; }
+      localStorage.setItem(streakKey, streak);
+      localStorage.setItem(lastKey, today);
+
+      const streakEl = document.getElementById('streakNote');
+      if (streak >= 2) {
+        streakEl.textContent = `🔥 ${streak} ${streak < 5 ? 'дня' : 'дней'} подряд делаешь добро!`;
+      } else {
+        streakEl.textContent = '✨ Первый шаг — уже революция!';
+      }
+
+      // анимация котика
+      document.getElementById('catImg').classList.add('happy');
+      setTimeout(() => document.getElementById('catImg').classList.remove('happy'), 600);
+
+      burst();
+      setTimeout(() => showToast('Котик гордится тобой! 🐱💛'), 400);
+    });
+
+    // серия при загрузке
+    (function() {
+      const streak = parseInt(localStorage.getItem('kindness_streak') || '0');
+      const last = localStorage.getItem('kindness_streak_last');
+      if (streak >= 2 && last === today) {
+        document.getElementById('streakNote').textContent =
+          `🔥 ${streak} ${streak < 5 ? 'дня' : 'дней'} подряд делаешь добро!`;
+      }
+    })();
+  </script>
+</body>
+</html>
