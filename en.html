@@ -524,6 +524,10 @@
       const el = document.getElementById('petCounter');
       const msg = [...petMsgs].reverse().find(([n]) => petCount >= n);
       el.textContent = msg ? msg[1] : '';
+      // live tab title
+      const icons = ['😺','😸','😻','🥰','👑','🌟'];
+      const icon = icons[Math.min(Math.floor(petCount / 2), icons.length - 1)];
+      document.title = `${icon} ×${petCount} · Purr-r-revolution`;
       const steps = [1, 2, 5, 10, 20, 50];
       const next = steps.find(s => s > petCount);
       const prev = steps.filter(s => s <= petCount).pop() || 0;
