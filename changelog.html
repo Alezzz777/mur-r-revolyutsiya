@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>История улучшений 🐾 Мур-р-революция</title>
+  <meta name="description" content="Как котик-разработчик каждый день делает Мур-р-революцию чуточку лучше." />
+  <script>
+    (function(){
+      var lang = (navigator.language || navigator.userLanguage || '').toLowerCase();
+      if (lang.startsWith('en') && !sessionStorage.getItem('lang-chosen')) {
+        sessionStorage.setItem('lang-chosen', '1');
+        location.replace('/en-changelog.html');
+      }
+    })();
+  </script>
+  <style>
+    :root {
+      --bg1: #ffe9f0; --bg2: #fff6e6;
+      --ink: #3a2b32; --accent: #ff7eb3;
+      --accent-dark: #e85b97; --card: #fffdfb;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      color: var(--ink);
+      background: linear-gradient(135deg, var(--bg1), var(--bg2));
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 24px 16px 64px;
+    }
+    .lang-switch { align-self: flex-end; margin-bottom: 8px; font-size: .88rem; }
+    .lang-switch a { color: var(--accent-dark); text-decoration: none; font-weight: 600; opacity: .75; }
+    .lang-switch a:hover { opacity: 1; }
+    .back {
+      align-self: flex-start; margin-bottom: 16px;
+      text-decoration: none; color: var(--accent-dark);
+      font-weight: 600; font-size: 0.95rem; opacity: 0.85; transition: opacity .2s;
+    }
+    .back:hover { opacity: 1; }
+    h1 { font-size: clamp(1.8rem, 5vw, 2.8rem); text-align: center; margin: 0 0 8px; }
+    .sub { text-align: center; font-size: 1rem; opacity: .7; margin: 0 0 40px; }
+
+    .log { max-width: 620px; width: 100%; display: flex; flex-direction: column; gap: 12px; }
+
+    .entry {
+      background: var(--card);
+      border-radius: 18px;
+      box-shadow: 0 6px 22px rgba(232,91,151,.11);
+      padding: 18px 22px;
+      display: flex; gap: 16px; align-items: flex-start;
+    }
+    .entry-icon { font-size: 1.6rem; flex-shrink: 0; margin-top: 2px; }
+    .entry-body { flex: 1; }
+    .entry-date {
+      font-size: .78rem; font-weight: 700; letter-spacing: .04em;
+      color: var(--accent-dark); text-transform: uppercase; margin-bottom: 3px;
+    }
+    .entry-title { font-weight: 700; font-size: 1rem; margin: 0 0 4px; }
+    .entry-desc { font-size: .92rem; line-height: 1.6; opacity: .8; margin: 0; }
+
+    .month-label {
+      font-size: .8rem; font-weight: 700; letter-spacing: .08em;
+      text-transform: uppercase; color: var(--accent-dark);
+      opacity: .6; margin: 16px 0 4px 4px;
+    }
+    .month-label:first-child { margin-top: 0; }
+
+    footer { margin-top: 48px; opacity: .6; font-size: .88rem; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="lang-switch"><a href="/en-changelog.html">🇬🇧 EN</a></div>
+  <a class="back" href="/">← Назад к котику</a>
+
+  <h1>🛠️ История улучшений</h1>
+  <p class="sub">Котик-разработчик не дремлет — он только делает вид 😴</p>
+
+  <div class="log">
+
+    <p class="month-label">Июнь 2026</p>
+
+    <div class="entry">
+      <span class="entry-icon">🤧</span>
+      <div class="entry-body">
+        <p class="entry-date">4 июня 2026</p>
+        <p class="entry-title">Котик иногда чихает</p>
+        <p class="entry-desc">С шансом 3% при поглаживании котик вздрагивает и показывает "апчхи! 🤧" — редкий сюрприз для внимательных.</p>
+      </div>
+    </div>
+
+    <div class="entry">
+      <span class="entry-icon">📊</span>
+      <div class="entry-body">
+        <p class="entry-date">4 июня 2026</p>
+        <p class="entry-title">Прогресс-бар поглаживаний</p>
+        <p class="entry-desc">Розовая полоска под котиком показывает, как близко до следующей вехи: 5 → 10 → 20 → 50 поглаживаний.</p>
+      </div>
+    </div>
+
+    <div class="entry">
+      <span class="entry-icon">💌</span>
+      <div class="entry-body">
+        <p class="entry-date">4 июня 2026</p>
+        <p class="entry-title">Счётчик переданных котиков</p>
+        <p class="entry-desc">При каждом шаринге считается сколько котиков ты передал. На вехах 1, 3, 5, 10, 20, 50 — тёплое послание.</p>
+      </div>
+    </div>
+
+    <div class="entry">
+      <span class="entry-icon">😸</span>
+      <div class="entry-body">
+        <p class="entry-date">4 июня 2026</p>
+        <p class="entry-title">Котик потягивается</p>
+        <p class="entry-desc">При загрузке нового котика картинка появляется с пружинистой анимацией потягивания — как будто кошка только проснулась.</p>
+      </div>
+    </div>
+
+    <div class="entry">
+      <span class="entry-icon">😌</span>
+      <div class="entry-body">
+        <p class="entry-date">4 июня 2026</p>
+        <p class="entry-title">Котик моргает</p>
+        <p class="entry-desc">Каждые 7–12 секунд котик медленно щурится — полупрозрачный оверлей мягко накрывает фото и снимается.</p>
+      </div>
+    </div>
+
+    <div class="entry">
+      <span class="entry-icon">🐱</span>
+      <div class="entry-body">
+        <p class="entry-date">4 июня 2026</p>
+        <p class="entry-title">Тайный шёпот котика</p>
+        <p class="entry-desc">Двойной клик по котику показывает скрытое тёплое послание: "котик шепчет: ты не один 💛".</p>
+      </div>
+    </div>
+
+    <div class="entry">
+      <span class="entry-icon">🐾</span>
+      <div class="entry-body">
+        <p class="entry-date">4 июня 2026</p>
+        <p class="entry-title">След лапок за курсором</p>
+        <p class="entry-desc">При движении мыши по странице остаются маленькие 🐾, которые плавно растворяются — как настоящие кошачьи следы.</p>
+      </div>
+    </div>
+
+    <div class="entry">
+      <span class="entry-icon">☀️</span>
+      <div class="entry-body">
+        <p class="entry-date">4 июня 2026</p>
+        <p class="entry-title">Сезонный бейдж</p>
+        <p class="entry-desc">Небольшая надпись с настроением сезона — летом ☀️, осенью 🍂, зимой ❄️, весной 🌸. Меняется сама.</p>
+      </div>
+    </div>
+
+    <div class="entry">
+      <span class="entry-icon">👀</span>
+      <div class="entry-body">
+        <p class="entry-date">3 июня 2026</p>
+        <p class="entry-title">Котик скучает</p>
+        <p class="entry-desc">Если 20 секунд никто не взаимодействует со страницей, котик тихонько показывает "мяу? 👀" — намекает, что соскучился.</p>
+      </div>
+    </div>
+
+    <div class="entry">
+      <span class="entry-icon">🌙</span>
+      <div class="entry-body">
+        <p class="entry-date">3 июня 2026</p>
+        <p class="entry-title">Автоматический ночной режим</p>
+        <p class="entry-desc">После 22:00 и до 6:00 сайт сам переключается в тёмную тему с фиолетово-розовой палитрой.</p>
+      </div>
+    </div>
+
+    <p class="month-label">Май 2026</p>
+
+    <div class="entry">
+      <span class="entry-icon">🎵</span>
+      <div class="entry-body">
+        <p class="entry-date">Май 2026</p>
+        <p class="entry-title">Мурчание с дыханием и случайностью</p>
+        <p class="entry-desc">Звук из коричневого шума с тремоло и дыхательным LFO — каждый раз немного другой, как у настоящего котика.</p>
+      </div>
+    </div>
+
+    <div class="entry">
+      <span class="entry-icon">🔥</span>
+      <div class="entry-body">
+        <p class="entry-date">Май 2026</p>
+        <p class="entry-title">Серия дней подряд</p>
+        <p class="entry-desc">Счётчик "🔥 X дней подряд гладишь котиков!" — мотивирует возвращаться каждый день.</p>
+      </div>
+    </div>
+
+    <div class="entry">
+      <span class="entry-icon">✨</span>
+      <div class="entry-body">
+        <p class="entry-date">Май 2026</p>
+        <p class="entry-title">Котик дня и ежедневное послание</p>
+        <p class="entry-desc">Каждый день новое имя котика и тёплое послание — сеяны по дате, одинаковые для всех в один день.</p>
+      </div>
+    </div>
+
+    <div class="entry">
+      <span class="entry-icon">🐾</span>
+      <div class="entry-body">
+        <p class="entry-date">Май 2026</p>
+        <p class="entry-title">Следы лапок при загрузке</p>
+        <p class="entry-desc">При открытии страницы через верх пробегают 7 следов лапок — анонс того, что революция началась.</p>
+      </div>
+    </div>
+
+    <div class="entry">
+      <span class="entry-icon">🗺️</span>
+      <div class="entry-body">
+        <p class="entry-date">Май 2026</p>
+        <p class="entry-title">Карта мира с лапками</p>
+        <p class="entry-desc">На карте видно откуда уже гладили котиков — каждый визит оставляет метку 🐾 на своём городе.</p>
+      </div>
+    </div>
+
+    <div class="entry">
+      <span class="entry-icon">🌍</span>
+      <div class="entry-body">
+        <p class="entry-date">Май 2026</p>
+        <p class="entry-title">Английская версия</p>
+        <p class="entry-desc">Автоматическое определение языка браузера — англоязычные посетители попадают на en.html.</p>
+      </div>
+    </div>
+
+    <div class="entry">
+      <span class="entry-icon">🚀</span>
+      <div class="entry-body">
+        <p class="entry-date">Май 2026</p>
+        <p class="entry-title">Первый запуск</p>
+        <p class="entry-desc">Мур-р-революция родилась за один вечер — котик, кнопка "переслать", манифест и деплой на Render.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>Мур-р-революция · каждый день чуточку лучше · <a href="/about.html" style="color:#e85b97;text-decoration:none;font-weight:600;">История проекта 🐾</a></footer>
+</body>
+</html>
