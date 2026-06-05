@@ -258,6 +258,13 @@
       100% { transform: scale(1) rotate(0deg); opacity: 1; }
     }
     .cat-wrap.stretching img { animation: catStretch 0.55s cubic-bezier(.22,1,.36,1) forwards; }
+    @keyframes catBreath {
+      0%,100% { transform: scale(1); }
+      50%     { transform: scale(1.018); }
+    }
+    .cat-wrap img.breathing { animation: catBreath 3.8s ease-in-out infinite; }
+    .cat-wrap.sneezing img.breathing,
+    .cat-wrap.stretching img.breathing { animation: none; }
     @keyframes pawFade {
       0%   { opacity: .7; transform: scale(1) rotate(var(--r)); }
       100% { opacity: 0;  transform: scale(0.5) rotate(var(--r)) translateY(-14px); }
@@ -546,8 +553,11 @@
     const toast = document.getElementById('toast');
 
     catImg.style.transition = 'opacity .35s ease';
+    catImg.addEventListener('load', () => catImg.classList.add('breathing'), { once: false });
+    if (catImg.complete) catImg.classList.add('breathing');
 
     function newCat() {
+      catImg.classList.remove('breathing');
       catImg.style.opacity = '0';
       setTimeout(() => {
         const bust = Date.now() + '-' + Math.floor(Math.random() * 1e6);
@@ -555,6 +565,7 @@
         catImg.src = 'https://cataas.com/cat?width=600&height=600&t=' + bust;
         catImg.onload = () => {
           catImg.style.opacity = '1';
+          catImg.classList.add('breathing');
           catWrap.classList.add('stretching');
           setTimeout(() => catWrap.classList.remove('stretching'), 600);
         };
