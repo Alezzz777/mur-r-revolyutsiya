@@ -397,9 +397,24 @@
         'Tell someone something good about them 💛',
         'The world is better because you\'re in it 🌍',
       ];
+      const titles = [
+        'specialist in cozy blankets',
+        'expert in empty boxes',
+        'professor of window gazing',
+        'master of knocking things off tables',
+        'doctor of purring',
+        'connoisseur of warm keyboards',
+        'researcher of bags and crinkly things',
+        'academician of napping',
+        'champion of selective ignoring',
+        'chief editor of cat news',
+        'engineer of biscuit-making',
+        'laureate of the cuteness prize',
+      ];
       const d = new Date();
       const seed = d.getFullYear() * 10000 + (d.getMonth()+1) * 100 + d.getDate();
-      document.getElementById('catOfDay').textContent = `✨ Cat of the day: ${names[seed % names.length]}`;
+      const title = titles[(seed * 3 + 7) % titles.length];
+      document.getElementById('catOfDay').textContent = `✨ Cat of the day: ${names[seed % names.length]} — ${title}`;
       const msg = messages[(seed + 7) % messages.length];
       document.getElementById('dailyMsg').innerHTML =
         `<div class="msg-label">💌 Today's cat message</div><div class="msg-text">"${msg}"</div>`;
