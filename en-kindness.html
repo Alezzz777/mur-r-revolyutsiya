@@ -54,6 +54,33 @@
     .done-counter { font-size: .88rem; opacity: .65; text-align: center; }
     .done-counter span { font-weight: 700; color: var(--accent-dark); }
     .streak-note { font-size: .88rem; text-align: center; min-height: 1.3em; color: var(--accent-dark); font-weight: 600; }
+
+    /* --- BADGES --- */
+    .badges-section { max-width: 520px; width: 100%; margin-top: 28px; }
+    .badges-title { font-size: .85rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--accent-dark); opacity: .65; margin: 0 0 14px 4px; }
+    .badges-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+    .badge-card { background: var(--card); border-radius: 20px; box-shadow: 0 4px 18px rgba(232,91,151,.10); padding: 16px 14px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 6px; position: relative; transition: transform .15s, box-shadow .2s; cursor: default; }
+    .badge-card.earned { cursor: pointer; }
+    .badge-card.earned:hover { transform: translateY(-3px); box-shadow: 0 8px 26px rgba(232,91,151,.22); }
+    .badge-card.locked { opacity: .38; filter: grayscale(.7); }
+    .badge-icon { font-size: 2.2rem; line-height: 1; }
+    .badge-name { font-size: .82rem; font-weight: 700; line-height: 1.3; }
+    .badge-req { font-size: .72rem; opacity: .6; line-height: 1.3; }
+    @keyframes badgePop { 0%{transform:scale(.5) rotate(-8deg);opacity:0} 60%{transform:scale(1.12) rotate(3deg);opacity:1} 100%{transform:scale(1) rotate(0deg)} }
+    .badge-card.badge-animate { animation: badgePop .5s cubic-bezier(.34,1.56,.64,1) both; }
+
+    .badge-modal-overlay { position: fixed; inset: 0; background: rgba(58,43,50,.55); display: flex; align-items: center; justify-content: center; z-index: 9998; opacity: 0; transition: opacity .25s; pointer-events: none; }
+    .badge-modal-overlay.open { opacity: 1; pointer-events: all; }
+    .badge-modal { background: var(--card); border-radius: 28px; box-shadow: 0 20px 60px rgba(232,91,151,.3); padding: 36px 28px; max-width: 340px; width: 90%; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 14px; transform: scale(.85); transition: transform .25s cubic-bezier(.34,1.56,.64,1); }
+    .badge-modal-overlay.open .badge-modal { transform: scale(1); }
+    .badge-modal .modal-icon { font-size: 3.5rem; line-height: 1; }
+    .badge-modal .modal-name { font-size: 1.4rem; font-weight: 800; margin: 0; }
+    .badge-modal .modal-desc { font-size: .95rem; opacity: .75; margin: 0; line-height: 1.5; }
+    .modal-share-btn { font: inherit; font-weight: 700; font-size: .95rem; background: var(--accent); color: white; border: none; border-radius: 999px; padding: 12px 28px; cursor: pointer; box-shadow: 0 4px 14px rgba(255,126,179,.4); transition: background .2s; }
+    .modal-share-btn:hover { background: var(--accent-dark); }
+    .modal-close { font: inherit; font-size: .88rem; opacity: .55; background: none; border: none; cursor: pointer; color: var(--ink); }
+    .modal-close:hover { opacity: 1; }
+
     @keyframes floatHeart { 0%{transform:translateY(0) scale(1);opacity:1} 100%{transform:translateY(-80px) scale(1.3);opacity:0} }
     .float-heart { position: fixed; pointer-events: none; font-size: 1.6rem; animation: floatHeart 1s ease-out forwards; z-index: 9999; }
     .nav-links { max-width: 520px; width: 100%; margin-top: 32px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
@@ -87,10 +114,26 @@
     <p class="streak-note" id="streakNote"></p>
   </div>
 
+  <div class="badges-section" id="badgesSection" style="display:none">
+    <p class="badges-title">🏅 My achievements</p>
+    <div class="badges-grid" id="badgesGrid"></div>
+  </div>
+
   <div class="nav-links">
     <a class="nav-link" href="/en.html">🐾 Pet the cat</a>
     <a class="nav-link" href="/en-about.html">📖 Our story</a>
     <a class="nav-link" href="/en-changelog.html">🛠️ What's new</a>
+  </div>
+
+  <!-- badge modal -->
+  <div class="badge-modal-overlay" id="badgeModal">
+    <div class="badge-modal">
+      <div class="modal-icon" id="modalIcon"></div>
+      <p class="modal-name" id="modalName"></p>
+      <p class="modal-desc" id="modalDesc"></p>
+      <button class="modal-share-btn" id="modalShareBtn">💌 Share this achievement</button>
+      <button class="modal-close" id="modalClose">close</button>
+    </div>
   </div>
 
   <div class="toast" id="toast"></div>
@@ -126,6 +169,16 @@
       { icon: '🐾', text: 'Pass the cat on to someone', hint: 'Share this site with someone who needs a little warmth right now.' },
     ];
 
+    const BADGES = [
+      { id: 'b3',   streak: 3,   icon: '🌱', name: 'Seed of Kindness',       desc: '3 days in a row — something is starting to grow 🌱' },
+      { id: 'b7',   streak: 7,   icon: '🌸', name: 'Week of Warmth',          desc: '7 days in a row — a whole week of small revolutions!' },
+      { id: 'b14',  streak: 14,  icon: '✨', name: 'Fortnight of Light',      desc: '14 days — you\'re already changing the world around you ✨' },
+      { id: 'b21',  streak: 21,  icon: '🔥', name: 'The Flame Burns On',      desc: '21 days — the habit of doing good is almost wired in!' },
+      { id: 'b30',  streak: 30,  icon: '🏅', name: 'Month of Revolution',     desc: '30 days! The cat solemnly awards you this medal 🏅' },
+      { id: 'b60',  streak: 60,  icon: '🦋', name: 'Agent of Change',         desc: '60 days — you\'re a true agent of the quiet revolution 🦋' },
+      { id: 'b100', streak: 100, icon: '👑', name: 'The Cat Is Proud of You', desc: '100 days of kindness. A legend. The cat is crying with joy 👑' },
+    ];
+
     const d = new Date();
     const seed = d.getFullYear() * 10000 + (d.getMonth()+1) * 100 + d.getDate();
     const deed = DEEDS[seed % DEEDS.length];
@@ -149,13 +202,67 @@
       doneBtn.classList.add('did-it');
     }
 
+    function getEarnedIds() {
+      try { return JSON.parse(localStorage.getItem('kindness_badges') || '[]'); } catch(e) { return []; }
+    }
+    function saveEarnedIds(ids) { localStorage.setItem('kindness_badges', JSON.stringify(ids)); }
+
+    function renderBadges() {
+      const earned = getEarnedIds();
+      if (earned.length === 0) { document.getElementById('badgesSection').style.display = 'none'; return; }
+      document.getElementById('badgesSection').style.display = '';
+      const grid = document.getElementById('badgesGrid');
+      grid.innerHTML = '';
+      BADGES.forEach(b => {
+        const isEarned = earned.includes(b.id);
+        const card = document.createElement('div');
+        card.className = 'badge-card' + (isEarned ? ' earned' : ' locked');
+        card.innerHTML = `<div class="badge-icon">${b.icon}</div><div class="badge-name">${b.name}</div><div class="badge-req">${b.streak} days in a row</div>`;
+        if (isEarned) card.addEventListener('click', () => openModal(b));
+        grid.appendChild(card);
+      });
+    }
+
+    function checkNewBadges(streak) {
+      const earned = getEarnedIds();
+      let newBadge = null;
+      BADGES.forEach(b => {
+        if (streak >= b.streak && !earned.includes(b.id)) {
+          earned.push(b.id);
+          newBadge = b;
+        }
+      });
+      saveEarnedIds(earned);
+      return newBadge;
+    }
+
+    let currentModalBadge = null;
+    function openModal(badge) {
+      currentModalBadge = badge;
+      document.getElementById('modalIcon').textContent = badge.icon;
+      document.getElementById('modalName').textContent = badge.name;
+      document.getElementById('modalDesc').textContent = badge.desc;
+      document.getElementById('badgeModal').classList.add('open');
+    }
+    document.getElementById('modalClose').addEventListener('click', () => {
+      document.getElementById('badgeModal').classList.remove('open');
+    });
+    document.getElementById('badgeModal').addEventListener('click', e => {
+      if (e.target === document.getElementById('badgeModal'))
+        document.getElementById('badgeModal').classList.remove('open');
+    });
+    document.getElementById('modalShareBtn').addEventListener('click', () => {
+      if (!currentModalBadge) return;
+      const text = `I earned the "${currentModalBadge.name}" badge ${currentModalBadge.icon} on Purr-r-revolution!\n${currentModalBadge.desc}\nhttps://mur-r-revolyutsiya.onrender.com/en-kindness.html`;
+      navigator.clipboard.writeText(text).then(() => showToast('Copied! Now go share it 💛'));
+    });
+
     function showToast(msg) {
       const t = document.getElementById('toast');
       t.textContent = msg;
       t.classList.add('show');
       setTimeout(() => t.classList.remove('show'), 2500);
     }
-
     function burst() {
       const emojis = ['💛','🐾','💛','🌸','💛','😻','💛'];
       for (let i = 0; i < 12; i++) {
@@ -197,10 +304,21 @@
         streakEl.textContent = '✨ First step — already a revolution!';
       }
 
+      const newBadge = checkNewBadges(streak);
+      renderBadges();
+
       document.getElementById('catImg').classList.add('happy');
       setTimeout(() => document.getElementById('catImg').classList.remove('happy'), 600);
       burst();
-      setTimeout(() => showToast('The cat is proud of you! 🐱💛'), 400);
+
+      if (newBadge) {
+        setTimeout(() => {
+          openModal(newBadge);
+          showToast(`New badge: ${newBadge.name} ${newBadge.icon}`);
+        }, 600);
+      } else {
+        setTimeout(() => showToast('The cat is proud of you! 🐱💛'), 400);
+      }
     });
 
     (function() {
@@ -210,8 +328,9 @@
         document.getElementById('streakNote').textContent =
           `🔥 ${streak} days of kindness in a row!`;
       }
+      renderBadges();
     })();
-    // scroll-to-top
+
     (function() {
       const btn = document.getElementById('scrollTop');
       window.addEventListener('scroll', () => btn.classList.toggle('visible', window.scrollY > 280), { passive: true });

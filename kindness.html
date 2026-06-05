@@ -44,7 +44,6 @@
     .lang-switch a:hover { opacity: 1; }
     .back { align-self: flex-start; margin-bottom: 16px; text-decoration: none; color: var(--accent-dark); font-weight: 600; font-size: 0.95rem; opacity: 0.85; transition: opacity .2s; }
     .back:hover { opacity: 1; }
-
     h1 { font-size: clamp(1.8rem, 5vw, 2.8rem); text-align: center; margin: 0 0 6px; }
     .sub { text-align: center; font-size: 1rem; opacity: .7; margin: 0 0 32px; }
 
@@ -54,7 +53,6 @@
       padding: 32px 28px; max-width: 520px; width: 100%;
       display: flex; flex-direction: column; align-items: center; gap: 20px;
     }
-
     .cat-img {
       width: 140px; height: 140px; border-radius: 50%;
       object-fit: cover; box-shadow: 0 6px 20px rgba(232,91,151,.2);
@@ -66,12 +64,10 @@
       30%  { transform: scale(1.08) rotate(-4deg); }
       60%  { transform: scale(1.08) rotate(4deg); }
     }
-
     .date-label {
       font-size: .8rem; font-weight: 700; letter-spacing: .06em;
       text-transform: uppercase; color: var(--accent-dark); opacity: .7;
     }
-
     .deed-card {
       background: linear-gradient(135deg, #fff0f6, #fff8ee);
       border-radius: 20px; padding: 22px 24px;
@@ -79,12 +75,8 @@
     }
     body.night-mode .deed-card { background: linear-gradient(135deg, #2e1a2e, #261a20); }
     .deed-icon { font-size: 2.8rem; margin-bottom: 10px; display: block; }
-    .deed-text {
-      font-size: 1.15rem; font-weight: 600; line-height: 1.55;
-      margin: 0 0 8px;
-    }
+    .deed-text { font-size: 1.15rem; font-weight: 600; line-height: 1.55; margin: 0 0 8px; }
     .deed-hint { font-size: .9rem; opacity: .7; line-height: 1.5; margin: 0; }
-
     .done-btn {
       font: inherit; font-weight: 700; font-size: 1.05rem;
       background: var(--accent); color: white;
@@ -96,51 +88,97 @@
     }
     .done-btn:hover { background: var(--accent-dark); }
     .done-btn:active { transform: scale(.97); }
-    .done-btn.did-it {
-      background: #4caf82; box-shadow: 0 6px 18px rgba(76,175,130,.35);
-    }
-
-    .done-counter {
-      font-size: .88rem; opacity: .65; text-align: center;
-    }
+    .done-btn.did-it { background: #4caf82; box-shadow: 0 6px 18px rgba(76,175,130,.35); }
+    .done-counter { font-size: .88rem; opacity: .65; text-align: center; }
     .done-counter span { font-weight: 700; color: var(--accent-dark); }
+    .streak-note { font-size: .88rem; text-align: center; min-height: 1.3em; color: var(--accent-dark); font-weight: 600; }
 
-    .streak-note {
-      font-size: .88rem; text-align: center; min-height: 1.3em;
-      color: var(--accent-dark); font-weight: 600;
+    /* --- BADGES --- */
+    .badges-section {
+      max-width: 520px; width: 100%; margin-top: 28px;
     }
+    .badges-title {
+      font-size: .85rem; font-weight: 700; letter-spacing: .07em;
+      text-transform: uppercase; color: var(--accent-dark); opacity: .65;
+      margin: 0 0 14px 4px;
+    }
+    .badges-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 12px;
+    }
+    .badge-card {
+      background: var(--card); border-radius: 20px;
+      box-shadow: 0 4px 18px rgba(232,91,151,.10);
+      padding: 16px 14px; text-align: center;
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      position: relative; transition: transform .15s, box-shadow .2s;
+      cursor: default;
+    }
+    .badge-card.earned { cursor: pointer; }
+    .badge-card.earned:hover { transform: translateY(-3px); box-shadow: 0 8px 26px rgba(232,91,151,.22); }
+    .badge-card.locked { opacity: .38; filter: grayscale(.7); }
+    .badge-icon { font-size: 2.2rem; line-height: 1; }
+    .badge-name { font-size: .82rem; font-weight: 700; line-height: 1.3; }
+    .badge-req { font-size: .72rem; opacity: .6; line-height: 1.3; }
+    .badge-new-ribbon {
+      position: absolute; top: 8px; right: 8px;
+      background: var(--accent); color: white;
+      font-size: .6rem; font-weight: 800; letter-spacing: .04em;
+      padding: 2px 7px; border-radius: 999px; text-transform: uppercase;
+    }
+    @keyframes badgePop {
+      0%   { transform: scale(.5) rotate(-8deg); opacity: 0; }
+      60%  { transform: scale(1.12) rotate(3deg); opacity: 1; }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+    .badge-card.badge-animate { animation: badgePop .5s cubic-bezier(.34,1.56,.64,1) both; }
+
+    /* badge modal */
+    .badge-modal-overlay {
+      position: fixed; inset: 0; background: rgba(58,43,50,.55);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 9998; opacity: 0; transition: opacity .25s;
+      pointer-events: none;
+    }
+    .badge-modal-overlay.open { opacity: 1; pointer-events: all; }
+    .badge-modal {
+      background: var(--card); border-radius: 28px;
+      box-shadow: 0 20px 60px rgba(232,91,151,.3);
+      padding: 36px 28px; max-width: 340px; width: 90%;
+      text-align: center; display: flex; flex-direction: column; align-items: center; gap: 14px;
+      transform: scale(.85); transition: transform .25s cubic-bezier(.34,1.56,.64,1);
+    }
+    .badge-modal-overlay.open .badge-modal { transform: scale(1); }
+    .badge-modal .modal-icon { font-size: 3.5rem; line-height: 1; }
+    .badge-modal .modal-name { font-size: 1.4rem; font-weight: 800; margin: 0; }
+    .badge-modal .modal-desc { font-size: .95rem; opacity: .75; margin: 0; line-height: 1.5; }
+    .modal-share-btn {
+      font: inherit; font-weight: 700; font-size: .95rem;
+      background: var(--accent); color: white;
+      border: none; border-radius: 999px;
+      padding: 12px 28px; cursor: pointer;
+      box-shadow: 0 4px 14px rgba(255,126,179,.4);
+      transition: background .2s;
+    }
+    .modal-share-btn:hover { background: var(--accent-dark); }
+    .modal-close {
+      font: inherit; font-size: .88rem; opacity: .55;
+      background: none; border: none; cursor: pointer; color: var(--ink);
+    }
+    .modal-close:hover { opacity: 1; }
 
     @keyframes floatHeart {
       0%   { transform: translateY(0) scale(1); opacity: 1; }
       100% { transform: translateY(-80px) scale(1.3); opacity: 0; }
     }
-    .float-heart {
-      position: fixed; pointer-events: none; font-size: 1.6rem;
-      animation: floatHeart 1s ease-out forwards; z-index: 9999;
-    }
+    .float-heart { position: fixed; pointer-events: none; font-size: 1.6rem; animation: floatHeart 1s ease-out forwards; z-index: 9999; }
 
-    .nav-links {
-      max-width: 520px; width: 100%; margin-top: 32px;
-      display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
-    }
-    .nav-link {
-      display: inline-block; padding: 10px 20px; border-radius: 999px;
-      background: var(--card); color: var(--accent-dark);
-      text-decoration: none; font-weight: 600; font-size: .9rem;
-      box-shadow: 0 4px 14px rgba(232,91,151,.12);
-      transition: transform .12s, box-shadow .2s;
-    }
+    .nav-links { max-width: 520px; width: 100%; margin-top: 32px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+    .nav-link { display: inline-block; padding: 10px 20px; border-radius: 999px; background: var(--card); color: var(--accent-dark); text-decoration: none; font-weight: 600; font-size: .9rem; box-shadow: 0 4px 14px rgba(232,91,151,.12); transition: transform .12s, box-shadow .2s; }
     .nav-link:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(232,91,151,.2); }
 
-    .toast {
-      position: fixed; bottom: 24px; left: 50%;
-      transform: translateX(-50%) translateY(80px);
-      background: var(--ink); color: white;
-      padding: 12px 22px; border-radius: 999px;
-      opacity: 0; transition: all .3s; z-index: 9999; white-space: nowrap;
-    }
+    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--ink); color: white; padding: 12px 22px; border-radius: 999px; opacity: 0; transition: all .3s; z-index: 9999; white-space: nowrap; }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
     footer { margin-top: 40px; opacity: .6; font-size: .88rem; text-align: center; }
     .scroll-top { position:fixed; bottom:28px; right:20px; z-index:999; width:44px; height:44px; border-radius:50%; background:var(--card); border:none; cursor:pointer; font-size:1.4rem; box-shadow:0 4px 16px rgba(232,91,151,.25); opacity:0; transform:translateY(12px); transition:opacity .3s,transform .3s; display:flex; align-items:center; justify-content:center; }
     .scroll-top.visible { opacity:1; transform:translateY(0); }
@@ -157,16 +195,19 @@
   <div class="card">
     <img class="cat-img" id="catImg" src="https://cataas.com/cat?width=300&height=300" alt="Котик" />
     <p class="date-label" id="dateLabel"></p>
-
     <div class="deed-card">
       <span class="deed-icon" id="deedIcon"></span>
       <p class="deed-text" id="deedText"></p>
       <p class="deed-hint" id="deedHint"></p>
     </div>
-
     <button class="done-btn" id="doneBtn">✓ Я сделал это!</button>
     <p class="done-counter">Сегодня это доброе дело сделали: <span id="doneCount">…</span> человек</p>
     <p class="streak-note" id="streakNote"></p>
+  </div>
+
+  <div class="badges-section" id="badgesSection" style="display:none">
+    <p class="badges-title">🏅 Мои достижения</p>
+    <div class="badges-grid" id="badgesGrid"></div>
   </div>
 
   <div class="nav-links">
@@ -175,12 +216,22 @@
     <a class="nav-link" href="/changelog.html">🛠️ Что нового</a>
   </div>
 
+  <!-- badge modal -->
+  <div class="badge-modal-overlay" id="badgeModal">
+    <div class="badge-modal">
+      <div class="modal-icon" id="modalIcon"></div>
+      <p class="modal-name" id="modalName"></p>
+      <p class="modal-desc" id="modalDesc"></p>
+      <button class="modal-share-btn" id="modalShareBtn">💌 Поделиться достижением</button>
+      <button class="modal-close" id="modalClose">закрыть</button>
+    </div>
+  </div>
+
   <div class="toast" id="toast"></div>
   <button class="scroll-top" id="scrollTop" title="Наверх">🐾</button>
   <footer>Мур-р-революция · доброта заразна · одно дело за раз 💛</footer>
 
   <script>
-    // ночной режим
     (function() {
       const h = new Date().getHours();
       if (h >= 20 || h < 6) document.body.classList.add('night-mode');
@@ -209,6 +260,16 @@
       { icon: '🐾', text: 'Передай котика кому-нибудь', hint: 'Поделись этим сайтом с кем-то кому нужно немного тепла прямо сейчас.' },
     ];
 
+    const BADGES = [
+      { id: 'b3',   streak: 3,   icon: '🌱', name: 'Росточек добра',       desc: '3 дня добрых дел подряд — что-то начинает расти 🌱' },
+      { id: 'b7',   streak: 7,   icon: '🌸', name: 'Неделя мягкости',      desc: '7 дней подряд — целая неделя маленьких революций!' },
+      { id: 'b14',  streak: 14,  icon: '✨', name: 'Две недели света',     desc: '14 дней — ты уже меняешь мир вокруг себя ✨' },
+      { id: 'b21',  streak: 21,  icon: '🔥', name: 'Огонь не гаснет',      desc: '21 день — привычка творить добро почти встроена в тебя!' },
+      { id: 'b30',  streak: 30,  icon: '🏅', name: 'Месяц революции',      desc: '30 дней! Котик торжественно вручает медаль 🏅' },
+      { id: 'b60',  streak: 60,  icon: '🦋', name: 'Агент перемен',        desc: '60 дней — ты настоящий агент тихой революции 🦋' },
+      { id: 'b100', streak: 100, icon: '👑', name: 'Котик гордится тобой', desc: '100 дней добра. Это — легенда. Котик плачет от счастья 👑' },
+    ];
+
     const d = new Date();
     const seed = d.getFullYear() * 10000 + (d.getMonth()+1) * 100 + d.getDate();
     const deed = DEEDS[seed % DEEDS.length];
@@ -220,15 +281,12 @@
     const months = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
     document.getElementById('dateLabel').textContent = `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
 
-    // счётчик сделавших (localStorage, сбрасывается каждый день)
     const today = d.toISOString().slice(0, 10);
     const countKey = 'kindness_count_' + today;
     let doneCount = parseInt(localStorage.getItem(countKey) || '0');
-    // имитируем базовый счётчик — добавляем seed-число чтобы не выглядело пустым
     const baseCount = 7 + (seed % 23);
     document.getElementById('doneCount').textContent = baseCount + doneCount;
 
-    // кнопка "я сделал"
     const doneKey = 'kindness_done_' + today;
     const doneBtn = document.getElementById('doneBtn');
     if (localStorage.getItem(doneKey)) {
@@ -236,13 +294,72 @@
       doneBtn.classList.add('did-it');
     }
 
+    // --- badge helpers ---
+    function getEarnedIds() {
+      try { return JSON.parse(localStorage.getItem('kindness_badges') || '[]'); } catch(e) { return []; }
+    }
+    function saveEarnedIds(ids) {
+      localStorage.setItem('kindness_badges', JSON.stringify(ids));
+    }
+
+    function renderBadges() {
+      const earned = getEarnedIds();
+      if (earned.length === 0) { document.getElementById('badgesSection').style.display = 'none'; return; }
+      document.getElementById('badgesSection').style.display = '';
+      const grid = document.getElementById('badgesGrid');
+      grid.innerHTML = '';
+      BADGES.forEach(b => {
+        const isEarned = earned.includes(b.id);
+        const card = document.createElement('div');
+        card.className = 'badge-card' + (isEarned ? ' earned' : ' locked');
+        card.innerHTML = `<div class="badge-icon">${b.icon}</div><div class="badge-name">${b.name}</div><div class="badge-req">${b.streak} дней подряд</div>`;
+        if (isEarned) card.addEventListener('click', () => openModal(b));
+        grid.appendChild(card);
+      });
+    }
+
+    function checkNewBadges(streak) {
+      const earned = getEarnedIds();
+      let newBadge = null;
+      BADGES.forEach(b => {
+        if (streak >= b.streak && !earned.includes(b.id)) {
+          earned.push(b.id);
+          newBadge = b;
+        }
+      });
+      saveEarnedIds(earned);
+      return newBadge;
+    }
+
+    // --- modal ---
+    let currentModalBadge = null;
+    function openModal(badge) {
+      currentModalBadge = badge;
+      document.getElementById('modalIcon').textContent = badge.icon;
+      document.getElementById('modalName').textContent = badge.name;
+      document.getElementById('modalDesc').textContent = badge.desc;
+      document.getElementById('badgeModal').classList.add('open');
+    }
+    document.getElementById('modalClose').addEventListener('click', () => {
+      document.getElementById('badgeModal').classList.remove('open');
+    });
+    document.getElementById('badgeModal').addEventListener('click', e => {
+      if (e.target === document.getElementById('badgeModal'))
+        document.getElementById('badgeModal').classList.remove('open');
+    });
+    document.getElementById('modalShareBtn').addEventListener('click', () => {
+      if (!currentModalBadge) return;
+      const text = `Я получил бейдж «${currentModalBadge.name}» ${currentModalBadge.icon} на Мур-р-революции!\n${currentModalBadge.desc}\nhttps://mur-r-revolyutsiya.onrender.com/kindness.html`;
+      navigator.clipboard.writeText(text).then(() => showToast('Скопировано! Теперь поделись 💛'));
+    });
+
+    // --- toast & burst ---
     function showToast(msg) {
       const t = document.getElementById('toast');
       t.textContent = msg;
       t.classList.add('show');
       setTimeout(() => t.classList.remove('show'), 2500);
     }
-
     function burst() {
       const emojis = ['💛','🐾','💛','🌸','💛','😻','💛'];
       for (let i = 0; i < 12; i++) {
@@ -270,15 +387,13 @@
       doneBtn.textContent = '✓ Уже сделано сегодня!';
       doneBtn.classList.add('did-it');
 
-      // серия дней добрых дел
+      // streak
       const yesterday = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
-      const lastKey = 'kindness_streak_last';
-      const streakKey = 'kindness_streak';
-      const last = localStorage.getItem(lastKey);
-      let streak = parseInt(localStorage.getItem(streakKey) || '0');
+      const last = localStorage.getItem('kindness_streak_last');
+      let streak = parseInt(localStorage.getItem('kindness_streak') || '0');
       if (last === yesterday) { streak++; } else { streak = 1; }
-      localStorage.setItem(streakKey, streak);
-      localStorage.setItem(lastKey, today);
+      localStorage.setItem('kindness_streak', streak);
+      localStorage.setItem('kindness_streak_last', today);
 
       const streakEl = document.getElementById('streakNote');
       if (streak >= 2) {
@@ -287,15 +402,25 @@
         streakEl.textContent = '✨ Первый шаг — уже революция!';
       }
 
-      // анимация котика
+      // check badges
+      const newBadge = checkNewBadges(streak);
+      renderBadges();
+
       document.getElementById('catImg').classList.add('happy');
       setTimeout(() => document.getElementById('catImg').classList.remove('happy'), 600);
-
       burst();
-      setTimeout(() => showToast('Котик гордится тобой! 🐱💛'), 400);
+
+      if (newBadge) {
+        setTimeout(() => {
+          openModal(newBadge);
+          showToast(`Новый бейдж: ${newBadge.name} ${newBadge.icon}`);
+        }, 600);
+      } else {
+        setTimeout(() => showToast('Котик гордится тобой! 🐱💛'), 400);
+      }
     });
 
-    // серия при загрузке
+    // on load
     (function() {
       const streak = parseInt(localStorage.getItem('kindness_streak') || '0');
       const last = localStorage.getItem('kindness_streak_last');
@@ -303,7 +428,9 @@
         document.getElementById('streakNote').textContent =
           `🔥 ${streak} ${streak < 5 ? 'дня' : 'дней'} подряд делаешь добро!`;
       }
+      renderBadges();
     })();
+
     // scroll-to-top
     (function() {
       const btn = document.getElementById('scrollTop');
