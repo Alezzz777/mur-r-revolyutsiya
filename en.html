@@ -155,6 +155,14 @@
     .donate-btn.boosty { background:#f15c22; color:white; }
 
     footer { margin-top:40px; opacity:.7; font-size:.9rem; text-align:center; }
+    /* --- poem of the day --- */
+    .poem-section { max-width:540px; width:100%; margin-top:24px; }
+    .poem-card { background:var(--card); border-radius:22px; box-shadow:0 6px 24px rgba(232,91,151,.13); padding:24px 28px; text-align:center; position:relative; overflow:hidden; }
+    .poem-card::before { content:'❝'; position:absolute; top:10px; left:16px; font-size:3rem; opacity:.08; line-height:1; pointer-events:none; color:var(--accent-dark); }
+    .poem-label { font-size:.78rem; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--accent-dark); opacity:.65; margin:0 0 14px; }
+    .poem-lines { font-size:1.02rem; line-height:1.9; font-style:italic; white-space:pre-line; margin:0 0 14px; opacity:.88; }
+    .poem-author { font-size:.8rem; opacity:.5; font-style:normal; }
+
     .scroll-top { position:fixed; bottom:28px; right:20px; z-index:999; width:44px; height:44px; border-radius:50%; background:var(--card); border:none; cursor:pointer; font-size:1.4rem; box-shadow:0 4px 16px rgba(232,91,151,.25); opacity:0; transform:translateY(12px); transition:opacity .3s,transform .3s; display:flex; align-items:center; justify-content:center; }
     .scroll-top.visible { opacity:1; transform:translateY(0); }
     .scroll-top:hover { box-shadow:0 6px 20px rgba(232,91,151,.4); transform:translateY(-2px) !important; }
@@ -232,6 +240,14 @@
 
   <section class="daily-msg-section">
     <div class="daily-msg" id="dailyMsg"></div>
+  </section>
+
+  <section class="poem-section">
+    <div class="poem-card">
+      <p class="poem-label">🐾 Poem of the day</p>
+      <p class="poem-lines" id="poemLines"></p>
+      <p class="poem-author">— the cat-poet</p>
+    </div>
   </section>
 
   <section class="manifest">
@@ -339,6 +355,45 @@
           setTimeout(() => p.remove(), 750);
         }, i * 120);
       }
+    })();
+
+    // --- poem of the day ---
+    (function() {
+      const POEMS = [
+        'lying on the keyboard\nthinking about important things\nyou want to eat —\nwait. i\'m busy.',
+        'sun on the floor\ni found it first\nthis is my spot\nyours too — no.',
+        'you left for work\ni guarded the couch\nyou\'re back — report:\ncouch is fine. i\'m exhausted.',
+        'sometimes i look out the window\nthinking about eternity\nthen i see a bird\nand think only about the bird',
+        'you think i\'m sleeping\nbut i\'m watching\neverything\neverything\neverything',
+        'meow\nthat means i love you\nmeow\nthat means feed me\nmeow\nonly i know the difference',
+        'best part of the day —\nwhen you open the door\ni pretend i wasn\'t waiting\nbut i was',
+        'life is short\nbut sleep is long enough\nif you choose the right spot\non your human\'s legs',
+        'i fell\nbut it was a maneuver\nstrategic\nyou wouldn\'t understand',
+        'night. silence.\neveryone sleeps.\ni walk across the keys\nthis is called art',
+        'bread falls butter-side down\ncat falls paws-down\nthe butter and i\nare simply different beings',
+        'you\'re carrying a bag\ni hear the rustling\ni\'m already here\ni\'m always already here',
+        'a box arrived\nits contents don\'t matter\nthe box matters\nthe box is home',
+        'morning\nyou stepped on me\ni let you live\nyou\'re welcome',
+        'someone\'s at the door\ni knew first\ni say nothing\nlet them figure it out',
+        'rain outside\ni don\'t care\ni wasn\'t planning\nto go out anyway',
+        'you removed my fur\ni left new fur\nthis is not a problem\nthis is a process',
+        'i saw myself today\nin the water\'s reflection\nbeautiful\nvery beautiful',
+        'people think i don\'t\nunderstand words\ni understand\nnot everyone deserves a reply',
+        'i hugged you in the night\nyou say i got in the way\nthis is called\ncare',
+        'climbed on top of the fridge\nlooking down at everything\nthis is what life looks like\nwhen you\'re above it all',
+        'you may pet me\nbut only\nwhen i\ncome to you',
+        'the fish in the bowl isn\'t moving\nthis is suspicious\ni sit. i wait.\ntime is on my side',
+        'you\'re reading a book\ni lie on the book\nnow you\'re reading me\ni\'m more interesting',
+        'the world is complex\nbut i have a blanket\nand a person who\nopens food at exactly seven',
+        'sometimes i meow\nfor no reason\njust so you know\nthat i\'m here',
+        'monday morning\nyou\'re sad\ni come and lie beside you\nmonday isn\'t so scary now',
+        'it\'s cold outside\nit\'s warm inside\nyou think that\'s a coincidence\nthat\'s me',
+        'lived a good day\npetted four times\nfed on time\nthe world is in order',
+        'you stare at your phone\ni stare at you\none of us\nis spending time better',
+      ];
+      const d = new Date();
+      const seed = d.getFullYear() * 10000 + (d.getMonth()+1) * 100 + d.getDate();
+      document.getElementById('poemLines').textContent = POEMS[(seed * 11 + 3) % POEMS.length];
     })();
 
     // --- background particles ---

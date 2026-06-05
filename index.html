@@ -225,6 +225,30 @@
       opacity: .9;
     }
     footer { margin-top:40px; opacity:.7; font-size:.9rem; text-align:center; }
+    /* --- стихотворение дня --- */
+    .poem-section { max-width:540px; width:100%; margin-top:24px; }
+    .poem-card {
+      background: var(--card); border-radius: 22px;
+      box-shadow: 0 6px 24px rgba(232,91,151,.13);
+      padding: 24px 28px; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .poem-card::before {
+      content: '❝'; position: absolute; top: 10px; left: 16px;
+      font-size: 3rem; opacity: .08; line-height: 1; pointer-events: none;
+      color: var(--accent-dark);
+    }
+    .poem-label {
+      font-size: .78rem; font-weight: 700; letter-spacing: .07em;
+      text-transform: uppercase; color: var(--accent-dark); opacity: .65; margin: 0 0 14px;
+    }
+    .poem-lines {
+      font-size: 1.02rem; line-height: 1.9; font-style: italic;
+      white-space: pre-line; margin: 0 0 14px; opacity: .88;
+    }
+    .poem-author { font-size: .8rem; opacity: .5; font-style: normal; }
+    body.night-mode .poem-card { background: var(--card); }
+
     .scroll-top {
       position: fixed; bottom: 28px; right: 20px; z-index: 999;
       width: 44px; height: 44px; border-radius: 50%;
@@ -313,6 +337,14 @@
 
   <section class="daily-msg-section">
     <div class="daily-msg" id="dailyMsg"></div>
+  </section>
+
+  <section class="poem-section">
+    <div class="poem-card">
+      <p class="poem-label">🐾 Стихотворение дня</p>
+      <p class="poem-lines" id="poemLines"></p>
+      <p class="poem-author">— котик-поэт</p>
+    </div>
   </section>
 
   <section class="manifest">
@@ -455,6 +487,45 @@
       const msg = messages[(seed + 7) % messages.length];
       document.getElementById('dailyMsg').innerHTML =
         `<div class="msg-label">💌 Послание котика дня</div><div class="msg-text">«${msg}»</div>`;
+    })();
+
+    // --- стихотворение дня ---
+    (function() {
+      const POEMS = [
+        'лежу на клавиатуре\nдумаю о важном\nхозяин хочет есть —\nпусть подождёт. я занят.',
+        'солнце на полу\nя его нашёл первым\nэто моё место\nи твоё тоже — нет',
+        'ты ушёл на работу\nя охранял диван\nвернулся — докладываю:\nдиван цел. я устал.',
+        'иногда я смотрю в окно\nи думаю о вечном\nа потом вижу птицу\nи думаю только о птице',
+        'ты думаешь, я сплю\nа я слежу\nза всем\nза всем\nза всем',
+        'мяу\nэто значит «люблю тебя»\nмяу\nэто значит «дай поесть»\nмяу\nтолько я знаю разницу',
+        'лучший момент дня —\nкогда ты открываешь дверь\nя делаю вид что не ждал\nно я ждал',
+        'жизнь коротка\nно сон достаточно длинный\nесли правильно выбрать\nместо на твоих ногах',
+        'я упал\nно это был манёвр\nстратегический\nты не понял',
+        'ночь. тишина.\nвсе спят.\nя хожу по клавишам\nэто называется творчество',
+        'хлеб падает маслом вниз\nкотик падает лапами вниз\nмы с маслом —\nпросто разные существа',
+        'ты несёшь пакет\nя слышу шуршание\nя уже здесь\nя всегда здесь',
+        'коробка пришла\nсодержимое не важно\nважна коробка\nкоробка — это дом',
+        'утро\nты наступил на меня\nя дал тебе пожить\nцени',
+        'кто-то звонит в дверь\nя первый знал\nя молчу\nпусть сами разбираются',
+        'дождь за окном\nмне всё равно\nмне и так не надо\nна улицу идти',
+        'ты убрал мою шерсть\nя оставил новую\nэто не проблема\nэто процесс',
+        'видел сегодня себя\nв отражении воды\nкрасивый\nочень красивый',
+        'люди думают что я\nне понимаю слова\nя понимаю\nпросто не все заслуживают ответа',
+        'обнял тебя ночью\nты говоришь мешал спать\nэто называется\nзабота',
+        'запрыгнул на холодильник\nсмотрю сверху вниз\nтак выглядит жизнь\nкогда ты выше всего',
+        'гладить меня можно\nтолько тогда\nкогда я сам\nподойду',
+        'рыбка в миске не шевелится\nэто подозрительно\nсижу. жду.\nвремя на моей стороне',
+        'ты читаешь книгу\nя ложусь на книгу\nтеперь ты читаешь меня\nя интереснее',
+        'мир сложен\nно у меня есть плед\nи человек который\nоткрывает корм ровно в семь',
+        'иногда я мяукаю\nбез причины\nпросто чтобы ты знал\nчто я здесь',
+        'утро понедельника\nты грустишь\nя прихожу и ложусь рядом\nпонедельник — не так страшно',
+        'снаружи холодно\nвнутри тепло\nты думаешь это случайно\nэто я',
+        'прожил хороший день\nпогладили четырежды\nпокормили вовремя\nмир в порядке',
+        'ты смотришь в телефон\nя смотрю на тебя\nодин из нас\nтратит время лучше',
+      ];
+      const d = new Date();
+      const seed = d.getFullYear() * 10000 + (d.getMonth()+1) * 100 + d.getDate();
+      document.getElementById('poemLines').textContent = POEMS[(seed * 11 + 3) % POEMS.length];
     })();
 
     // --- фоновые частицы ---
