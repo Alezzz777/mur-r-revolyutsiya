@@ -96,6 +96,8 @@
     }
     .cat-wrap.blinking .blink-overlay { opacity: 1; }
     .buttons { display:flex; flex-wrap:wrap; gap:10px; margin-top:16px; justify-content:center; }
+    .btn-kindness { display:flex; align-items:center; justify-content:center; width:100%; margin-top:2px; padding:12px 22px; text-decoration:none; font-weight:700; font-size:1rem; border-radius:999px; background:linear-gradient(135deg,#fff8ee,#fff0f6); color:var(--accent-dark); border:2px solid var(--accent); transition:background .2s,box-shadow .2s; box-shadow:0 3px 12px rgba(232,91,151,.12); }
+    .btn-kindness:hover { background:linear-gradient(135deg,#fff0f6,#fff8ee); box-shadow:0 5px 18px rgba(232,91,151,.22); }
     button {
       font:inherit; font-weight:600; border:none; border-radius:999px;
       padding:12px 20px; cursor:pointer; transition:transform .12s,box-shadow .2s;
@@ -242,11 +244,11 @@
       font-size: .78rem; font-weight: 700; letter-spacing: .07em;
       text-transform: uppercase; color: var(--accent-dark); opacity: .65; margin: 0 0 14px;
     }
-    .poem-lines {
-      font-size: 1.02rem; line-height: 1.9; font-style: italic;
-      white-space: pre-line; margin: 0 0 14px; opacity: .88;
-    }
-    .poem-author { font-size: .8rem; opacity: .5; font-style: normal; }
+    .poem-lines { font-size: 1.02rem; line-height: 1.9; font-style: italic; margin: 0 0 14px; }
+    .poem-line { display: block; opacity: 0; transform: translateY(6px); transition: opacity .4s ease, transform .4s ease; }
+    .poem-line.visible { opacity: .88; transform: translateY(0); }
+    .poem-author { font-size: .8rem; opacity: 0; font-style: normal; transition: opacity .4s ease; }
+    .poem-author.visible { opacity: .5; }
     body.night-mode .poem-card { background: var(--card); }
 
     .scroll-top {
@@ -321,7 +323,7 @@
     <div class="buttons">
       <button class="btn-primary" id="shareBtn">💌 Переслать котика</button>
       <button class="btn-ghost" id="newCatBtn">🎲 Новый котик</button>
-      <a class="btn-ghost" href="/kindness.html" style="display:inline-flex;align-items:center;padding:10px 22px;text-decoration:none;font-weight:600;border-radius:999px;">💛 Доброе дело дня</a>
+      <a class="btn-kindness" href="/kindness.html">💛 Доброе дело дня</a>
     </div>
     <p class="cat-fact" id="catFact"></p>
     <p class="pet-counter" id="petCounter"></p>
@@ -342,8 +344,8 @@
   <section class="poem-section">
     <div class="poem-card">
       <p class="poem-label">🐾 Стихотворение дня</p>
-      <p class="poem-lines" id="poemLines"></p>
-      <p class="poem-author">— котик-поэт</p>
+      <div class="poem-lines" id="poemLines"></div>
+      <p class="poem-author" id="poemAuthor">— котик-поэт</p>
     </div>
   </section>
 
@@ -525,7 +527,17 @@
       ];
       const d = new Date();
       const seed = d.getFullYear() * 10000 + (d.getMonth()+1) * 100 + d.getDate();
-      document.getElementById('poemLines').textContent = POEMS[(seed * 11 + 3) % POEMS.length];
+      const poem = POEMS[(seed * 11 + 3) % POEMS.length];
+      const linesEl = document.getElementById('poemLines');
+      const authorEl = document.getElementById('poemAuthor');
+      poem.split('\n').forEach((line, i) => {
+        const span = document.createElement('span');
+        span.className = 'poem-line';
+        span.textContent = line;
+        linesEl.appendChild(span);
+        setTimeout(() => span.classList.add('visible'), 300 + i * 220);
+      });
+      setTimeout(() => authorEl.classList.add('visible'), 300 + poem.split('\n').length * 220 + 100);
     })();
 
     // --- фоновые частицы ---
