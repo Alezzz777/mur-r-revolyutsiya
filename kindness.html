@@ -393,7 +393,7 @@
 
     doneBtn.addEventListener('click', () => {
       if (localStorage.getItem(doneKey)) {
-        showToast('Котик уже знает — ты молодец! 💛');
+        showToast(window.I18N_T('kittyAlready') || 'Котик уже знает — ты молодец! 💛');
         return;
       }
       localStorage.setItem(doneKey, '1');
@@ -432,7 +432,7 @@
           showToast(`Новый бейдж: ${newBadge.name} ${newBadge.icon}`);
         }, 600);
       } else {
-        setTimeout(() => showToast('Котик гордится тобой! 🐱💛'), 400);
+        setTimeout(() => showToast(window.I18N_T('kittyProud') || 'Котик гордится тобой! 🐱💛'), 400);
       }
     });
 

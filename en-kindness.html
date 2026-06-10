@@ -296,7 +296,7 @@
 
     doneBtn.addEventListener('click', () => {
       if (localStorage.getItem(doneKey)) {
-        showToast('The cat already knows — you\'re wonderful! 💛');
+        showToast(window.I18N_T('kittyAlready') || 'The cat already knows — you\'re wonderful! 💛');
         return;
       }
       localStorage.setItem(doneKey, '1');
@@ -333,7 +333,7 @@
           showToast(`New badge: ${newBadge.name} ${newBadge.icon}`);
         }, 600);
       } else {
-        setTimeout(() => showToast('The cat is proud of you! 🐱💛'), 400);
+        setTimeout(() => showToast(window.I18N_T('kittyProud') || 'The cat is proud of you! 🐱💛'), 400);
       }
     });
 

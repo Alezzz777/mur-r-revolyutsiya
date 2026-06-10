@@ -288,6 +288,7 @@
   <footer>Made with 💛 as part of Purr-r-revolution · <a href="/en-about.html" style="color:#e85b97;text-decoration:none;font-weight:600;">Our story 🐾</a> · <a href="/en-changelog.html" style="color:#e85b97;text-decoration:none;font-weight:600;">What's new 🛠️</a> · <a href="/en-todo.html" style="color:#e85b97;text-decoration:none;font-weight:600;">Cat plans 📋</a></footer>
   <div class="toast" id="toast"></div>
 
+  <script src="/i18n.js"></script>
   <script>
     const SUPABASE_URL = 'https://ramtjjkracjedynfdruq.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_QDZ8kFBXubI9Ni8_j2mVoQ_LrDTh59J';
@@ -438,20 +439,27 @@
       else { streak = 1; }
       localStorage.setItem('purr_streak', streak);
       localStorage.setItem('purr_streak_last', today);
-      const el = document.getElementById('streak');
-      el.textContent = streak >= 2 ? `🔥 ${streak} days petting cats in a row!` : '✨ Welcome to the revolution!';
+      window._purrStreak = streak;
     })();
+    function _initStreak() {
+      const streak = window._purrStreak || 1;
+      const el = document.getElementById('streak');
+      if (streak >= 2) {
+        el.textContent = (window.I18N_T('streakN') || '🔥 {n}').replace('{n}', streak);
+      } else {
+        el.textContent = window.I18N_T('streakNew') || '✨';
+      }
+    }
+    _initStreak();
 
     // --- greeting by time ---
-    (function() {
+    function _initGreeting() {
       const h = new Date().getHours();
-      const greetings = h < 6  ? ['🌙 Late night revolutionary — the cat is with you.', '✨ Can\'t sleep? The cat purrs for you.']
-                      : h < 12 ? ['☀️ Good morning! Your cat is ready.', '🌅 Good morning, revolutionary!']
-                      : h < 17 ? ['🌤️ Good afternoon! Perfect time to pet a cat.', '☀️ Have a warm day — with a cat in it!']
-                      : h < 20 ? ['🌇 Good evening! The cat purrs for you.', '🌆 Evenings are better with cats.']
-                      :          ['🌙 A quiet night — the best time for cats.', '✨ Night is softer with a purring cat.'];
-      document.getElementById('greeting').textContent = greetings[Math.floor(Math.random() * greetings.length)];
-    })();
+      const period = h < 6 ? 'greet_night' : h < 12 ? 'greet_morning' : h < 17 ? 'greet_afternoon' : h < 20 ? 'greet_evening' : 'greet_latenight';
+      const arr = window.I18N_T(period);
+      document.getElementById('greeting').textContent = Array.isArray(arr) ? arr[Math.floor(Math.random() * arr.length)] : arr;
+    }
+    _initGreeting();
 
     // --- cat of the day + daily message ---
     (function() {
@@ -624,23 +632,24 @@
     }
 
     let petCount = 0;
-    const petMsgs = [
-      [1,  '😺 The cat felt your hand…'],
-      [2,  '😸 The cat is happy!'],
-      [5,  '😻 The cat is delighted! purr-purr-purr'],
-      [10, '🥰 The cat considers you their human'],
-      [20, '👑 You are beloved by all cats of the world'],
-      [50, '🌟 Legend of the Purr-r-revolution!'],
-    ];
+    function getPetMsgs() {
+      return [
+        [1,  window.I18N_T('pet1')],
+        [2,  window.I18N_T('pet2')],
+        [5,  window.I18N_T('pet5')],
+        [10, window.I18N_T('pet10')],
+        [20, window.I18N_T('pet20')],
+        [50, window.I18N_T('pet50')],
+      ];
+    }
     function updatePetCounter() {
       petCount++;
       const el = document.getElementById('petCounter');
-      const msg = [...petMsgs].reverse().find(([n]) => petCount >= n);
+      const msg = [...getPetMsgs()].reverse().find(([n]) => petCount >= n);
       el.textContent = msg ? msg[1] : '';
-      // live tab title
       const icons = ['😺','😸','😻','🥰','👑','🌟'];
       const icon = icons[Math.min(Math.floor(petCount / 2), icons.length - 1)];
-      document.title = `${icon} ×${petCount} · Purr-r-revolution`;
+      document.title = `${icon} ×${petCount} · ${(window.I18N_T('shareTitle_dyn') || '🐾').replace(' 🐾','')}`;
       const steps = [1, 2, 5, 10, 20, 50];
       const next = steps.find(s => s > petCount);
       const prev = steps.filter(s => s <= petCount).pop() || 0;
@@ -666,29 +675,20 @@
     })();
 
     // --- secret cat whisper on double click ---
-    const whispers = [
-      '🐱 the cat whispers: everything will be okay',
-      '💛 the cat says: you are special',
-      '😺 the cat knows: kindness always comes back',
-      '🐾 the cat is sure: you can handle this',
-      '🌙 the cat whispers: today is a good day',
-      '💛 the cat says: you are not alone',
-      '😸 the cat knows: the world is kinder with you in it',
-      '🐾 the cat whispers: hug someone today',
-    ];
     catWrap.addEventListener('dblclick', () => {
-      showToast(whispers[Math.floor(Math.random() * whispers.length)]);
+      const arr = window.I18N_T('whispers');
+      showToast(Array.isArray(arr) ? arr[Math.floor(Math.random() * arr.length)] : '💛');
     });
 
     catWrap.addEventListener('click', (e) => {
       if (Math.random() < 0.03) {
         const purrBubble = catWrap.querySelector('.purr');
         catWrap.classList.add('sneezing', 'purring');
-        purrBubble.textContent = 'achoo! 🤧';
+        purrBubble.textContent = window.I18N_T('purrSneeze') || 'achoo! 🤧';
         setTimeout(() => {
           catWrap.classList.remove('sneezing', 'purring');
-          purrBubble.textContent = 'purr-r-r 💛';
-          showToast('bless you, kitty! 🐱');
+          purrBubble.textContent = window.I18N_T('purrDefault') || 'purr-r-r 💛';
+          showToast(window.I18N_T('sneezeBless') || 'bless you! 🐱');
         }, 1800);
         return;
       }
@@ -713,13 +713,6 @@
     // --- cat missed you while tab was hidden ---
     (function() {
       let hiddenAt = null;
-      const msgs = [
-        'the cat was waiting for you! 🐾',
-        'finally! the cat missed you 💛',
-        'the cat didn\'t sleep — it was waiting 😺',
-        'you\'re back! the cat is happy 🐱',
-        'the cat had its paw ready 🐾',
-      ];
       document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
           hiddenAt = Date.now();
@@ -727,7 +720,8 @@
           hiddenAt = null;
           catWrap.classList.add('stretching');
           setTimeout(() => catWrap.classList.remove('stretching'), 600);
-          setTimeout(() => showToast(msgs[Math.floor(Math.random() * msgs.length)]), 300);
+          const arr = window.I18N_T('tabReturn');
+          setTimeout(() => showToast(Array.isArray(arr) ? arr[Math.floor(Math.random() * arr.length)] : '🐾'), 300);
         } else {
           hiddenAt = null;
         }
@@ -763,33 +757,33 @@
     })();
 
     // --- seasonal badge ---
-    (function() {
+    function _initSeason() {
       const m = new Date().getMonth();
       const seasons = [
-        { months: [2,3,4],  text: '🌸 Spring — cats bloom along with nature!' },
-        { months: [5,6,7],  text: '☀️ Summer — cats are soaking up the sun!' },
-        { months: [8,9,10], text: '🍂 Autumn — cats love rustling through leaves!' },
-        { months: [11,0,1], text: '❄️ Winter — cats purr and keep you warm!' },
+        { months: [2,3,4],  key: 'season_spring' },
+        { months: [5,6,7],  key: 'season_summer' },
+        { months: [8,9,10], key: 'season_autumn' },
+        { months: [11,0,1], key: 'season_winter' },
       ];
       const s = seasons.find(s => s.months.includes(m));
-      if (s) document.getElementById('seasonBadge').textContent = s.text;
-    })();
+      if (s) document.getElementById('seasonBadge').textContent = window.I18N_T(s.key) || '';
+    }
+    _initSeason();
 
     // --- cat gets bored ---
     (function() {
       const purrBubble = catWrap.querySelector('.purr');
-      const idleTexts = ['meow? 👀', 'hey, you there? 🐾', 'purr… 💛', 'pet me? 🐱', 'meow-meow~ 😺'];
       let idleTimer;
       function resetIdle() {
         clearTimeout(idleTimer);
         idleTimer = setTimeout(() => {
           if (catWrap.classList.contains('purring')) return;
-          const txt = idleTexts[Math.floor(Math.random() * idleTexts.length)];
-          purrBubble.textContent = txt;
+          const arr = window.I18N_T('idleTexts');
+          purrBubble.textContent = Array.isArray(arr) ? arr[Math.floor(Math.random() * arr.length)] : 'meow? 👀';
           catWrap.classList.add('purring');
           setTimeout(() => {
             catWrap.classList.remove('purring');
-            purrBubble.textContent = 'purr-r-r 💛';
+            purrBubble.textContent = window.I18N_T('purrDefault') || 'purr-r-r 💛';
           }, 2000);
           resetIdle();
         }, 20000);
@@ -820,37 +814,34 @@
             animation-delay:${Math.random()*0.6}s;`;
           overlay.appendChild(span);
         }
-        showToast('🐱 PURR-R-REVOLUTION ACTIVATED! 🐱');
+        showToast('🐱 ' + (window.I18N_T('shareTitle_dyn') || 'PURR-R-REVOLUTION') + ' ACTIVATED! 🐱');
         setTimeout(() => overlay.remove(), 2500);
       });
     })();
 
     document.getElementById('newCatBtn').addEventListener('click', newCat);
 
-  </script>
-  <script src="/i18n.js"></script>
-  <script>
+    window._purrReinit = function() {
+      _initGreeting();
+      _initStreak();
+      _initSeason();
+    };
+
     // --- shared cat counter ---
     function onShared() {
       const n = (parseInt(localStorage.getItem('purr_shared') || '0')) + 1;
       localStorage.setItem('purr_shared', n);
-      const milestones = {
-        1:  '💌 you passed the first cat! The revolution has begun!',
-        3:  '💌 3 cats in the world — you\'re a true revolutionary!',
-        5:  '🐾 5 cats! The world is noticeably kinder thanks to you!',
-        10: '😻 10 cats! You\'re a legend of Purr-r-revolution!',
-        20: '🌍 20 cats! You\'re changing the world one purr at a time!',
-        50: '👑 50 cats! You are the great Cat-Passer!',
-      };
-      if (milestones[n]) setTimeout(() => showToast(milestones[n]), 1200);
+      const keys = { 1:'shareM1', 3:'shareM3', 5:'shareM5', 10:'shareM10', 20:'shareM20', 50:'shareM50' };
+      if (keys[n]) setTimeout(() => showToast(window.I18N_T(keys[n])), 1200);
     }
 
     document.getElementById('shareBtn').addEventListener('click', async () => {
-      const text = 'Here\'s a cat for you 🐱 Pet it, read the manifesto, and pass it on — this is Purr-r-revolution, we\'re making the world softer.';
+      const text = window.I18N_T('shareText');
+      const title = window.I18N_T('shareTitle_dyn');
       const url = window.location.href;
       try {
         if (navigator.share && navigator.canShare) {
-          showToast('Loading the cat… 🐾');
+          showToast(window.I18N_T('shareLoading'));
           let blob = await catToBlob();
           if (!blob) {
             blob = await fetch(catImg.src).then(r => r.blob()).catch(() => null);
@@ -858,23 +849,23 @@
           if (blob) {
             const file = new File([blob], 'cat.jpg', { type: 'image/jpeg' });
             if (navigator.canShare({ files: [file] })) {
-              await navigator.share({ files: [file], title: 'Purr-r-revolution 🐾', text: text + '\n' + url });
+              await navigator.share({ files: [file], title, text: text + '\n' + url });
               onShared(); return;
             }
           }
         }
         if (navigator.share) {
-          await navigator.share({ title: 'Purr-r-revolution 🐾', text, url });
+          await navigator.share({ title, text, url });
           onShared();
         } else {
           await navigator.clipboard.writeText(text + ' ' + url);
-          showToast('Link copied — pass the cat on! 💌');
+          showToast(window.I18N_T('shareCopied'));
           onShared();
         }
       } catch(e) {
         if (e.name !== 'AbortError') {
           await navigator.clipboard.writeText(text + ' ' + url).catch(() => {});
-          showToast('Link copied — pass the cat on! 💌');
+          showToast(window.I18N_T('shareCopied'));
           onShared();
         }
       }

@@ -5,15 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>История улучшений 🐾 Мур-р-революция</title>
   <meta name="description" content="Как котик-разработчик каждый день делает Мур-р-революцию чуточку лучше." />
-  <script>
-    (function(){
-      var lang = (navigator.language || navigator.userLanguage || '').toLowerCase();
-      if (lang.startsWith('en') && !sessionStorage.getItem('lang-chosen')) {
-        sessionStorage.setItem('lang-chosen', '1');
-        location.replace('/en-changelog.html');
-      }
-    })();
-  </script>
   <style>
     :root {
       --bg1: #ffe9f0; --bg2: #fff6e6;
@@ -76,10 +67,9 @@
   </style>
 </head>
 <body>
-  <div class="lang-switch"><a href="/en-changelog.html">🇬🇧 EN</a></div>
-  <a class="back" href="/">← Назад к котику</a>
+  <a class="back" href="/" data-i18n="backLink">← Назад к котику</a>
 
-  <h1>🛠️ История улучшений</h1>
+  <h1 data-i18n="changelogTitle">🛠️ История улучшений</h1>
   <p class="sub">Котик-разработчик не дремлет — он только делает вид 😴</p>
 
   <div class="log">
@@ -280,6 +270,7 @@
   </div>
 
   <script>(function(){const h=new Date().getHours();if(h>=20||h<6)document.body.classList.add('night-mode');})();</script>
+  <script src="/i18n.js"></script>
   <footer>Мур-р-революция · каждый день чуточку лучше · <a href="/about.html" style="color:#e85b97;text-decoration:none;font-weight:600;">История проекта 🐾</a></footer>
 </body>
 </html>
