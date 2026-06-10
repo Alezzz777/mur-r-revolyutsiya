@@ -257,15 +257,15 @@
 
   <section class="manifest">
     <h2 data-i18n="manifestTitle">Purr-r-Revolution Manifesto</h2>
-    <p>This is a revolution without barricades and without enemies. Its only weapon is warmth.</p>
+    <p data-i18n="manifestIntro">This is a revolution without barricades and without enemies. Its only weapon is warmth.</p>
     <ol>
-      <li><span class="heart">Kindness is contagious.</span> One warm act sparks the next. We pass the cat along — and pass the feeling with it.</li>
-      <li><span class="heart">Nobody is born cruel.</span> Most often, cruelty hides exhaustion and fear. A cat doesn't argue — it just purrs — and the person becomes softer.</li>
-      <li><span class="heart">Small things matter more than loud ones.</span> Feeding a stray cat, supporting someone who's struggling, not returning cruelty with cruelty — the world is built from these moments.</li>
-      <li><span class="heart">Anyone can join.</span> You don't need to be a hero. Just pet the cat and pass it on.</li>
-      <li><span class="heart">Peace is when everyone pets their cats.</span> And we're getting there one purr at a time.</li>
+      <li data-i18n="manifestItem1" data-i18n-html><span class="heart">Kindness is contagious.</span> One warm act sparks the next. We pass the cat along — and pass the feeling with it.</li>
+      <li data-i18n="manifestItem2" data-i18n-html><span class="heart">Nobody is born cruel.</span> Most often, cruelty hides exhaustion and fear. A cat doesn't argue — it just purrs — and the person becomes softer.</li>
+      <li data-i18n="manifestItem3" data-i18n-html><span class="heart">Small things matter more than loud ones.</span> Feeding a stray cat, supporting someone who's struggling, not returning cruelty with cruelty — the world is built from these moments.</li>
+      <li data-i18n="manifestItem4" data-i18n-html><span class="heart">Anyone can join.</span> You don't need to be a hero. Just pet the cat and pass it on.</li>
+      <li data-i18n="manifestItem5" data-i18n-html><span class="heart">Peace is when everyone pets their cats.</span> And we're getting there one purr at a time.</li>
     </ol>
-    <p style="text-align:center"><strong>Petted it? Pass it on. 🐱➡️🐱➡️🐱</strong></p>
+    <p style="text-align:center" data-i18n="manifestFooter" data-i18n-html><strong>Petted it? Pass it on. 🐱➡️🐱➡️🐱</strong></p>
     <p style="text-align:center;margin-top:20px">
       <a href="/en-kindness.html" data-i18n="kindnessBtnManifest" style="display:inline-block;background:var(--accent);color:white;font-weight:700;padding:13px 28px;border-radius:999px;text-decoration:none;box-shadow:0 6px 18px rgba(255,126,179,.4);transition:background .2s;" onmouseover="this.style.background='var(--accent-dark)'" onmouseout="this.style.background='var(--accent)'">💛 Good Deed of the Day</a>
     </p>
@@ -364,44 +364,15 @@
     })();
 
     // --- poem of the day ---
-    (function() {
-      const POEMS = [
-        'lying on the keyboard\nthinking about important things\nyou want to eat —\nwait. i\'m busy.',
-        'sun on the floor\ni found it first\nthis is my spot\nyours too — no.',
-        'you left for work\ni guarded the couch\nyou\'re back — report:\ncouch is fine. i\'m exhausted.',
-        'sometimes i look out the window\nthinking about eternity\nthen i see a bird\nand think only about the bird',
-        'you think i\'m sleeping\nbut i\'m watching\neverything\neverything\neverything',
-        'meow\nthat means i love you\nmeow\nthat means feed me\nmeow\nonly i know the difference',
-        'best part of the day —\nwhen you open the door\ni pretend i wasn\'t waiting\nbut i was',
-        'life is short\nbut sleep is long enough\nif you choose the right spot\non your human\'s legs',
-        'i fell\nbut it was a maneuver\nstrategic\nyou wouldn\'t understand',
-        'night. silence.\neveryone sleeps.\ni walk across the keys\nthis is called art',
-        'bread falls butter-side down\ncat falls paws-down\nthe butter and i\nare simply different beings',
-        'you\'re carrying a bag\ni hear the rustling\ni\'m already here\ni\'m always already here',
-        'a box arrived\nits contents don\'t matter\nthe box matters\nthe box is home',
-        'morning\nyou stepped on me\ni let you live\nyou\'re welcome',
-        'someone\'s at the door\ni knew first\ni say nothing\nlet them figure it out',
-        'rain outside\ni don\'t care\ni wasn\'t planning\nto go out anyway',
-        'you removed my fur\ni left new fur\nthis is not a problem\nthis is a process',
-        'i saw myself today\nin the water\'s reflection\nbeautiful\nvery beautiful',
-        'people think i don\'t\nunderstand words\ni understand\nnot everyone deserves a reply',
-        'i hugged you in the night\nyou say i got in the way\nthis is called\ncare',
-        'climbed on top of the fridge\nlooking down at everything\nthis is what life looks like\nwhen you\'re above it all',
-        'you may pet me\nbut only\nwhen i\ncome to you',
-        'the fish in the bowl isn\'t moving\nthis is suspicious\ni sit. i wait.\ntime is on my side',
-        'you\'re reading a book\ni lie on the book\nnow you\'re reading me\ni\'m more interesting',
-        'the world is complex\nbut i have a blanket\nand a person who\nopens food at exactly seven',
-        'sometimes i meow\nfor no reason\njust so you know\nthat i\'m here',
-        'monday morning\nyou\'re sad\ni come and lie beside you\nmonday isn\'t so scary now',
-        'it\'s cold outside\nit\'s warm inside\nyou think that\'s a coincidence\nthat\'s me',
-        'lived a good day\npetted four times\nfed on time\nthe world is in order',
-        'you stare at your phone\ni stare at you\none of us\nis spending time better',
-      ];
+    function _initPoem() {
+      const POEMS = window.I18N_T('poems');
       const d = new Date();
       const seed = d.getFullYear() * 10000 + (d.getMonth()+1) * 100 + d.getDate();
       const poem = POEMS[(seed * 11 + 3) % POEMS.length];
       const linesEl = document.getElementById('poemLines');
       const authorEl = document.getElementById('poemAuthor');
+      linesEl.innerHTML = '';
+      authorEl.classList.remove('visible');
       poem.split('\n').forEach((line, i) => {
         const span = document.createElement('span');
         span.className = 'poem-line';
@@ -410,7 +381,8 @@
         setTimeout(() => span.classList.add('visible'), 300 + i * 220);
       });
       setTimeout(() => authorEl.classList.add('visible'), 300 + poem.split('\n').length * 220 + 100);
-    })();
+    }
+    _initPoem();
 
     // --- background particles ---
     (function() {
@@ -462,49 +434,23 @@
     _initGreeting();
 
     // --- cat of the day + daily message ---
-    (function() {
-      const names = ['Biscuit','Marshmallow','Whiskers','Fluffy','Peanut','Mochi','Cheddar',
-        'Noodle','Pretzel','Waffle','Pudding','Toffee','Socks','Shadow',
-        'Ginger','Pumpkin','Pepper','Snowball','Mittens','Chester'];
-      const messages = [
-        'Hug someone for no reason at all 💛',
-        'Write to someone you\'ve been thinking about 🐾',
-        'Do one small kind thing — and the day is already a success 😺',
-        'Smile at a stranger. That\'s also a revolution 🌍',
-        'Feed a stray cat — or a bird. The world gets softer 🐱',
-        'Say thank you to someone who\'s long overdue 💛',
-        'Today is a good day to forgive someone 🌸',
-        'Make tea, wrap up in a blanket, and just be 🍵',
-        'Call a friend or family member — right now 💛',
-        'Go outside and find something beautiful. It\'s there 🌿',
-        'Take a pause. Let\'s breathe together, like a cat 🐾',
-        'Help someone with something small — that\'s the revolution 😸',
-        'Today you can do nothing. Cats approve 😴',
-        'Tell someone something good about them 💛',
-        'The world is better because you\'re in it 🌍',
-      ];
-      const titles = [
-        'specialist in cozy blankets',
-        'expert in empty boxes',
-        'professor of window gazing',
-        'master of knocking things off tables',
-        'doctor of purring',
-        'connoisseur of warm keyboards',
-        'researcher of bags and crinkly things',
-        'academician of napping',
-        'champion of selective ignoring',
-        'chief editor of cat news',
-        'engineer of biscuit-making',
-        'laureate of the cuteness prize',
-      ];
+    function _initCatOfDay() {
+      const names = window.I18N_T('catNames');
+      const titles = window.I18N_T('catTitles');
       const d = new Date();
       const seed = d.getFullYear() * 10000 + (d.getMonth()+1) * 100 + d.getDate();
+      const name = names[seed % names.length];
       const title = titles[(seed * 3 + 7) % titles.length];
-      document.getElementById('catOfDay').textContent = `✨ Cat of the day: ${names[seed % names.length]} — ${title}`;
+      document.getElementById('catOfDay').textContent =
+        window.I18N_T('catOfDayTemplate').replace('{name}', name).replace('{title}', title);
+
+      const messages = window.I18N_T('dailyMessages');
       const msg = messages[(seed + 7) % messages.length];
+      const [qOpen, qClose] = window.I18N_T('dailyMsgQuotes');
       document.getElementById('dailyMsg').innerHTML =
-        `<div class="msg-label">💌 Today's cat message</div><div class="msg-text">"${msg}"</div>`;
-    })();
+        `<div class="msg-label">${window.I18N_T('dailyMsgLabel')}</div><div class="msg-text">${qOpen}${msg}${qClose}</div>`;
+    }
+    _initCatOfDay();
 
     function playPurr() {
       try {
@@ -825,6 +771,8 @@
       _initGreeting();
       _initStreak();
       _initSeason();
+      _initCatOfDay();
+      _initPoem();
     };
 
     // --- shared cat counter ---
