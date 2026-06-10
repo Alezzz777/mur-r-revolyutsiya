@@ -187,11 +187,10 @@
   </style>
 </head>
 <body>
-  <div class="lang-switch"><a href="/en-kindness.html">🇬🇧 EN</a></div>
-  <a class="back" href="/">← Назад к котику</a>
+  <a class="back" href="/" data-i18n="backLink">← Назад к котику</a>
 
-  <h1>💛 Доброе дело дня</h1>
-  <p class="sub">Одно маленькое действие — и мир уже немного мягче</p>
+  <h1 data-i18n="kindnessPageTitle">💛 Доброе дело дня</h1>
+  <p class="sub" data-i18n="kindnessSub">Одно маленькое действие — и мир уже немного мягче</p>
 
   <div class="card">
     <img class="cat-img" id="catImg" src="https://cataas.com/cat?width=300&height=300" alt="Котик" />
@@ -201,13 +200,13 @@
       <p class="deed-text" id="deedText"></p>
       <p class="deed-hint" id="deedHint"></p>
     </div>
-    <button class="done-btn" id="doneBtn">✓ Я сделал это!</button>
-    <p class="done-counter">Сегодня это доброе дело сделали: <span id="doneCount">…</span> человек</p>
+    <button class="done-btn" id="doneBtn" data-i18n="doneBtn">✓ Я сделал это!</button>
+    <p class="done-counter"><span data-i18n="donePeople">Сегодня это доброе дело сделали:</span> <span id="doneCount">…</span> <span data-i18n="doneUnit">человек</span></p>
     <p class="streak-note" id="streakNote"></p>
   </div>
 
   <div class="badges-section" id="badgesSection">
-    <p class="badges-title">🏅 Мои достижения</p>
+    <p class="badges-title" data-i18n="badgesTitle">🏅 Мои достижения</p>
     <div class="badges-grid" id="badgesGrid"></div>
   </div>
 
@@ -223,8 +222,8 @@
       <div class="modal-icon" id="modalIcon"></div>
       <p class="modal-name" id="modalName"></p>
       <p class="modal-desc" id="modalDesc"></p>
-      <button class="modal-share-btn" id="modalShareBtn">💌 Поделиться достижением</button>
-      <button class="modal-close" id="modalClose">закрыть</button>
+      <button class="modal-share-btn" id="modalShareBtn" data-i18n="modalShareBtn">💌 Поделиться достижением</button>
+      <button class="modal-close" id="modalClose" data-i18n="modalClose">закрыть</button>
     </div>
   </div>
 
@@ -303,25 +302,30 @@
       localStorage.setItem('kindness_badges', JSON.stringify(ids));
     }
 
-    function renderBadges() {
+    function renderBadges(newIds) {
+      newIds = newIds || [];
       const earned = getEarnedIds();
       const grid = document.getElementById('badgesGrid');
       grid.innerHTML = '';
+      const streakSuffix = window.I18N_T ? window.I18N_T('badgeStreakSuffix') : 'дней подряд';
       if (earned.length === 0) {
         const streak = parseInt(localStorage.getItem('kindness_streak') || '0');
         const last = localStorage.getItem('kindness_streak_last');
-        const today = new Date().toISOString().slice(0, 10);
-        const hasStarted = streak >= 1 && last === today;
-        grid.innerHTML = hasStarted
-          ? '<p class="badges-empty">Отлично! Первый бейдж «Росточек добра» 🌱 — через 3 дня подряд</p>'
-          : '<p class="badges-empty">Сделай первое доброе дело — и здесь появятся твои достижения 💛</p>';
+        const todayStr = new Date().toISOString().slice(0, 10);
+        const hasStarted = streak >= 1 && last === todayStr;
+        const emptyKey = hasStarted ? 'badgesEmptyStarted' : 'badgesEmptyFirst';
+        const emptyText = window.I18N_T ? window.I18N_T(emptyKey) : (hasStarted
+          ? 'Отлично! Первый бейдж «Росточек добра» 🌱 — через 3 дня подряд'
+          : 'Сделай первое доброе дело — и здесь появятся твои достижения 💛');
+        grid.innerHTML = '<p class="badges-empty">' + emptyText + '</p>';
         return;
       }
       BADGES.forEach(b => {
         const isEarned = earned.includes(b.id);
+        const isNew = newIds.indexOf(b.id) !== -1;
         const card = document.createElement('div');
-        card.className = 'badge-card' + (isEarned ? ' earned' : ' locked');
-        card.innerHTML = `<div class="badge-icon">${b.icon}</div><div class="badge-name">${b.name}</div><div class="badge-req">${b.streak} дней подряд</div>`;
+        card.className = 'badge-card' + (isEarned ? ' earned' : ' locked') + (isNew ? ' badge-animate' : '');
+        card.innerHTML = `<div class="badge-icon">${b.icon}</div><div class="badge-name">${b.name}</div><div class="badge-req">${b.streak} ${streakSuffix}</div>` + (isNew ? `<span class="badge-new-ribbon">${window.I18N_T ? window.I18N_T('badgeNew') : 'NEW'}</span>` : '');
         if (isEarned) card.addEventListener('click', () => openModal(b));
         grid.appendChild(card);
       });
@@ -329,14 +333,17 @@
 
     function checkNewBadges(streak) {
       const earned = getEarnedIds();
+      const newIds = [];
       let newBadge = null;
       BADGES.forEach(b => {
         if (streak >= b.streak && !earned.includes(b.id)) {
           earned.push(b.id);
+          newIds.push(b.id);
           newBadge = b;
         }
       });
       saveEarnedIds(earned);
+      checkNewBadges._lastNewIds = newIds;
       return newBadge;
     }
 
@@ -413,7 +420,7 @@
 
       // check badges
       const newBadge = checkNewBadges(streak);
-      renderBadges();
+      renderBadges(checkNewBadges._lastNewIds || []);
 
       document.getElementById('catImg').classList.add('happy');
       setTimeout(() => document.getElementById('catImg').classList.remove('happy'), 600);
@@ -437,7 +444,7 @@
         document.getElementById('streakNote').textContent =
           `🔥 ${streak} ${streak < 5 ? 'дня' : 'дней'} подряд делаешь добро!`;
       }
-      renderBadges();
+      renderBadges([]);
     })();
 
     // scroll-to-top
@@ -447,5 +454,6 @@
       btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
     })();
   </script>
+  <script src="/i18n.js"></script>
 </body>
 </html>

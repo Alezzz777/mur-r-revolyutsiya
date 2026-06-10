@@ -95,12 +95,11 @@
     .scroll-top:hover { box-shadow:0 6px 20px rgba(232,91,151,.4); transform:translateY(-2px) !important; }
   </style>
 </head>
-<body>
-  <div class="lang-switch"><a href="/kindness.html">🇷🇺 RU</a></div>
-  <a class="back" href="/en.html">← Back to the cat</a>
+<body data-default-lang="en">
+  <a class="back" href="/en.html" data-i18n="backLink">← Back to the cat</a>
 
-  <h1>💛 Good Deed of the Day</h1>
-  <p class="sub">One small action — and the world is already a little softer</p>
+  <h1 data-i18n="kindnessPageTitle">💛 Good Deed of the Day</h1>
+  <p class="sub" data-i18n="kindnessSub">One small action — and the world is already a little softer</p>
 
   <div class="card">
     <img class="cat-img" id="catImg" src="https://cataas.com/cat?width=300&height=300" alt="Cat" />
@@ -110,13 +109,13 @@
       <p class="deed-text" id="deedText"></p>
       <p class="deed-hint" id="deedHint"></p>
     </div>
-    <button class="done-btn" id="doneBtn">✓ I did it!</button>
-    <p class="done-counter">People who did this today: <span id="doneCount">…</span></p>
+    <button class="done-btn" id="doneBtn" data-i18n="doneBtn">✓ I did it!</button>
+    <p class="done-counter"><span data-i18n="donePeople">People who did this today:</span> <span id="doneCount">…</span> <span data-i18n="doneUnit"></span></p>
     <p class="streak-note" id="streakNote"></p>
   </div>
 
   <div class="badges-section" id="badgesSection">
-    <p class="badges-title">🏅 My achievements</p>
+    <p class="badges-title" data-i18n="badgesTitle">🏅 My achievements</p>
     <div class="badges-grid" id="badgesGrid"></div>
   </div>
 
@@ -132,8 +131,8 @@
       <div class="modal-icon" id="modalIcon"></div>
       <p class="modal-name" id="modalName"></p>
       <p class="modal-desc" id="modalDesc"></p>
-      <button class="modal-share-btn" id="modalShareBtn">💌 Share this achievement</button>
-      <button class="modal-close" id="modalClose">close</button>
+      <button class="modal-share-btn" id="modalShareBtn" data-i18n="modalShareBtn">💌 Share this achievement</button>
+      <button class="modal-close" id="modalClose" data-i18n="modalClose">close</button>
     </div>
   </div>
 
@@ -208,25 +207,30 @@
     }
     function saveEarnedIds(ids) { localStorage.setItem('kindness_badges', JSON.stringify(ids)); }
 
-    function renderBadges() {
+    function renderBadges(newIds) {
+      newIds = newIds || [];
       const earned = getEarnedIds();
       const grid = document.getElementById('badgesGrid');
       grid.innerHTML = '';
+      const streakSuffix = window.I18N_T ? window.I18N_T('badgeStreakSuffix') : 'days in a row';
       if (earned.length === 0) {
         const streak = parseInt(localStorage.getItem('kindness_streak') || '0');
         const last = localStorage.getItem('kindness_streak_last');
-        const today = new Date().toISOString().slice(0, 10);
-        const hasStarted = streak >= 1 && last === today;
-        grid.innerHTML = hasStarted
-          ? '<p class="badges-empty">Great start! First badge "Seed of Kindness" 🌱 — come back 3 days in a row</p>'
-          : '<p class="badges-empty">Do your first good deed — and your achievements will appear here 💛</p>';
+        const todayStr = new Date().toISOString().slice(0, 10);
+        const hasStarted = streak >= 1 && last === todayStr;
+        const emptyKey = hasStarted ? 'badgesEmptyStarted' : 'badgesEmptyFirst';
+        const emptyText = window.I18N_T ? window.I18N_T(emptyKey) : (hasStarted
+          ? 'Great start! First badge "Seed of Kindness" 🌱 — come back 3 days in a row'
+          : 'Do your first good deed — and your achievements will appear here 💛');
+        grid.innerHTML = '<p class="badges-empty">' + emptyText + '</p>';
         return;
       }
       BADGES.forEach(b => {
         const isEarned = earned.includes(b.id);
+        const isNew = newIds.indexOf(b.id) !== -1;
         const card = document.createElement('div');
-        card.className = 'badge-card' + (isEarned ? ' earned' : ' locked');
-        card.innerHTML = `<div class="badge-icon">${b.icon}</div><div class="badge-name">${b.name}</div><div class="badge-req">${b.streak} days in a row</div>`;
+        card.className = 'badge-card' + (isEarned ? ' earned' : ' locked') + (isNew ? ' badge-animate' : '');
+        card.innerHTML = `<div class="badge-icon">${b.icon}</div><div class="badge-name">${b.name}</div><div class="badge-req">${b.streak} ${streakSuffix}</div>` + (isNew ? `<span class="badge-new-ribbon">${window.I18N_T ? window.I18N_T('badgeNew') : 'NEW'}</span>` : '');
         if (isEarned) card.addEventListener('click', () => openModal(b));
         grid.appendChild(card);
       });
@@ -234,14 +238,17 @@
 
     function checkNewBadges(streak) {
       const earned = getEarnedIds();
+      const newIds = [];
       let newBadge = null;
       BADGES.forEach(b => {
         if (streak >= b.streak && !earned.includes(b.id)) {
           earned.push(b.id);
+          newIds.push(b.id);
           newBadge = b;
         }
       });
       saveEarnedIds(earned);
+      checkNewBadges._lastNewIds = newIds;
       return newBadge;
     }
 
@@ -314,7 +321,7 @@
       }
 
       const newBadge = checkNewBadges(streak);
-      renderBadges();
+      renderBadges(checkNewBadges._lastNewIds || []);
 
       document.getElementById('catImg').classList.add('happy');
       setTimeout(() => document.getElementById('catImg').classList.remove('happy'), 600);
@@ -337,7 +344,7 @@
         document.getElementById('streakNote').textContent =
           `🔥 ${streak} days of kindness in a row!`;
       }
-      renderBadges();
+      renderBadges([]);
     })();
 
     (function() {
@@ -346,5 +353,6 @@
       btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
     })();
   </script>
+  <script src="/i18n.js"></script>
 </body>
 </html>

@@ -12,15 +12,6 @@
   <meta property="og:url" content="https://mur-r-revolyutsiya.onrender.com/" />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <script>
-    (function(){
-      var lang = (navigator.language || navigator.userLanguage || '').toLowerCase();
-      if (lang.startsWith('en') && !sessionStorage.getItem('lang-chosen')) {
-        sessionStorage.setItem('lang-chosen', '1');
-        location.replace('/en.html');
-      }
-    })();
-  </script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
@@ -306,9 +297,8 @@
 <body>
   <div class="paw-trail" id="pawTrail"></div>
   <div id="bgParticles"></div>
-  <div class="lang-switch"><a href="/en.html">🇬🇧 EN</a></div>
-  <h1>🐾 Мур-р-революция</h1>
-  <p class="tagline">Мы не воюем — мы мурчим.</p>
+  <h1 data-i18n="h1">🐾 Мур-р-революция</h1>
+  <p class="tagline" data-i18n="tagline">Мы не воюем — мы мурчим.</p>
   <p class="greeting" id="greeting"></p>
   <p class="counter">Революцию поддержали уже <span id="cnt">…</span> котиков по всему миру 🌍</p>
   <p class="streak" id="streak"></p>
@@ -322,9 +312,9 @@
       <div class="blink-overlay"></div>
     </div>
     <div class="buttons">
-      <button class="btn-primary" id="shareBtn">💌 Переслать котика</button>
-      <button class="btn-ghost" id="newCatBtn">🎲 Новый котик</button>
-      <a class="btn-kindness" href="/kindness.html">💛 Доброе дело дня</a>
+      <button class="btn-primary" id="shareBtn" data-i18n="shareBtn">💌 Переслать котика</button>
+      <button class="btn-ghost" id="newCatBtn" data-i18n="newCatBtn">🎲 Новый котик</button>
+      <a class="btn-kindness" href="/kindness.html" data-i18n="kindnessBtn">💛 Доброе дело дня</a>
     </div>
     <p class="cat-fact" id="catFact"></p>
     <p class="pet-counter" id="petCounter"></p>
@@ -334,7 +324,7 @@
   </div>
 
   <section class="map-section">
-    <h2>🗺️ Откуда уже гладили котиков</h2>
+    <h2 data-i18n="mapTitle">🗺️ Откуда уже гладили котиков</h2>
     <div id="map"></div>
   </section>
 
@@ -344,14 +334,14 @@
 
   <section class="poem-section">
     <div class="poem-card">
-      <p class="poem-label">🐾 Стихотворение дня</p>
+      <p class="poem-label" data-i18n="poemLabel">🐾 Стихотворение дня</p>
       <div class="poem-lines" id="poemLines"></div>
-      <p class="poem-author" id="poemAuthor">— котик-поэт</p>
+      <p class="poem-author" id="poemAuthor" data-i18n="poemAuthor">— котик-поэт</p>
     </div>
   </section>
 
   <section class="manifest">
-    <h2>Манифест Мур-р-революции</h2>
+    <h2 data-i18n="manifestTitle">Манифест Мур-р-революции</h2>
     <p>Это революция без баррикад и без врагов. Её единственное оружие — тепло.</p>
     <ol>
       <li><span class="heart">Доброта заразна.</span> Один тёплый поступок будит следующий. Мы передаём котика — и передаём настроение.</li>
@@ -362,19 +352,19 @@
     </ol>
     <p style="text-align:center"><strong>Погладил? Передай дальше. 🐱➡️🐱➡️🐱</strong></p>
     <p style="text-align:center;margin-top:20px">
-      <a href="/kindness.html" style="display:inline-block;background:var(--accent);color:white;font-weight:700;padding:13px 28px;border-radius:999px;text-decoration:none;box-shadow:0 6px 18px rgba(255,126,179,.4);transition:background .2s;" onmouseover="this.style.background='var(--accent-dark)'" onmouseout="this.style.background='var(--accent)'">💛 Доброе дело дня</a>
+      <a href="/kindness.html" data-i18n="kindnessBtnManifest" style="display:inline-block;background:var(--accent);color:white;font-weight:700;padding:13px 28px;border-radius:999px;text-decoration:none;box-shadow:0 6px 18px rgba(255,126,179,.4);transition:background .2s;" onmouseover="this.style.background='var(--accent-dark)'" onmouseout="this.style.background='var(--accent)'">💛 Доброе дело дня</a>
     </p>
   </section>
 
   <section class="donate-section">
-    <h2 style="text-align:center;margin-bottom:6px;">💛 Помочь котикам</h2>
-    <p style="text-align:center;opacity:.75;margin:0 0 18px;font-size:.97rem;">Каждый рубль идёт на корм бездомным котикам и помощь приютам</p>
+    <h2 data-i18n="donateTitle" style="text-align:center;margin-bottom:6px;">💛 Помочь котикам</h2>
+    <p data-i18n="donateDesc" style="text-align:center;opacity:.75;margin:0 0 18px;font-size:.97rem;">Каждый рубль идёт на корм бездомным котикам и помощь приютам</p>
     <div class="donate-btns">
       <a class="donate-btn kofi" href="https://ko-fi.com/murrrevolyutsiya" target="_blank" rel="noopener">
-        <img src="https://storage.ko-fi.com/cdn/cup-border.png" alt="Ko-fi" style="height:20px;vertical-align:middle;margin-right:7px;">Поддержать на Ko-fi
+        <img src="https://storage.ko-fi.com/cdn/cup-border.png" alt="Ko-fi" style="height:20px;vertical-align:middle;margin-right:7px;"><span data-i18n="kofiBtn">Поддержать на Ko-fi</span>
       </a>
       <a class="donate-btn boosty" href="https://boosty.to/murrrevolyutsiya" target="_blank" rel="noopener">
-        🚀 Поддержать на Boosty
+        <span data-i18n="boostyBtn">🚀 Поддержать на Boosty</span>
       </a>
     </div>
   </section>
@@ -1016,5 +1006,6 @@
       });
     })();
   </script>
+  <script src="/i18n.js"></script>
 </body>
 </html>
